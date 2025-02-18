@@ -1,4 +1,4 @@
-package com.example.breaadbook.global.handler;
+package com.example.breadbook.global.handler;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

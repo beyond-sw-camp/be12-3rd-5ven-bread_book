@@ -1,4 +1,4 @@
-package com.example.breaadbook.domain.test.model;
+package com.example.breadbook.domain.test.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

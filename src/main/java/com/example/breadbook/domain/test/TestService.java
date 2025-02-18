@@ -1,4 +1,4 @@
-package com.example.breaadbook.domain.test;
+package com.example.breadbook.domain.test;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
