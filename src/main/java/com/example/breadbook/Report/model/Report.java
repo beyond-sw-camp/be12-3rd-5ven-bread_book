@@ -1,4 +1,4 @@
-package com.example.breadbook.Notification.model;
+package com.example.breadbook.Report.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,17 +13,20 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notification {
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
-    private Long member_Idx;
-    private String message;
-    private Boolean is_read;
-    private Date created_at;
+    private Long member_idx;
+    private Long product_idx;
+    private String report_reason;
+    private Date create_at;
 
     @OneToOne
-    @JoinColumn(name = 'member_idx')
+    @JoinColumn(name = "member_idx")
     private Member member;
 
+    @OneToOne
+    @JoinColumn(name = "product_idx")
+    private Product product;
 }
