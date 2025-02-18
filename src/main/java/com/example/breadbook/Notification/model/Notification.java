@@ -1,13 +1,13 @@
-package com.example.breadbook.Notification.Model;
+package com.example.breadbook.Notification.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.breadbook.domain.member.model.Member;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Entity
 @Getter
@@ -18,5 +18,13 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+    private Long member_Idx;
+    private String message;
+    private Boolean is_read;
+    private Date created_at;
+
+    @OneToOne
+    @JoinColumn(name = "member_idx")
+    private Member member;
 
 }

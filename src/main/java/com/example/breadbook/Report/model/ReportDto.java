@@ -17,6 +17,7 @@ public class ReportDto {
         private Date create_at;
 
         public Report toEntity(Product product, Member member) {
+
             return Report.builder()
                     .member_idx(member.getIdx())
                     .product_idx(product.getIdx())
