@@ -1,5 +1,6 @@
 package com.example.breadbook.Notification.model;
 
+import com.example.breadbook.domain.member.model.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,7 @@ public class Notification {
     private Date created_at;
 
     @OneToOne
-    @JoinColumn(name = 'member_idx')
+    @JoinColumn(name = "member_idx")
     private Member member;
 
 }
