@@ -23,7 +23,7 @@ public class Notification {
     private Boolean is_read;
     private Date created_at;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 

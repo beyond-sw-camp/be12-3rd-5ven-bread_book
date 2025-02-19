@@ -1,5 +1,6 @@
 package com.example.breadbook.domain.member.model;
 
+import com.example.breadbook.Notification.model.Notification;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberDto {
     @Getter
@@ -23,6 +26,7 @@ public class MemberDto {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate birthDate;
         private Member.GenderType gender;
+
         public Member toEntity(String encodedPassword) {
             return Member.builder()
                     .userid(userId)
@@ -35,6 +39,7 @@ public class MemberDto {
                     .build();
         }
     }
+
 
     @Getter @Builder @AllArgsConstructor @NoArgsConstructor
     public static class SignupResponse {
