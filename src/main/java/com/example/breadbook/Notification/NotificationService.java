@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     
-    public void rgister(NotificationDto.NotificationRegister dto, Member member) {
+    public void register(NotificationDto.NotificationRegister dto, Member member) {
         Notification notification = notificationRepository.save(dto.toEntity(member));
     }
 

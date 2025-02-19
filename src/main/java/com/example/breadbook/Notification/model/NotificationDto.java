@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class NotificationDto {
     // 이부분은 유저 밑에 만들어두면 좋을 것 같다.
