@@ -1,4 +1,4 @@
-package com.example.breaadbook.domain.review.model;
+package com.example.breadbook.domain.review.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

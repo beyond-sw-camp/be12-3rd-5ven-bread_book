@@ -1,8 +1,13 @@
-package com.example.breaadbook.domain.order;
+package com.example.breadbook.domain.order;
 
-import com.example.breaadbook.domain.order.model.Order;
-import com.example.breaadbook.domain.order.model.OrderDto;
-import com.example.breaadbook.domain.order.model.OrderStatus;
+
+import com.example.breadbook.domain.member.MemberRepository;
+import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.order.model.Order;
+import com.example.breadbook.domain.order.model.OrderDto;
+import com.example.breadbook.domain.order.model.OrderStatus;
+import com.example.breadbook.domain.product.ProductRepository;
+import com.example.breadbook.domain.product.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +43,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<Order> findOrders(Long memberIdx) {
-        return orderRepository.findByMember(memberIdx).orElse(null);
+        return orderRepository.findByMember(memberIdx);
     }
 
     @Transactional(readOnly = true)

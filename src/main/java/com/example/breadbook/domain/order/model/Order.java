@@ -1,5 +1,7 @@
-package com.example.breaadbook.domain.order.model;
+package com.example.breadbook.domain.order.model;
 
+import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

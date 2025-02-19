@@ -1,4 +1,4 @@
-package com.example.breaadbook.domain.order.model;
+package com.example.breadbook.domain.order.model;
 
 import lombok.Builder;
 import lombok.Getter;

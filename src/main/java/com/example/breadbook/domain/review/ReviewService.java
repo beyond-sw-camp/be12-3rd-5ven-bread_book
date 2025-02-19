@@ -1,7 +1,11 @@
-package com.example.breaadbook.domain.review;
+package com.example.breadbook.domain.review;
 
-import com.example.breaadbook.domain.review.model.Review;
-import com.example.breaadbook.domain.review.model.ReviewDto;
+import com.example.breadbook.domain.member.MemberRepository;
+import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.product.ProductRepository;
+import com.example.breadbook.domain.product.model.Product;
+import com.example.breadbook.domain.review.model.Review;
+import com.example.breadbook.domain.review.model.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +39,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public List<Review> findOrders(Long memberIdx) {
-        return reviewRepository.findByMember(memberIdx).orElse(null);
+        return reviewRepository.findByMember(memberIdx);
     }
 
     @Transactional(readOnly = true)
