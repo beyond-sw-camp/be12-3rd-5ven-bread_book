@@ -1,4 +1,4 @@
-package com.example.breadbook.Notification.model;
+package com.example.breadbook.domain.notification.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import lombok.AllArgsConstructor;

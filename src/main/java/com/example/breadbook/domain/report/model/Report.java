@@ -1,4 +1,4 @@
-package com.example.breadbook.Report.model;
+package com.example.breadbook.domain.report.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
