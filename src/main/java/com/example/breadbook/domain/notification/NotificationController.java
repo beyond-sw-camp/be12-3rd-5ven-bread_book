@@ -1,7 +1,7 @@
-package com.example.breadbook.Notification;
+package com.example.breadbook.domain.notification;
 
 
-import com.example.breadbook.Notification.model.NotificationDto;
+import com.example.breadbook.domain.notification.model.NotificationDto;
 import com.example.breadbook.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
