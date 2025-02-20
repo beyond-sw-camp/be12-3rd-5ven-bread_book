@@ -3,14 +3,17 @@ package com.example.breadbook.domain.review.model;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Builder
+@AllArgsConstructor @NoArgsConstructor
 public class Review {
 
     @Id

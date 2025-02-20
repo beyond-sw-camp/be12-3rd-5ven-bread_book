@@ -1,13 +1,11 @@
 package com.example.breadbook.global.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BaseResponse<T> {
     private Boolean isSuccess;
     private String message;

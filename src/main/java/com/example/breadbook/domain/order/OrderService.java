@@ -30,13 +30,12 @@ public class OrderService {
 
         if(member.isPresent()&&product.isPresent()) {
             return  orderRepository.save(Order.builder()
-                    .orderStatus(OrderStatus.거래중)
+                    .orderStatus(OrderStatus.품절)
                     .member(member.get())
                     .product(product.get())
                     .amount(dto.getAmount())
                     .createdAt(LocalDateTime.now())
                     .build());
-
         }
         return null;
     }
