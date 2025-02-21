@@ -20,16 +20,14 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
-    private Long member_idx;
-    private Long product_idx;
     private String report_reason;
     private Date create_at;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_idx")
     private Product product;
 }

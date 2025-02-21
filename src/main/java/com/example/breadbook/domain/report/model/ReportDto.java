@@ -12,16 +12,12 @@ import java.util.Date;
 public class ReportDto {
     @Getter
     public static class ReportRegister {
-        private Long member_idx;
-        private Long product_idx;
         private String report_reason;
         private Date create_at;
 
         public Report toEntity(Product product, Member member) {
 
             return Report.builder()
-                    .member_idx(member.getIdx())
-                    .product_idx(product.getIdx())
                     .report_reason(report_reason)
                     .create_at(create_at)
                     .product(product)
