@@ -3,7 +3,6 @@ package com.example.breadbook.global.response;
 import lombok.*;
 
 @Getter
-@Builder
 public class BaseResponse<T> {
     private Boolean isSuccess;
     private String message;
