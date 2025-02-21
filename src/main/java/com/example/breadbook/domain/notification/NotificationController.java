@@ -3,6 +3,7 @@ package com.example.breadbook.domain.notification;
 
 import com.example.breadbook.domain.notification.model.NotificationDto;
 import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.product.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,8 +18,8 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/register")
-    public void register(@AuthenticationPrincipal Member member, @RequestBody NotificationDto.NotificationRegister dto) {
-        notificationService.register(dto, member);
+    public void register(@AuthenticationPrincipal Member member, @AuthenticationPrincipal Product product, @RequestBody NotificationDto.NotificationRegister dto) {
+        notificationService.register(dto, member, product);
     }
 
     @GetMapping("/list")
