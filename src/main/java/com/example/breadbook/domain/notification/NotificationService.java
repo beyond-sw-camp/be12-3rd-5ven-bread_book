@@ -1,8 +1,8 @@
-package com.example.breadbook.Notification;
+package com.example.breadbook.domain.notification;
 
 
-import com.example.breadbook.Notification.model.Notification;
-import com.example.breadbook.Notification.model.NotificationDto;
+import com.example.breadbook.domain.notification.model.Notification;
+import com.example.breadbook.domain.notification.model.NotificationDto;
 import com.example.breadbook.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     
-    public void rgister(NotificationDto.NotificationRegister dto, Member member) {
+    public void register(NotificationDto.NotificationRegister dto, Member member) {
         Notification notification = notificationRepository.save(dto.toEntity(member));
     }
 

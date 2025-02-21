@@ -1,4 +1,4 @@
-package com.example.breadbook.Notification.model;
+package com.example.breadbook.domain.notification.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import jakarta.persistence.*;
@@ -23,7 +23,7 @@ public class Notification {
     private Boolean is_read;
     private Date created_at;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 

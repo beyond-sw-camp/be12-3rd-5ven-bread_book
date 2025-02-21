@@ -1,7 +1,7 @@
-package com.example.breadbook.Notification;
+package com.example.breadbook.domain.notification;
 
 
-import com.example.breadbook.Notification.model.NotificationDto;
+import com.example.breadbook.domain.notification.model.NotificationDto;
 import com.example.breadbook.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/notice")
 public class NotificationController {
     private final NotificationService notificationService;
-    
+
     @PostMapping("/register")
     public void register(@AuthenticationPrincipal Member member, @RequestBody NotificationDto.NotificationRegister dto) {
         notificationService.register(dto, member);
@@ -27,7 +27,7 @@ public class NotificationController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/{notificationIdx")
+    @GetMapping("/{notificationIdx}")
     public ResponseEntity<NotificationDto.NotificationResponse> get(@PathVariable Long notificationIdx) {
         NotificationDto.NotificationResponse response = notificationService.read(notificationIdx);
         return ResponseEntity.ok(response);
