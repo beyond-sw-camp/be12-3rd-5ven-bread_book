@@ -1,6 +1,7 @@
 package com.example.breadbook.domain.notification.model;
 
 import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.product.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,18 +17,17 @@ public class NotificationDto {
 
     @Getter
     public static class NotificationRegister {
-        private Long member_Idx;
         private String message;
         private Boolean is_read;
         private Date created_at;
 
-        public Notification toEntity(Member member) {
+        public Notification toEntity(Member member, Product product) {
             return Notification.builder()
-                    .member_Idx(member.getIdx())
                     .message(message)
                     .is_read(is_read)
                     .created_at(created_at)
                     .member(member)
+                    .product(product)
                     .build();
         }
     }
@@ -36,6 +36,7 @@ public class NotificationDto {
     public static class NotificationResponse {
         private Long idx;
         private Long member_Idx;
+        private Long product_Idx;
         private String message;
         private Boolean is_read;
         private Date created_at;
@@ -43,10 +44,11 @@ public class NotificationDto {
 
         public static NotificationResponse from(Notification notification) {
             // 이부분은 물어보고 추후에 수정하자.
-            Member member = notification.getMember();
+            Product product = notification.getProduct();
             return NotificationResponse.builder()
                     .idx(notification.getIdx())
-                    .member_Idx(member.getIdx())
+                    .member_Idx(product.getMemberIdx())
+                    .product_Idx(product.getIdx())
                     .message(notification.getMessage())
                     .is_read(notification.getIs_read())
                     .created_at(notification.getCreated_at())
