@@ -10,6 +10,7 @@ import com.example.breadbook.domain.order.model.OrderStatus;
 import com.example.breadbook.domain.product.ProductRepository;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.review.ReviewRepository;
+import com.example.breadbook.domain.review.model.Review;
 import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.response.BaseResponseMessage;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,8 @@ public class OrderService {
         List<OrderDto.OrderListResp> list=new ArrayList<>();
 
         for (Order order : orders) {
-            list.add(OrderDto.OrderListResp.toResp(order,reviewRepository.findByProduct(order.getProduct().getIdx())));
+            Optional<Review> review=reviewRepository.findByProduct(order.getProduct().getIdx());
+            list.add(OrderDto.OrderListResp.toResp(order,review));
         }
 
         if(list.size()>0) {
@@ -86,5 +88,11 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findOderDetails(Long orderIdx) {
         return orderRepository.findById(orderIdx).orElse(null);
+    }
+
+    public BaseResponse<OrderDto.OrderDetailsResp> orderDetails(Long idx) {
+        Optional<Order> order=orderRepository.findById(idx);
+        OrderDto.OrderDetailsResp result= OrderDto.OrderDetailsResp.toResp(order.get());
+        return new BaseResponse(BaseResponseMessage.ORDER_ORDERDETAILS_SUCCESS,result);
     }
 }

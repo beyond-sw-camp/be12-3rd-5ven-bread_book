@@ -30,4 +30,10 @@ public class OrderController {
     public ResponseEntity<BaseResponse<List<OrderDto.PayListResp>>> payList(@PathVariable Long idx){
         return ResponseEntity.ok(orderService.PayList(idx));
     }
+
+    @PostMapping("/orderDetails/{idx}")
+    public ResponseEntity<BaseResponse<OrderDto.OrderDetailsResp>> orderDetails(@PathVariable Long idx) {
+        return ResponseEntity.ok(orderService.orderDetails(idx));
+    }
+
 }
