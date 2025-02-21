@@ -1,5 +1,7 @@
 package com.example.breadbook.global.response;
 
+import com.example.breadbook.domain.book.model.Book;
+import com.example.breadbook.domain.order.model.Order;
 import lombok.*;
 
 @Getter
@@ -21,5 +23,7 @@ public class BaseResponse<T> {
         this.message = baseResponseMessage.getMessage();
         this.code = baseResponseMessage.getCode();
     }
+
+
 }
 
