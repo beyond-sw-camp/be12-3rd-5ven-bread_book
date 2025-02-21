@@ -91,8 +91,9 @@ public class OrderService {
     }
 
     public BaseResponse<OrderDto.OrderDetailsResp> orderDetails(Long idx) {
-        Optional<Order> order=orderRepository.findById(idx);
-        OrderDto.OrderDetailsResp result= OrderDto.OrderDetailsResp.toResp(order.get());
+        Order order=orderRepository.findById(idx).get();
+        Optional<Review> review=reviewRepository.findByProduct(order.getProduct().getIdx());
+        OrderDto.OrderDetailsResp result= OrderDto.OrderDetailsResp.toResp(order,review);
         return new BaseResponse(BaseResponseMessage.ORDER_ORDERDETAILS_SUCCESS,result);
     }
 }

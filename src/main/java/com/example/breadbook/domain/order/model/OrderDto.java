@@ -96,8 +96,9 @@ public class OrderDto {
     }
 
 
-    @Getter @Builder
-    public class OrderDetailsResp {
+    @Getter
+    @Builder
+    public static class OrderDetailsResp {
         private LocalDateTime orderCreatedAt ;
         private String bookImg;
         private OrderStatus orderStatus;
@@ -107,7 +108,7 @@ public class OrderDto {
         private Long reviewIdx;
         private Long memberIdx;
 
-        public static OrderDetailsResp toResp(Order order){
+        public static OrderDetailsResp toResp(Order order,Optional<Review> review){
             return OrderDetailsResp.builder()
                     .orderCreatedAt(order.getCreatedAt())
                     .bookImg(order.getProduct().getBookImage())
@@ -116,6 +117,7 @@ public class OrderDto {
                     .amount(order.getAmount())
                     .orderIdx(order.getIdx())
                     .memberIdx(order.getProduct().getMemberIdx())
+                    .reviewIdx(review.map(Review::getIdx).orElse(null))
                     .build();
         }
     }
