@@ -1,4 +1,4 @@
-package com.example.breadbook.Report.model;
+package com.example.breadbook.domain.report.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
@@ -8,7 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,16 +22,15 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
-    private Long member_idx;
-    private Long product_idx;
     private String report_reason;
-    private Date create_at;
+    @CreationTimestamp
+    private LocalDateTime create_at;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_idx")
     private Member member;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_idx")
     private Product product;
 }

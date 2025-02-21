@@ -1,8 +1,9 @@
-package com.example.breadbook.Report;
+package com.example.breadbook.domain.report;
 
-import com.example.breadbook.Report.model.Report;
-import com.example.breadbook.Report.model.ReportDto;
+import com.example.breadbook.domain.report.model.Report;
+import com.example.breadbook.domain.report.model.ReportDto;
 import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.product.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

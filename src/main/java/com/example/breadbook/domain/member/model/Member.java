@@ -53,6 +53,9 @@ public class Member implements UserDetails {
     @ColumnDefault(value = "0")
     private Integer score;
 
+    @ColumnDefault(value = "/defaultProfileImg.jpg")
+    private String imgUrl;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
