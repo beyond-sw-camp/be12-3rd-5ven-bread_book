@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class NotificationDto {
@@ -19,7 +20,7 @@ public class NotificationDto {
     public static class NotificationRegister {
         private String message;
         private Boolean is_read;
-        private Date created_at;
+        private LocalDateTime created_at;
 
         public Notification toEntity(Member member, Product product) {
             return Notification.builder()
@@ -39,7 +40,7 @@ public class NotificationDto {
         private Long product_Idx;
         private String message;
         private Boolean is_read;
-        private Date created_at;
+        private LocalDateTime created_at;
 
 
         public static NotificationResponse from(Notification notification) {

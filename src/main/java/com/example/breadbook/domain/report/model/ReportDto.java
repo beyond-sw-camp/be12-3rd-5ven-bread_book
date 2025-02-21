@@ -7,13 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ReportDto {
     @Getter
     public static class ReportRegister {
         private String report_reason;
-        private Date create_at;
+        private LocalDateTime create_at;
 
         public Report toEntity(Product product, Member member) {
 
@@ -30,7 +31,7 @@ public class ReportDto {
     public static class ReportResponse {
         private Long idx;
         private String report_reason;
-        private Date create_at;
+        private LocalDateTime create_at;
         private MemberInfo memberInfo;
         private ProductInfo productInfo;
 
