@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,7 +23,8 @@ public class Notification {
     private Long idx;
     private String message;
     private Boolean is_read;
-    private Date created_at;
+    @CreationTimestamp
+    private LocalDateTime created_at;
 
     @ManyToOne
     @JoinColumn(name = "member_idx")
