@@ -42,7 +42,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public List<Review> findOrders(Long memberIdx) {
-        return reviewRepository.findByMember(memberIdx);
+        return reviewRepository.findByMember(memberRepository.findById(memberIdx).get());
     }
 
     @Transactional(readOnly = true)
