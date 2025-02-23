@@ -42,8 +42,13 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<Review> findOrders(Long memberIdx) {
-        return reviewRepository.findByMember(memberRepository.findById(memberIdx).get());
+    public BaseResponse<Review> findReview(Long productIdx) {
+        Optional<Product> product = productRepository.findById(productIdx);
+        Optional<Review> result = reviewRepository.findByProduct(product.get());
+        if(result.isPresent()){
+            return new BaseResponse(BaseResponseMessage.REVIEW_FIND_SUCCESS,result.get());
+        }
+        return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
     }
 
     @Transactional(readOnly = true)
