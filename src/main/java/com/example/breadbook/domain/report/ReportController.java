@@ -28,7 +28,7 @@ public class ReportController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/{reportIdx")
+    @GetMapping("/{reportIdx}")
     public ResponseEntity<ReportDto.ReportResponse> get(@PathVariable Long reportIdx) {
         ReportDto.ReportResponse response = reportService.read(reportIdx);
         return ResponseEntity.ok(response);

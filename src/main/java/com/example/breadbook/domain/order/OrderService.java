@@ -48,11 +48,11 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public BaseResponse<List<OrderDto.OrderListResp>> orderList(Long idx) {
-        List<Order> orders=orderRepository.findByMember(idx);
+        List<Order> orders=orderRepository.findByMember(memberRepository.findById(idx).get());
         List<OrderDto.OrderListResp> list=new ArrayList<>();
 
         for (Order order : orders) {
-            Optional<Review> review=reviewRepository.findByProduct(order.getProduct().getIdx());
+            Optional<Review> review=reviewRepository.findByProduct(order.getProduct());
             list.add(OrderDto.OrderListResp.toResp(order,review));
         }
 
@@ -65,7 +65,8 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public BaseResponse<List<OrderDto.PayListResp>> PayList(Long idx) {
-        List<Order> orders=orderRepository.findByMember(idx);
+
+        List<Order> orders=orderRepository.findByMember(memberRepository.findById(idx).get());
         List<OrderDto.PayListResp> list=new ArrayList<>();
 
         for (Order order : orders) {
@@ -80,19 +81,19 @@ public class OrderService {
     }
 
 
-    @Transactional(readOnly = true)
-    public List<Order> findOrders(Long memberIdx) {
-        return orderRepository.findByMember(memberIdx);
-    }
-
-    @Transactional(readOnly = true)
-    public Order findOderDetails(Long orderIdx) {
-        return orderRepository.findById(orderIdx).orElse(null);
-    }
+//    @Transactional(readOnly = true)
+//    public List<Order> findOrders(Long memberIdx) {
+//        return orderRepository.findByMember(memberIdx);
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public Order findOderDetails(Long orderIdx) {
+//        return orderRepository.findById(orderIdx).orElse(null);
+//    }
 
     public BaseResponse<OrderDto.OrderDetailsResp> orderDetails(Long idx) {
         Order order=orderRepository.findById(idx).get();
-        Optional<Review> review=reviewRepository.findByProduct(order.getProduct().getIdx());
+        Optional<Review> review=reviewRepository.findByProduct(order.getProduct());
         OrderDto.OrderDetailsResp result= OrderDto.OrderDetailsResp.toResp(order,review);
         return new BaseResponse(BaseResponseMessage.ORDER_ORDERDETAILS_SUCCESS,result);
     }
