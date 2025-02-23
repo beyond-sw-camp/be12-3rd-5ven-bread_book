@@ -35,6 +35,7 @@ public enum BaseResponseMessage {
     // 리뷰 기능(5000)
     // 리뷰 생성 5000
     REVIEW_REGISTER_SUCCESS(true, 5000, "리뷰 작성이 완료 되었습니다."),
+    REVIEW_FIND_SUCCESS(true, 5001, "행당 리뷰가 있습니다.")
 
 
 
