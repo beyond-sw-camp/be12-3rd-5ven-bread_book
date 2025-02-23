@@ -30,7 +30,12 @@ public enum BaseResponseMessage {
     ORDER_REGISTER_SUCCESS(true, 4000, "상품 주문이 완료 되었습니다."),
     ORDER_ORDERlISTFIND_SUCCESS(true, 4001, "주문 정보 확인"),
     ORDER_PAYlISTFIND_SUCCESS(true, 4002, "판매 정보 확인"),
-    ORDER_ORDERDETAILS_SUCCESS(true, 4003, "주문 상세정보 확인")
+    ORDER_ORDERDETAILS_SUCCESS(true, 4003, "주문 상세정보 확인"),
+
+    // 리뷰 기능(5000)
+    // 리뷰 생성 5000
+    REVIEW_REGISTER_SUCCESS(true, 5000, "리뷰 작성이 완료 되었습니다."),
+
 
 
 

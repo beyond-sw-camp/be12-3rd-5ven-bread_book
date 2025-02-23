@@ -7,6 +7,7 @@ import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.review.model.Review;
 import com.example.breadbook.domain.review.model.ReviewDto;
 import com.example.breadbook.global.response.BaseResponse;
+import com.example.breadbook.global.response.BaseResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Review create(ReviewDto.ReviewDtoReq dto){
+    public BaseResponse<Review> regist(ReviewDto.ReviewDtoReq dto){
         Optional<Member> member = memberRepository.findById(dto.getMemberIdx());
         Optional<Product> product = productRepository.findById(dto.getProductIdx());
         if(member.isEmpty() && product.isEmpty()){
@@ -35,9 +36,9 @@ public class ReviewService {
                     .createdAt(LocalDateTime.now())
                     .build();
             reviewRepository.save(review);
-            return review;
+            return new BaseResponse(BaseResponseMessage.REVIEW_REGISTER_SUCCESS,review);
         }
-        return null;
+        return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
     }
 
     @Transactional(readOnly = true)
