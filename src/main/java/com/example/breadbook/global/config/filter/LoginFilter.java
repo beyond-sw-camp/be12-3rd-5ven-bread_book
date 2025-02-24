@@ -61,8 +61,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         Member member = (Member) authResult.getPrincipal();
         String jwtToken = JwtUtil.generateToken(member.getIdx(), member.getEmail(),
-                member.getScore(), member.getUserid(), member.getBirthDate(),
-                member.getUsername(), member.getNickname(), member.getGender());
+                member.getUserid(),
+                member.getUsername(), member.getNickname(), member.getProvider());
 
 
 //        일반적인 객체 생성 및 객체의 변수에 값을 설정하는 방법

@@ -2,6 +2,7 @@ package com.example.breadbook.domain.member;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.member.model.MemberDto;
+import com.example.breadbook.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,9 +24,18 @@ public class MemberService implements UserDetailsService {
         return MemberDto.SignupResponse.fromEntity(member2);
     }
 
+    public MemberDto.SignupResponse signupOauth(String token, MemberDto.SignupOauthRequest dto) {
+        if(!JwtUtil.validate(token)) {
+            return null;
+        }
+        Member temp = JwtUtil.getMember(token);
+        Member member = memberRepository.save(dto.toEntity(temp.getUserid(), temp.getProvider()));
+        return MemberDto.SignupResponse.fromEntity(member);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> result = memberRepository.findByUserid(username);
+        Optional<Member> result = memberRepository.findByUseridAndProvider(username, "email");
         return result.orElse(null);
     }
 }
