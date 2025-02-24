@@ -33,6 +33,30 @@ public class MemberDto {
                     .nickname(nickName)
                     .birthDate(birthDate)
                     .gender(gender)
+                    .provider("email")
+                    .build();
+        }
+    }
+
+
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class SignupOauthRequest {
+        private String userName;
+        private String email;
+        private String nickName;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate birthDate;
+        private Member.GenderType gender;
+        public Member toEntity(String userId, String provider) {
+            return Member.builder()
+                    .userid(userId)
+                    .password(provider)
+                    .username(userName)
+                    .email(email)
+                    .nickname(nickName)
+                    .birthDate(birthDate)
+                    .gender(gender)
+                    .provider(provider)
                     .build();
         }
     }
