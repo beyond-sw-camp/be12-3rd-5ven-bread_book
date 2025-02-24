@@ -39,8 +39,10 @@ public class JwtUtil {
                     .username(claims.get("memberUserName", String.class))
                     .nickname(claims.get("memberNickName", String.class))
                     .email(claims.get("memberEmail", String.class))
+                    .gender(claims.get("memberGender", Member.GenderType.class))
+                    .birthDate(claims.get("memberBirthDate", LocalDate.class))
                     .userid(claims.get("memberUserId", String.class))
-                    .provider(claims.get("memberProvider", String.class))
+                    .score(claims.get("memberScore", Integer.class))
                     .build();
 
         } catch (ExpiredJwtException e) {
@@ -49,16 +51,18 @@ public class JwtUtil {
         }
     }
 
-    public static String generateToken(Long memberIdx, String memberEmail,
-                                       String memberUserId, String memberUserName,
-                                       String memberNickName, String memberProvider) {
+    public static String generateToken(Long memberIdx, String memberEmail, Integer memberScore,
+                                       String memberUserId, LocalDate memberBirthDate,
+                                       String memberUserName, String memberNickName, Member.GenderType memberGender) {
         Claims claims = Jwts.claims();
         claims.put("memberNickName", memberNickName);
         claims.put("memberEmail", memberEmail);
         claims.put("memberIdx", memberIdx);
         claims.put("memberUserId", memberUserId);
         claims.put("memberUserName", memberUserName);
-        claims.put("memberProvider", memberProvider);
+        claims.put("memberGender", memberGender);
+        claims.put("memberBirthDate", memberBirthDate.toString());
+        claims.put("memberScore", memberScore);
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

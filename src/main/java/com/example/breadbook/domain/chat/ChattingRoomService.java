@@ -1,5 +1,6 @@
 package com.example.breadbook.domain.chat;
 
+import com.example.breadbook.domain.book.BookRepository;
 import com.example.breadbook.domain.chat.model.ChattingRoom;
 import com.example.breadbook.domain.chat.model.Message;
 import com.example.breadbook.domain.chat.model.Participant;
@@ -14,12 +15,31 @@ public class ChattingRoomService {
     private final ChattingRoomRepository chattingRoomRepository;
     private final MessageRepository messageRepository;
     private final ParticipantRepository participantRepository;
+    private final BookRepository bookRepository;
 
     // 1:1 채팅방 생성 (상품을 등록한 판매자와 구매자만 참여)
+//    public ChattingRoom createChattingRoom(String identifier, Long productIdx, Long buyerId, Long sellerId) {
+//        ChattingRoom room = new ChattingRoom();
+//        room.setIdentifier(identifier);
+//        room.setProductIdx(productIdx);
+//        ChattingRoom savedRoom = chattingRoomRepository.save(room);
+//
+//        // 채팅방 생성 시 자동으로 구매자 & 판매자 추가
+//        participantRepository.save(new Participant(savedRoom, buyerId));
+//        participantRepository.save(new Participant(savedRoom, sellerId));
+//
+//        return savedRoom;
+//    }
     public ChattingRoom createChattingRoom(String identifier, Long productIdx, Long buyerId, Long sellerId) {
         ChattingRoom room = new ChattingRoom();
         room.setIdentifier(identifier);
         room.setProductIdx(productIdx);
+
+        // 📌 책 제목 가져오기
+        bookRepository.findById(productIdx).ifPresent(book -> {
+            room.setTitle(book.getTitle()); // 채팅방 제목 설정
+        });
+
         ChattingRoom savedRoom = chattingRoomRepository.save(room);
 
         // 채팅방 생성 시 자동으로 구매자 & 판매자 추가
