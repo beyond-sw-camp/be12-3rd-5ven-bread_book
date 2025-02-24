@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/user")
 public class MemberController {
     private final MemberService memberService;
 

@@ -24,6 +24,9 @@ public class ChattingRoom {
     @Column(name = "product_idx")
     private Long productIdx;
 
+    @Column(name = "book_title")
+    private String title;
+
     @Column(columnDefinition = "TEXT")
     private String lastChat;
 
