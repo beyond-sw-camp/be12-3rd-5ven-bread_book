@@ -35,8 +35,13 @@ public enum BaseResponseMessage {
     // 리뷰 기능(5000)
     // 리뷰 생성 5000
     REVIEW_REGISTER_SUCCESS(true, 5000, "리뷰 작성이 완료 되었습니다."),
-    REVIEW_FIND_SUCCESS(true, 5001, "행당 리뷰가 있습니다.")
+    REVIEW_FIND_SUCCESS(true, 5001, "행당 리뷰가 있습니다."),
 
+
+    // ==========================================================================================================================
+    CHATTINGROOM_SUCCESS(true, 6000, "채팅방이 생성되었습니다"),
+    CHATTINGROOM_LIST_SUCCESS(true, 6001, "채팅방 목록이 조회되었습니다"),
+    CHATTINGROOM_LIST_DETAIL_SUCCESS(true, 6002, "채팅방이 상세 조회되었습니다"),
 
 
 
