@@ -52,11 +52,8 @@ public class SecurityConfig {
                 (auth) -> auth
                         .requestMatchers("/user/signup", "/login","/logout",
                                 "/user/read/**",
-
-                                "/chatting/room","/chatting/rooms","/chatting/room/**",
                                 "/error", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/swagger-resources/**").permitAll()
-                        .requestMatchers("/ws/**").permitAll()
 //                        .requestMatchers("/feed/register").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
         );

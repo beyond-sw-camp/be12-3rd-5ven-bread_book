@@ -39,8 +39,8 @@ public class JwtUtil {
                     .username(claims.get("memberUserName", String.class))
                     .nickname(claims.get("memberNickName", String.class))
                     .email(claims.get("memberEmail", String.class))
-                    .gender(Member.GenderType.valueOf(claims.get("memberGender", String.class))) // ✅ String → Enum 변환
-                    .birthDate(LocalDate.parse(claims.get("memberBirthDate", String.class))) // ✅ String → LocalDate 변환
+                    .gender(claims.get("memberGender", Member.GenderType.class))
+                    .birthDate(claims.get("memberBirthDate", LocalDate.class))
                     .userid(claims.get("memberUserId", String.class))
                     .score(claims.get("memberScore", Integer.class))
                     .build();
