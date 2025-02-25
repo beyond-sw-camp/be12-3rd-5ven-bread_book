@@ -9,7 +9,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Component
@@ -66,6 +65,27 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
         return token;
+    }
+
+    public static String refreshToken(String oldToken) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(SECRET)
+                    .build()
+                    .parseClaimsJws(oldToken)
+                    .getBody();
+            String token = Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(new Date(System.currentTimeMillis() + EXP))
+                    .signWith(SignatureAlgorithm.HS256, SECRET)
+                    .compact();
+            return token;
+
+        } catch (ExpiredJwtException e) {
+            System.out.println("토큰이 만료되었습니다!");
+            return null;
+        }
     }
 
     public static boolean validate(String token) {
