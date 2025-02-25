@@ -70,6 +70,7 @@ public class JwtUtil {
 
     public static boolean validate(String token) {
         try {
+            if(token == null) { return false;}
             Jwts.parserBuilder()
                     .setSigningKey(SECRET)
                     .build()
