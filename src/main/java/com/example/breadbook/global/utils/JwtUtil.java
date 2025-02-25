@@ -39,10 +39,8 @@ public class JwtUtil {
                     .username(claims.get("memberUserName", String.class))
                     .nickname(claims.get("memberNickName", String.class))
                     .email(claims.get("memberEmail", String.class))
-                    .gender(claims.get("memberGender", Member.GenderType.class))
-                    .birthDate(claims.get("memberBirthDate", LocalDate.class))
                     .userid(claims.get("memberUserId", String.class))
-                    .score(claims.get("memberScore", Integer.class))
+                    .provider(claims.get("memberProvider", String.class))
                     .build();
 
         } catch (ExpiredJwtException e) {
@@ -51,18 +49,16 @@ public class JwtUtil {
         }
     }
 
-    public static String generateToken(Long memberIdx, String memberEmail, Integer memberScore,
-                                       String memberUserId, LocalDate memberBirthDate,
-                                       String memberUserName, String memberNickName, Member.GenderType memberGender) {
+    public static String generateToken(Long memberIdx, String memberEmail,
+                                       String memberUserId, String memberUserName,
+                                       String memberNickName, String memberProvider) {
         Claims claims = Jwts.claims();
         claims.put("memberNickName", memberNickName);
         claims.put("memberEmail", memberEmail);
         claims.put("memberIdx", memberIdx);
         claims.put("memberUserId", memberUserId);
         claims.put("memberUserName", memberUserName);
-        claims.put("memberGender", memberGender);
-        claims.put("memberBirthDate", memberBirthDate.toString());
-        claims.put("memberScore", memberScore);
+        claims.put("memberProvider", memberProvider);
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -74,6 +70,7 @@ public class JwtUtil {
 
     public static boolean validate(String token) {
         try {
+            if(token == null) { return false;}
             Jwts.parserBuilder()
                     .setSigningKey(SECRET)
                     .build()
