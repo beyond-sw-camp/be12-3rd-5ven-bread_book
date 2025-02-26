@@ -23,6 +23,8 @@ public enum BaseResponseMessage {
     LOGIN_VERIFY_DISABLED(false, 2403, "이메일이 인증되지 않았습니다."),
     EMAIL_VERIFY_SUCCESS(true, 2201, "이메일 인증에 성공했습니다."),
     EMAIL_VERIFY_NULL(false, 2404, "해당 uuid가 없습니다."),
+    FIND_ID_SUCCESS(true, 2201, "ID를 성공적으로 찾았습니다."),
+    FIND_ID_NULL(false, 2404, "해당 이름과 email로 가입된 ID가 없습니다."),
 
     // ========================================================================================================================
     // 상품 기능(3000)

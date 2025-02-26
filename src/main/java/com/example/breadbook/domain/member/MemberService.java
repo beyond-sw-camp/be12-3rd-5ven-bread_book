@@ -98,4 +98,15 @@ public class MemberService implements UserDetailsService {
         }
         return new BaseResponse<>(BaseResponseMessage.LOGIN_UNAUTHORIZED, response);
     }
+
+    public BaseResponse<MemberDto.IdResponse> getId(MemberDto.IdRequest dto) {
+        Member member = memberRepository
+                .findByUsernameAndEmailAndProvider(dto.getUsername(), dto.getEmail(), "email")
+                .orElse(null);
+        if(member == null) {
+            return new BaseResponse<>(BaseResponseMessage.FIND_ID_NULL, null);
+        }
+        MemberDto.IdResponse response = MemberDto.IdResponse.fromEntity(member);
+        return new BaseResponse<>(BaseResponseMessage.FIND_ID_SUCCESS, response);
+    }
 }
