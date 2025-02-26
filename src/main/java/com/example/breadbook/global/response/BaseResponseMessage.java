@@ -19,6 +19,10 @@ public enum BaseResponseMessage {
     // 회원가입 2000
     LOGIN_SUCCESS(true, 2201, "로그인 되었습니다."),
     LOGIN_UNAUTHORIZED(false, 2404, "로그인 되어 있지 않습니다."),
+    LOGIN_ID_PW_FAILED(false, 2401, "ID나 비밀번호가 틀렸습니다."),
+    LOGIN_VERIFY_DISABLED(false, 2403, "이메일이 인증되지 않았습니다."),
+    EMAIL_VERIFY_SUCCESS(true, 2201, "이메일 인증에 성공했습니다."),
+    EMAIL_VERIFY_NULL(false, 2404, "해당 uuid가 없습니다."),
 
     // ========================================================================================================================
     // 상품 기능(3000)

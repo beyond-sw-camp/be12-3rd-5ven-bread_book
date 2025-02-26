@@ -55,6 +55,8 @@ public class Member implements UserDetails {
     @ColumnDefault(value = "0")
     private Integer score;
     private String provider;
+    @ColumnDefault(value = "false")
+    private Boolean enabled;
 
     @ColumnDefault(value = "'/defaultProfileImg.jpg'")
     private String profileImgUrl;
@@ -77,6 +79,10 @@ public class Member implements UserDetails {
         return authorities;
     }
 
+    public void memberVerify() {
+        this.enabled = true;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -94,7 +100,7 @@ public class Member implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
 
