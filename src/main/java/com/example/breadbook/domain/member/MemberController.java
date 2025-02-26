@@ -46,6 +46,11 @@ public class MemberController {
         return ResponseEntity.ok(respDto);
     }
 
+    @PostMapping("/id_info")
+    public BaseResponse<MemberDto.IdResponse> idInfo(@RequestBody MemberDto.IdRequest dto) {
+        return memberService.getId(dto);
+    }
+
     @GetMapping("/auth/check")
     public ResponseEntity<BaseResponse<MemberDto.SignupResponse>> logincheck(
             @CookieValue(name = "ATOKEN", required = false) String token,

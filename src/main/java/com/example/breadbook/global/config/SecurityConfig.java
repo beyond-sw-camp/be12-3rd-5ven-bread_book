@@ -75,6 +75,7 @@ public class SecurityConfig {
                 (auth) -> auth
                         .requestMatchers("/user/signup", "/user/login","/logout",
                                 "/user/signup-oauth", "/user/auth/check", "/user/verify/**",
+                                "/user/id_info",
                                 "/error", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/swagger-resources/**","cookies/user").permitAll()
 //                        .requestMatchers("/feed/register").hasAnyRole("USER", "ADMIN")
