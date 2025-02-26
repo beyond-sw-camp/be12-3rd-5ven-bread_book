@@ -43,7 +43,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             member = Member.builder().idx(member.getIdx()).email(member.getEmail()).provider(provider)
                     .score(member.getScore()).userid(member.getUserid())
                     .birthDate(member.getBirthDate()).username(member.getUsername())
-                    .nickname(member.getNickname()).gender(member.getGender())
+                    .nickname(member.getNickname()).gender(member.getGender()).enabled(member.getEnabled())
                     .build();
         }
 
