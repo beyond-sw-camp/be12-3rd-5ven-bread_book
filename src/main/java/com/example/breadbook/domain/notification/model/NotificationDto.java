@@ -48,7 +48,7 @@ public class NotificationDto {
             Product product = notification.getProduct();
             return NotificationResponse.builder()
                     .idx(notification.getIdx())
-                    .member_Idx(product.getMemberIdx())
+                    .member_Idx(product.getMember().getIdx())
                     .product_Idx(product.getIdx())
                     .message(notification.getMessage())
                     .is_read(notification.getIs_read())

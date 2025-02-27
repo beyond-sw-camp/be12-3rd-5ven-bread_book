@@ -25,6 +25,7 @@ public class OrderController {
     @PostMapping("/orderList")
     public ResponseEntity<BaseResponse<List<OrderDto.OrderListResp>>> orderList(@RequestBody Map<String, Long> requestBody){
         Long idx = requestBody.get("idx");
+        System.out.println(idx);
         return ResponseEntity.ok(orderService.orderList(idx));
     }
 
