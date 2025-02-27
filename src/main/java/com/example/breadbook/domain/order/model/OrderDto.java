@@ -3,6 +3,7 @@ package com.example.breadbook.domain.order.model;
 import com.example.breadbook.domain.book.model.Book;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
+import com.example.breadbook.domain.product.model.ProductImage;
 import com.example.breadbook.domain.review.model.Review;
 import lombok.Builder;
 import lombok.Data;
@@ -42,7 +43,7 @@ public class OrderDto {
         private LocalDateTime orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
-        private String bookImg;
+        private List<ProductImage> bookImg;
         private int amount;
         private String title;
         private String userName;
@@ -58,7 +59,7 @@ public class OrderDto {
                     .orderStatus(order.getOrderStatus())
                     .title(order.getProduct().getBook().getTitle())
                     .orderCreatedAt(order.getCreatedAt())
-                    .bookImg(order.getProduct().getBookImage())
+                    .bookImg(order.getProduct().getProductImageList())
                     .productIdx(order.getProduct().getIdx())
                     .userName(order.getMember().getUsername())
                     .build();
@@ -76,7 +77,7 @@ public class OrderDto {
         private LocalDateTime orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
-        private String bookImg;
+        private List<ProductImage> bookImg;
         private int amount;
         private String title;
         private String userName;
@@ -87,7 +88,7 @@ public class OrderDto {
                     .amount(order.getAmount())
                     .orderStatus(order.getOrderStatus())
                     .orderCreatedAt(order.getCreatedAt())
-                    .bookImg(order.getProduct().getBookImage())
+                    .bookImg(order.getProduct().getProductImageList())
                     .userName(order.getMember().getUsername())
                     .productIdx(order.getProduct().getIdx())
                     .title(order.getProduct().getBook().getTitle())
@@ -100,7 +101,7 @@ public class OrderDto {
     @Builder
     public static class OrderDetailsResp {
         private LocalDateTime orderCreatedAt ;
-        private String bookImg;
+        private List<ProductImage> bookImg;
         private OrderStatus orderStatus;
         private String title;
         private int amount;
@@ -111,12 +112,12 @@ public class OrderDto {
         public static OrderDetailsResp toResp(Order order,Optional<Review> review){
             return OrderDetailsResp.builder()
                     .orderCreatedAt(order.getCreatedAt())
-                    .bookImg(order.getProduct().getBookImage())
+                    .bookImg(order.getProduct().getProductImageList())
                     .orderStatus(order.getOrderStatus())
                     .title(order.getProduct().getBook().getTitle())
                     .amount(order.getAmount())
                     .orderIdx(order.getIdx())
-                    .memberIdx(order.getProduct().getMemberIdx())
+                    .memberIdx(order.getProduct().getMember().getIdx())
                     .reviewIdx(review.map(Review::getIdx).orElse(null))
                     .build();
         }
