@@ -73,4 +73,16 @@ public class ChattingRoomService {
         message.setMessage(messageText);
         return messageRepository.save(message);
     }
+
+    // 로그인한 유저가 포함된 채팅방 목록 조회
+    public List<ChattingRoom> getUserChatRooms(Long userIdx) {
+        List<Participant> participants = participantRepository.findAll();
+        return participants.stream()
+                .filter(p -> p.getUserIdx().equals(userIdx)) // 현재 로그인한 유저가 속한 방만 필터링
+                .map(Participant::getRoom)
+                .distinct()
+                .toList();
+    }
+
+
 }
