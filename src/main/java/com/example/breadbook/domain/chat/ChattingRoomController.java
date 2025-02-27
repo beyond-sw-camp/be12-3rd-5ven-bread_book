@@ -53,4 +53,16 @@ public class ChattingRoomController {
         ChattingRoomDto.ChattingRes room = ChattingRoomDto.ChattingRes.from(chattingRoomService.getRoomWithMessages(roomIdx));
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_DETAIL_SUCCESS, room));
     }
+
+    // 특정 유저의 채팅방 목록 조회
+    @GetMapping("/rooms/{userIdx}")
+    public ResponseEntity<BaseResponse<List<ChattingRoomDto.ChattingRes>>> getUserChatRooms(@PathVariable Long userIdx) {
+        List<ChattingRoomDto.ChattingRes> rooms = chattingRoomService.getUserChatRooms(userIdx).stream()
+                .map(ChattingRoomDto.ChattingRes::from)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_SUCCESS, rooms));
+    }
+
+
 }
