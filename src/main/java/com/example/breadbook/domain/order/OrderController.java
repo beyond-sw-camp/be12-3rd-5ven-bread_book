@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,13 +22,15 @@ public class OrderController {
         return ResponseEntity.ok(orderService.registOrder(dto));
     }
 
-    @GetMapping("/orderList/{idx}")
-    public ResponseEntity<BaseResponse<List<OrderDto.OrderListResp>>> orderList(@PathVariable Long idx){
+    @PostMapping("/orderList")
+    public ResponseEntity<BaseResponse<List<OrderDto.OrderListResp>>> orderList(@RequestBody Map<String, Long> requestBody){
+        Long idx = requestBody.get("idx");
+        System.out.println(idx);
         return ResponseEntity.ok(orderService.orderList(idx));
     }
 
-    @GetMapping("/payList/{idx}")
-    public ResponseEntity<BaseResponse<List<OrderDto.PayListResp>>> payList(@PathVariable Long idx){
+    @GetMapping("/payList")
+    public ResponseEntity<BaseResponse<List<OrderDto.PayListResp>>> payList(@RequestParam("idx") Long idx){
         return ResponseEntity.ok(orderService.PayList(idx));
     }
 
@@ -35,5 +38,4 @@ public class OrderController {
     public ResponseEntity<BaseResponse<OrderDto.OrderDetailsResp>> orderDetails(@PathVariable Long idx) {
         return ResponseEntity.ok(orderService.orderDetails(idx));
     }
-
 }

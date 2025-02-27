@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,6 +28,14 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     public LoginFilter(AntPathRequestMatcher antPathRequestMatcher, AuthenticationManager authenticationManager) {
         super(antPathRequestMatcher, authenticationManager);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, failed);
+        if(failed.getMessage().equals("No value present") || failed instanceof BadCredentialsException) {
+
+        }
     }
 
     // 원래는 form-data 형식으로 사용자 정보를 입력받았는데

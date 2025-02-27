@@ -2,20 +2,18 @@ package com.example.breadbook.domain.member;
 
 import com.example.breadbook.domain.member.model.MemberDto;
 import com.example.breadbook.global.response.BaseResponse;
+import com.example.breadbook.global.utils.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Duration;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,10 +26,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.signup(dto));
     }
 
-    @PostMapping("/signup-oauth")
+    @PostMapping("/signup_oauth")
     public ResponseEntity<MemberDto.SignupResponse> signupOauth(@CookieValue(name = "SUTOKEN") String token,
                                                                 @RequestBody MemberDto.SignupOauthRequest dto,
-                                                                HttpServletResponse response) throws IOException {
+                                                                HttpServletResponse response) {
 
         MemberDto.SignupResponse respDto = memberService.signupOauth(token, dto);
         ResponseCookie cookie = ResponseCookie
@@ -48,17 +46,39 @@ public class MemberController {
         return ResponseEntity.ok(respDto);
     }
 
+    @PostMapping("/id_info")
+    public BaseResponse<MemberDto.IdResponse> idInfo(@RequestBody MemberDto.IdRequest dto) {
+        return memberService.getId(dto);
+    }
+
     @GetMapping("/auth/check")
     public ResponseEntity<BaseResponse<MemberDto.SignupResponse>> logincheck(
-            @CookieValue(name = "ATOKEN", required = false) String token) throws JsonProcessingException {
+            @CookieValue(name = "ATOKEN", required = false) String token,
+            HttpServletResponse httpResponse
+    ) throws JsonProcessingException {
 
         BaseResponse<MemberDto.SignupResponse> response = memberService.logincheck(token);
-        System.out.println(response.getData()+" "+ response.getIsSuccess());
+        if(token != null) {
+            String newToken = JwtUtil.refreshToken(token);
+            ResponseCookie cookie = ResponseCookie
+                    .from("ATOKEN", newToken)
+                    .path("/")
+                    .httpOnly(true)
+                    .secure(true)
+                    .maxAge(Duration.ofHours(1L))
+                    .build();
+            httpResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        }
         String jsonResponse = new ObjectMapper().writeValueAsString(response);
         return ResponseEntity
                 .ok()
                 .header("Content-Length", String.valueOf(jsonResponse.getBytes(StandardCharsets.UTF_8).length))
                 .body(response);
+    }
+
+    @GetMapping("/verify")
+    public BaseResponse<String> verify(String uuid) {
+        return memberService.verify(uuid);
     }
 
 }

@@ -85,4 +85,19 @@ public class MemberDto {
                     .build();
         }
     }
+
+    @Getter
+    public static class IdRequest {
+        private String username;
+        private String email;
+    }
+
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class IdResponse {
+        private String userid;
+        public static IdResponse fromEntity(Member member) {
+            return IdResponse.builder().userid(member.getUserid()).build();
+        }
+    }
+
 }
