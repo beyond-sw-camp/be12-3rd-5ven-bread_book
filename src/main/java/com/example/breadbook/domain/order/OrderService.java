@@ -2,7 +2,7 @@ package com.example.breadbook.domain.order;
 
 
 import com.example.breadbook.domain.book.BookRepository;
-import com.example.breadbook.domain.member.MemberRepository;
+import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.order.model.OrderDto;

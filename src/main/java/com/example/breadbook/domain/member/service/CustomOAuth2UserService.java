@@ -1,7 +1,8 @@
-package com.example.breadbook.domain.member;
+package com.example.breadbook.domain.member.service;
 
 import com.example.breadbook.domain.member.model.CustomOAuth2Member;
 import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

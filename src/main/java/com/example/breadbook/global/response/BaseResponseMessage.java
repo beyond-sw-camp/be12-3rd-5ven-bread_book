@@ -21,10 +21,15 @@ public enum BaseResponseMessage {
     LOGIN_UNAUTHORIZED(false, 2404, "로그인 되어 있지 않습니다."),
     LOGIN_ID_PW_FAILED(false, 2401, "ID나 비밀번호가 틀렸습니다."),
     LOGIN_VERIFY_DISABLED(false, 2403, "이메일이 인증되지 않았습니다."),
+    TOKEN_EXPIRED(false, 2444, "토큰이 만료되었습니다. 다시 로그인해주세요"),
     EMAIL_VERIFY_SUCCESS(true, 2201, "이메일 인증에 성공했습니다."),
     EMAIL_VERIFY_NULL(false, 2404, "해당 uuid가 없습니다."),
     FIND_ID_SUCCESS(true, 2201, "ID를 성공적으로 찾았습니다."),
-    FIND_ID_NULL(false, 2404, "해당 이름과 email로 가입된 ID가 없습니다."),
+    FIND_ID_NULL(false, 2404, "해당 이름과 Email로 가입된 ID가 없습니다."),
+    FIND_PASSWORD_SUCCESS(true, 2201, "가입한 이메일을 확인해주세요."),
+    RESET_PASSWORD_SUCCESS(true, 2201, "비밀번호 변경에 성공했습니다."),
+    RESET_PASSWORD_UNMATCHED(false, 2403, "비밀번호가 틀렸습니다."),
+    RESET_PASSWORD_NULL(false, 2404, "잘못된 uuid 값입니다."),
 
     // ========================================================================================================================
     // 상품 기능(3000)
