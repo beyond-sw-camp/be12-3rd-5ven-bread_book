@@ -86,6 +86,26 @@ public class MemberDto {
         }
     }
 
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class LoginResponse {
+        private Long idx;
+        private String userid;
+        private String username;
+        private String email;
+        private String nickname;
+        private String provider;
+        public static LoginResponse fromEntity(Member member) {
+            return LoginResponse.builder()
+                    .idx(member.getIdx())
+                    .userid(member.getUserid())
+                    .username(member.getUsername())
+                    .email(member.getEmail())
+                    .nickname(member.getNickname())
+                    .provider(member.getProvider())
+                    .build();
+        }
+    }
+
     @Getter
     public static class IdRequest {
         private String username;
@@ -98,6 +118,19 @@ public class MemberDto {
         public static IdResponse fromEntity(Member member) {
             return IdResponse.builder().userid(member.getUserid()).build();
         }
+    }
+
+    @Getter
+    public static class PasswordFindRequest {
+        private String userid;
+        private String email;
+    }
+
+    @Getter
+    public static class PasswordResetRequest {
+        private String uuid;
+        private String oldPassword;
+        private String newPassword;
     }
 
 }

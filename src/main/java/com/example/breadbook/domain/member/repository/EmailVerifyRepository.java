@@ -1,4 +1,4 @@
-package com.example.breadbook.domain.member;
+package com.example.breadbook.domain.member.repository;
 
 import com.example.breadbook.domain.member.model.EmailVerify;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,7 @@
 package com.example.breadbook.domain.member;
 
 import com.example.breadbook.domain.member.model.MemberDto;
+import com.example.breadbook.domain.member.service.MemberService;
 import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.utils.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,13 +52,24 @@ public class MemberController {
         return memberService.getId(dto);
     }
 
+    @PostMapping("/password/find")
+    public BaseResponse<String> findPassword(@RequestBody MemberDto.PasswordFindRequest dto) {
+        return memberService.forgetPassword(dto);
+    }
+
+    @PostMapping("/password/reset")
+    public BaseResponse<String> resetPassword(@RequestBody MemberDto.PasswordResetRequest dto,
+                                              @CookieValue(name = "ATOKEN", required = false) String token) {
+        return memberService.resetPassword(dto, token);
+    }
+
     @GetMapping("/auth/check")
-    public ResponseEntity<BaseResponse<MemberDto.SignupResponse>> logincheck(
+    public ResponseEntity<BaseResponse<MemberDto.LoginResponse>> logincheck(
             @CookieValue(name = "ATOKEN", required = false) String token,
             HttpServletResponse httpResponse
     ) throws JsonProcessingException {
 
-        BaseResponse<MemberDto.SignupResponse> response = memberService.logincheck(token);
+        BaseResponse<MemberDto.LoginResponse> response = memberService.logincheck(token);
         if(token != null) {
             String newToken = JwtUtil.refreshToken(token);
             ResponseCookie cookie = ResponseCookie

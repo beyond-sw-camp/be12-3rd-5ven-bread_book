@@ -1,6 +1,6 @@
 package com.example.breadbook.global.config;
 
-import com.example.breadbook.domain.member.CustomOAuth2UserService;
+import com.example.breadbook.domain.member.service.CustomOAuth2UserService;
 import com.example.breadbook.global.config.filter.JwtFilter;
 import com.example.breadbook.global.config.filter.LoginFilter;
 import com.example.breadbook.global.handler.OAuth2SuccessHandler;
@@ -75,7 +75,7 @@ public class SecurityConfig {
                 (auth) -> auth
                         .requestMatchers("/user/signup", "/user/login","/logout",
                                 "/user/signup-oauth", "/user/auth/check", "/user/verify/**",
-                                "/user/id_info",
+                                "/user/id_info", "/user/password/reset", "/user/password/find",
                                 "/error", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/swagger-resources/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
