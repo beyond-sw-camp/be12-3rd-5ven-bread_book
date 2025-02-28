@@ -60,7 +60,7 @@ public class MemberController {
     @PostMapping("/password/reset")
     public BaseResponse<String> resetPassword(@RequestBody MemberDto.PasswordResetRequest dto,
                                               @CookieValue(name = "ATOKEN", required = false) String token) {
-
+        return memberService.resetPassword(dto, token);
     }
 
     @GetMapping("/auth/check")
