@@ -77,7 +77,10 @@ public class SecurityConfig {
                                 "/user/signup-oauth", "/user/auth/check", "/user/verify/**",
                                 "/user/id_info", "/user/password/reset", "/user/password/find",
                                 "/error", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/swagger-resources/**","cookies/user").permitAll()
+                                "/swagger-resources/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/api/chatting/rooms").permitAll()
+                        .requestMatchers("/swagger-resources/**","/cookies/user").permitAll()
 //                        .requestMatchers("/feed/register").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
         );

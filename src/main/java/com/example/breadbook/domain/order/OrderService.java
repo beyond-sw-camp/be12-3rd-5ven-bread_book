@@ -7,8 +7,9 @@ import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.order.model.OrderDto;
 import com.example.breadbook.domain.order.model.OrderStatus;
-import com.example.breadbook.domain.product.ProductRepository;
+
 import com.example.breadbook.domain.product.model.Product;
+import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.domain.review.ReviewRepository;
 import com.example.breadbook.domain.review.model.Review;
 import com.example.breadbook.global.response.BaseResponse;
