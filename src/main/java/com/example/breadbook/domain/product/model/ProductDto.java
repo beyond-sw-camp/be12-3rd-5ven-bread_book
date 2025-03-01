@@ -17,7 +17,7 @@ public class ProductDto {
         // private Book book; //frontend 사용자 선택 => json 스트링 값 => 어떻게 바꿀 것?
         // private Category category; // frontend 사용자 선택 => json 스트링값 => 어떻게 바꿀 것?
         private Long bookIdx;
-        private Long categoryIdx;
+        private String categoryName;
         private Long price;
         private BookCondition bookCondition;
         private String tradeMethod;

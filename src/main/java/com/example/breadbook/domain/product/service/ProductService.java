@@ -31,7 +31,7 @@ public class ProductService {
     //, Book book, Category category
     public ProductDto.ProductResponse registerProduct(ProductDto.ProductRegister dto, Member member, MultipartFile[] imgFiles) {
         Book book = bookRepository.findById(dto.getBookIdx()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 책"));
-        Category category = categoryRepository.findById(dto.getCategoryIdx()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리"));
+        Category category = categoryRepository.findByName(dto.getCategoryName()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리"));
         // Optional 로 해줘도 될까?
 
         Product product = productRepository.save(dto.toEntity(member, book, category));

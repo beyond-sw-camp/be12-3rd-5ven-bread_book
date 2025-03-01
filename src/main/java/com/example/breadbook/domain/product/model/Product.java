@@ -51,6 +51,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;  // 판매 상태 (ENUM)
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImageList = new ArrayList<>();
 }
