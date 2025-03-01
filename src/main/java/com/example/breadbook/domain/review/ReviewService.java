@@ -2,7 +2,7 @@ package com.example.breadbook.domain.review;
 
 import com.example.breadbook.domain.member.MemberRepository;
 import com.example.breadbook.domain.member.model.Member;
-import com.example.breadbook.domain.product.ProductRepository;
+import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.review.model.Review;
 import com.example.breadbook.domain.review.model.ReviewDto;

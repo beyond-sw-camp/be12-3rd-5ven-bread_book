@@ -1,4 +1,4 @@
-package com.example.breadbook.domain.product;
+package com.example.breadbook.domain.product.repository;
 
 import com.example.breadbook.domain.product.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
