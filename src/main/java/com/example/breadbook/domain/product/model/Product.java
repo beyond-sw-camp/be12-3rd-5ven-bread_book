@@ -1,8 +1,6 @@
 package com.example.breadbook.domain.product.model;
 
 import com.example.breadbook.domain.book.model.Book;
-import com.example.breadbook.domain.book.model.BookDto;
-import com.example.breadbook.domain.category.model.Category;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.BookCondition;
 import com.example.breadbook.domain.product.ProductStatus;
@@ -53,6 +51,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;  // 판매 상태 (ENUM)
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImageList = new ArrayList<>();
 }
