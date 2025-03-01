@@ -1,8 +1,6 @@
 package com.example.breadbook.domain.product.model;
 
 import com.example.breadbook.domain.book.model.Book;
-import com.example.breadbook.domain.book.model.BookDto;
-import com.example.breadbook.domain.category.model.Category;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.BookCondition;
 import com.example.breadbook.domain.product.ProductStatus;

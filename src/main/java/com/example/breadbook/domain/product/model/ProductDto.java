@@ -1,18 +1,14 @@
 package com.example.breadbook.domain.product.model;
 
 import com.example.breadbook.domain.book.model.Book;
-import com.example.breadbook.domain.book.model.BookDto;
-import com.example.breadbook.domain.category.model.Category;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.BookCondition;
 import com.example.breadbook.domain.product.ProductStatus;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProductDto {
     @Getter
