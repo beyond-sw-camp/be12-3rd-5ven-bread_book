@@ -9,7 +9,6 @@ import com.example.breadbook.domain.product.ProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +41,12 @@ public class Product {
     @Column(nullable = false, length = 10)
     private BookCondition bookCondition;  // 책 상태 (ENUM)
 
+
+    @Column(nullable = false, length = 255)
     private String tradeMethod;  // 거래 선호 방식
+    @Column(nullable = true, length = 255)
     private String tradeLocation;  // 거래 장소 (직거래 시)
+    @Column(nullable = false, length = 1000)
     private String description;  // 상품 설명
     private LocalDateTime createdAt = LocalDateTime.now();  // 등록일시
 
