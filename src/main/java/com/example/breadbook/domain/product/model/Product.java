@@ -41,6 +41,7 @@ public class Product {
     @Column(nullable = false, length = 10)
     private BookCondition bookCondition;  // 책 상태 (ENUM)
 
+
     @Column(nullable = false, length = 255)
     private String tradeMethod;  // 거래 선호 방식
     @Column(nullable = true, length = 255)

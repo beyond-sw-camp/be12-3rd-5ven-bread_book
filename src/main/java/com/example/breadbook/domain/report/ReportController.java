@@ -1,6 +1,6 @@
-package com.example.breadbook.Report;
+package com.example.breadbook.domain.report;
 
-import com.example.breadbook.Report.model.ReportDto;
+import com.example.breadbook.domain.report.model.ReportDto;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ReportController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/{reportIdx")
+    @GetMapping("/{reportIdx}")
     public ResponseEntity<ReportDto.ReportResponse> get(@PathVariable Long reportIdx) {
         ReportDto.ReportResponse response = reportService.read(reportIdx);
         return ResponseEntity.ok(response);

@@ -1,4 +1,4 @@
-package com.example.breadbook.Report.model;
+package com.example.breadbook.domain.report.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
@@ -7,21 +7,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ReportDto {
     @Getter
     public static class ReportRegister {
-        private Long member_idx;
-        private Long product_idx;
         private String report_reason;
-        private Date create_at;
+        private LocalDateTime create_at;
 
         public Report toEntity(Product product, Member member) {
 
             return Report.builder()
-                    .member_idx(member.getIdx())
-                    .product_idx(product.getIdx())
                     .report_reason(report_reason)
                     .create_at(create_at)
                     .product(product)
@@ -34,7 +31,7 @@ public class ReportDto {
     public static class ReportResponse {
         private Long idx;
         private String report_reason;
-        private Date create_at;
+        private LocalDateTime create_at;
         private MemberInfo memberInfo;
         private ProductInfo productInfo;
 

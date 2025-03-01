@@ -1,6 +1,7 @@
 package com.example.breadbook.domain.member.model;
 
 
+import com.example.breadbook.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Builder
@@ -52,9 +54,15 @@ public class Member implements UserDetails {
     private Boolean agree;
     @ColumnDefault(value = "0")
     private Integer score;
+    private String provider;
+    @ColumnDefault(value = "false")
+    private Boolean enabled;
 
-    @ColumnDefault(value = "/defaultProfileImg.jpg")
-    private String imgUrl;
+    @ColumnDefault(value = "'/defaultProfileImg.jpg'")
+    private String profileImgUrl;
+
+//    @OneToMany(mappedBy = "member")
+//    private List<Product> productList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -69,6 +77,10 @@ public class Member implements UserDetails {
 
         authorities.add(authority);
         return authorities;
+    }
+
+    public void memberVerify() {
+        this.enabled = true;
     }
 
     @Override
@@ -88,7 +100,7 @@ public class Member implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
 
