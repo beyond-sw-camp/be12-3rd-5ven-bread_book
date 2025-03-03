@@ -12,6 +12,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Base64;
@@ -23,6 +24,7 @@ public class WishService {
     private final WishRepository wishRepository;
     private final ProductRepository productRepository;
 
+    @Transactional
     public void toggleWish(Long productIdx, Member member) {
         Product product = productRepository.findById(productIdx)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
@@ -38,6 +40,7 @@ public class WishService {
         wishRepository.save(wish);
     }
 
+    @Transactional
     public List<Product> getWishList(Member member) {
         return wishRepository.findAllByMemberAndCanceledFalse(member)
                 .stream().map(Wish::getProduct).toList();
