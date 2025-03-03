@@ -22,24 +22,24 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;  // 판매 상품 고유 ID
 
+    /* 외래키 */
     @ManyToOne
     @JoinColumn(name="member_idx")
     private Member member;  // 판매자 ID (회원 테이블 참조)
-
+    /* 외래키 */
     @ManyToOne
     @JoinColumn(name = "book_idx", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Book book;  // 판매되는 책 정보
-
+    /* 외래키 */
     @ManyToOne
     @JoinColumn(name = "category_idx", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Category category;  // 카테고리 참조
 
     private Long price;  // 가격
-
+    /* ENUM 열거형 상수 */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private BookCondition bookCondition;  // 책 상태 (ENUM)
-
 
     @Column(nullable = false, length = 255)
     private String tradeMethod;  // 거래 선호 방식
@@ -49,6 +49,7 @@ public class Product {
     private String description;  // 상품 설명
     private LocalDateTime createdAt = LocalDateTime.now();  // 등록일시
 
+    /* ENUM 열거형 상수 */
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;  // 판매 상태 (ENUM)
 
