@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface WishRepository extends JpaRepository<Wish, Long> {
     Optional<Wish> findByMemberAndProduct(Member member, Product product);
     List<Wish> findAllByMemberAndCanceledFalse(Member member);
+
+    List<Wish> findByMemberIdx(Long idx);
 }

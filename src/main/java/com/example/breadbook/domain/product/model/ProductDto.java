@@ -80,7 +80,10 @@ public class ProductDto {
         }
     }
 
-    @Getter @NoArgsConstructor @AllArgsConstructor @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class ListResponse {
         private String title;
         private String author;
@@ -89,6 +92,7 @@ public class ProductDto {
         private Long price;
         private BookCondition bookCondition;
         private String firstImageUrl;
+        private boolean isWishCanceled;
     }
 
 }
