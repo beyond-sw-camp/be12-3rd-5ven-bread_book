@@ -44,7 +44,7 @@ public class ProductService {
         List<String> uploadFilePaths = localImageService.upload(imgFiles);
         productImageService.createProductImage(uploadFilePaths, product);
 
-        ProductDto.ProductResponse response =  ProductDto.ProductResponse.of(product);
+        ProductDto.ProductResponse response =  ProductDto.ProductResponse.of(product, uploadFilePaths);
         response.setProductImageList(uploadFilePaths);
         return response;
     }
