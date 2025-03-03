@@ -1,6 +1,8 @@
 package com.example.breadbook.domain.chat.model;
 
+import com.example.breadbook.domain.member.model.Member;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "participant")
+@AllArgsConstructor
 public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +21,12 @@ public class Participant {
     @JoinColumn(name = "room_idx")
     private ChattingRoom room;
 
-    @Column(name = "user_idx")
-    private Long userIdx;
+    @ManyToOne
+    @JoinColumn(name = "member_idx")
+    private Member member;
 
-    public Participant(ChattingRoom room, Long userIdx) {
+    public Participant(ChattingRoom room, Member member) {
         this.room = room;
-        this.userIdx = userIdx;
+        this.member = member;
     }
 }
