@@ -11,7 +11,7 @@ import org.hibernate.annotations.BatchSize;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@BatchSize(size = 24)
+@BatchSize(size = 100)
 public class Wish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
