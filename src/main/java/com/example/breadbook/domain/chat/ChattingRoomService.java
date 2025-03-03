@@ -96,6 +96,7 @@ import com.example.breadbook.domain.chat.model.Message;
 import com.example.breadbook.domain.chat.model.Participant;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.member.repository.MemberRepository;
+import com.example.breadbook.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,6 +111,7 @@ public class ChattingRoomService {
     private final ParticipantRepository participantRepository;
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
+    private final ProductRepository productRepository;
 
     // 1:1 채팅방 생성 (판매자 & 구매자)
     @Transactional
@@ -119,7 +121,20 @@ public class ChattingRoomService {
         room.setProductIdx(productIdx);
 
         // 책 제목 가져오기
-        bookRepository.findById(productIdx).ifPresent(book -> room.setTitle(book.getTitle()));
+//        bookRepository.findById(productIdx).ifPresent(book -> room.setTitle(book.getTitle()));
+
+        // 📌 Product 엔티티에서 책 제목 & 대표 이미지 가져오기
+        productRepository.findById(productIdx).ifPresent(product -> {
+            room.setTitle(product.getBook().getTitle()); // ✅ 책 제목 설정
+
+            // ✅ 대표 이미지 가져오기 (첫 번째 이미지 선택)
+            if (!product.getProductImageList().isEmpty()) {
+                room.setProductImageUrl(product.getProductImageList().get(0).getProductImgUrl());
+            } else {
+                room.setProductImageUrl(null); // 이미지가 없으면 null
+            }
+        });
+
 
         ChattingRoom savedRoom = chattingRoomRepository.save(room);
 
