@@ -29,8 +29,9 @@ public class OrderController {
         return ResponseEntity.ok(orderService.orderList(idx));
     }
 
-    @GetMapping("/payList")
-    public ResponseEntity<BaseResponse<List<OrderDto.PayListResp>>> payList(@RequestParam("idx") Long idx){
+    @PostMapping("/payList")
+    public ResponseEntity<BaseResponse<List<OrderDto.PayListResp>>> payList(@RequestBody Map<String, Long> requestBody){
+        Long idx = requestBody.get("idx");
         return ResponseEntity.ok(orderService.PayList(idx));
     }
 
