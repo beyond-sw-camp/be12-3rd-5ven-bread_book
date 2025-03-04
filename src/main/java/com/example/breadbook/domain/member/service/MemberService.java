@@ -120,10 +120,9 @@ public class MemberService implements UserDetailsService {
             Member member = memberRepository.findById(tokenMember.getIdx()).orElseThrow();
             if(!passwordEncoder.matches(dto.getOldPassword(), member.getPassword()))
                 return new BaseResponse<>(BaseResponseMessage.RESET_PASSWORD_UNMATCHED, "실패");
-            memberRepository.save(Member.builder()
-                            .idx(member.getIdx())
-                            .password(passwordEncoder.encode(dto.getNewPassword()))
-                            .build());
+            memberRepository.save(member.updateMember(Member.builder()
+                    .password(passwordEncoder.encode(dto.getNewPassword()))
+                    .build()));
             return new BaseResponse<>(BaseResponseMessage.RESET_PASSWORD_SUCCESS, "비밀번호 변경 성공");
         } else {
             PasswordReset passwordReset = passwordResetRepository
@@ -134,11 +133,9 @@ public class MemberService implements UserDetailsService {
             }
 
             Member member = passwordReset.getMember();
-            memberRepository.save(Member.builder()
-                    .idx(member.getIdx())
+            memberRepository.save(member.updateMember(Member.builder()
                     .password(passwordEncoder.encode(dto.getNewPassword()))
-                    .build());
-
+                    .build()));
             memberRepository.save(member);
             return new BaseResponse<>(BaseResponseMessage.RESET_PASSWORD_SUCCESS, "비밀번호 변경 성공");
         }

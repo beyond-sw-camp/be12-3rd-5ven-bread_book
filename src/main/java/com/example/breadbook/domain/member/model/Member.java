@@ -103,6 +103,28 @@ public class Member implements UserDetails {
         return this.enabled;
     }
 
+    public Member updateMember(Member member) {
+        return Member.builder()
+                .idx(this.getIdx())
+                .userid(this.userid)
+                .username(member.getUsername() == null ? this.username : member.getUsername())
+                .email(this.email)
+                .password(member.getPassword() == null ? this.password : member.getPassword())
+                .nickname(member.getNickname() == null ? this.nickname : member.getNickname())
+                .birthDate(member.getBirthDate() == null ? this.birthDate : member.getBirthDate())
+                .gender(member.getGender() == null ? this.gender : member.getGender())
+                .createdAt(this.createdAt)
+                .isAdmin(this.isAdmin)
+                .isDeleted(this.isDeleted)
+                .deletedAt(this.deletedAt)
+                .agree(this.agree)
+                .score(this.score)
+                .provider(this.provider)
+                .enabled(this.enabled)
+                .profileImgUrl(member.getProfileImgUrl() == null ? this.profileImgUrl : member.getProfileImgUrl())
+                .build();
+    }
+
 
     public enum GenderType {
         male, female, other
