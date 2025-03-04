@@ -35,4 +35,10 @@ public class ChattingRoom {
 
     @OneToMany(mappedBy = "room")
     private List<Message> messages = new ArrayList<>();
+
+    @Column(name = "product_image_url")
+    private String productImageUrl;
+
+    private Long productPrice;
+
 }

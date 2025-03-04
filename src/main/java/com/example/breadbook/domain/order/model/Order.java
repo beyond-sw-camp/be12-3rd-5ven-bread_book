@@ -2,6 +2,7 @@ package com.example.breadbook.domain.order.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
+import com.example.breadbook.domain.review.model.Review;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,4 +39,7 @@ public class Order {
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt ;
+
+    @OneToOne(mappedBy = "order", optional = true)
+    private Review review;
 }

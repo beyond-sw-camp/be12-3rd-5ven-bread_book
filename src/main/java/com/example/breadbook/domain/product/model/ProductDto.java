@@ -1,18 +1,15 @@
 package com.example.breadbook.domain.product.model;
 
 import com.example.breadbook.domain.book.model.Book;
-import com.example.breadbook.domain.book.model.BookDto;
-import com.example.breadbook.domain.category.model.Category;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.BookCondition;
 import com.example.breadbook.domain.product.ProductStatus;
 import lombok.*;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProductDto {
     @Getter
@@ -21,7 +18,7 @@ public class ProductDto {
         // private Book book; //frontend 사용자 선택 => json 스트링 값 => 어떻게 바꿀 것?
         // private Category category; // frontend 사용자 선택 => json 스트링값 => 어떻게 바꿀 것?
         private Long bookIdx;
-        private Long categoryIdx;
+        private String categoryName;
         private Long price;
         private BookCondition bookCondition;
         private String tradeMethod;
@@ -42,17 +39,6 @@ public class ProductDto {
                     .description(description)
                     .createdAt(LocalDateTime.now())
                     .productStatus(productStatus)
-                    .build();
-        }
-    }
-    @Getter
-    public static class ProductImageRegister {
-        private String productImgUrl;
-
-        public ProductImage toEntity(Product product) {
-            return ProductImage.builder()
-                    .productImgUrl(productImgUrl)
-                    .product(product)
                     .build();
         }
     }
@@ -94,16 +80,19 @@ public class ProductDto {
         }
     }
 
-//    @Getter @NoArgsConstructor @AllArgsConstructor @Builder
-//    public static class ProductImageResponse {
-//        private Long idx;
-//        private String productImgUrl;
-//
-//        public static ProductImageResponse from(ProductImage productImage) {
-//            return ProductImageResponse.builder()
-//                    .idx(productImage.getIdx())
-//                    .productImgUrl(productImage.getProductImgUrl())
-//                    .build();
-//        }
-//    }
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ListResponse {
+        private String title;
+        private String author;
+        private String publisher;
+        private LocalDate publicationDate;
+        private Long price;
+        private BookCondition bookCondition;
+        private String firstImageUrl;
+        private boolean isWishCanceled;
+    }
+
 }

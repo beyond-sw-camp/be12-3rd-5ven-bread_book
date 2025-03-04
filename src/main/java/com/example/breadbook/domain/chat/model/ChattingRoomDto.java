@@ -21,6 +21,8 @@ public class ChattingRoomDto {
         private String identifier;
         private Long productIdx;
         private String title; // 추가
+        private String productImageUrl; // 책 이미지 URL 추가
+        private Long productPrice;
         private List<MessageDto.MessageRes> messages;
 
         public static ChattingRes from(ChattingRoom room) {
@@ -29,6 +31,8 @@ public class ChattingRoomDto {
                     .identifier(room.getIdentifier())
                     .productIdx(room.getProductIdx())
                     .title(room.getTitle())
+                    .productImageUrl(room.getProductImageUrl()) // 책 이미지
+                    .productPrice(room.getProductPrice())
                     .messages(
                             room.getMessages() == null
                                     ? null : room.getMessages().stream().map(MessageDto.MessageRes::from).collect(Collectors.toList())
