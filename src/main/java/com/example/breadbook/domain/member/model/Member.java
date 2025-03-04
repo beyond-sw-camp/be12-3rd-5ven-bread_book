@@ -1,12 +1,14 @@
 package com.example.breadbook.domain.member.model;
 
 
+import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
@@ -61,8 +63,16 @@ public class Member implements UserDetails {
     @ColumnDefault(value = "'/defaultProfileImg.jpg'")
     private String profileImgUrl;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Product> productList;
+    @Builder.Default
+    @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
+    private List<Product> products=new ArrayList<>();
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "member")
+    @BatchSize(size = 5)
+    private List<Order> orders=new ArrayList<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

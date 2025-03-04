@@ -2,11 +2,14 @@ package com.example.breadbook.domain.product.model;
 
 import com.example.breadbook.domain.book.model.Book;
 import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.product.BookCondition;
 import com.example.breadbook.domain.product.ProductStatus;
+import com.example.breadbook.domain.review.model.Review;
 import com.example.breadbook.domain.wish.model.Wish;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -58,5 +61,14 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishList = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "product")
+    @BatchSize(size = 1)
+    private List<Order> orders = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews = new ArrayList<>();
 
 }
