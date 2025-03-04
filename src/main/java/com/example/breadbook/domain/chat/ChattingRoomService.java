@@ -126,6 +126,7 @@ public class ChattingRoomService {
         // 📌 Product 엔티티에서 책 제목 & 대표 이미지 가져오기
         productRepository.findById(productIdx).ifPresent(product -> {
             room.setTitle(product.getBook().getTitle()); // ✅ 책 제목 설정
+            room.setProductPrice(product.getPrice());
 
             // ✅ 대표 이미지 가져오기 (첫 번째 이미지 선택)
             if (!product.getProductImageList().isEmpty()) {
