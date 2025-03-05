@@ -35,6 +35,7 @@ public class ChattingRoom {
     @OneToMany(mappedBy = "room")
     private List<Message> messages = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "room")
+    private List<Participant> participants = new ArrayList<>();
 }
 
