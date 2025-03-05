@@ -42,10 +42,7 @@ public class OrderDto {
         private String userName;
         private Long reviewIdx;
         private Long productIdx;
-        private void setReviewIdx(Long reviewIdx){
-            this.reviewIdx = reviewIdx;
-        }
-        public static OrderListResp toResp(Order order){
+        public static OrderListResp of(Order order){
             OrderListResp orderListResp= OrderListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
@@ -74,7 +71,7 @@ public class OrderDto {
         private String title;
         private String userName;
         private Long productIdx;
-        public static PayListResp toResp(Order order){
+        public static PayListResp of(Order order){
             return PayListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())

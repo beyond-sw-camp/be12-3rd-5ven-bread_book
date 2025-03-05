@@ -49,7 +49,7 @@ public class OrderService {
 
         for(Order order : members.get(0).getOrders()) {
 
-            list.add(OrderDto.PayListResp.toResp(order));
+            list.add(OrderDto.PayListResp.of(order));
         }
 
         if (list.size() > 0) {
@@ -75,28 +75,9 @@ public class OrderService {
 
         List<OrderDto.OrderListResp> list = new ArrayList<>();
         for (Order order : members.get(0).getOrders()) {
-            list.add(OrderDto.OrderListResp.toResp(order));
+            list.add(OrderDto.OrderListResp.of(order));
 
         }
-
-
-//        List<OrderDto.test> orderListResps = members.stream()
-//                .flatMap(member -> member.getProducts().stream() // 주문 목록을 먼저 순회
-//                                .flatMap(product -> product.getReviews().stream() // 상품에 대한 리뷰 목록을 순회
-//                                        .flatMap(order -> product.getProductImageList().stream() // 상품 이미지 목록을 순회
-//                                                .map(product -> OrderDto.test.builder()
-//                                                        .memberIdx(member.getIdx())
-//                                                        .productIdx(product.getIdx())
-//                                                                .bookIdx(product.getBook().getIdx())
-//                                                                .orderIdx(orders.getIdx())
-//                                                                .productImageListIdx(productImage.getIdx())
-//                                                        .build()
-//                                                )
-//                                        )
-//                               )
-//                        )
-//                )
-//                .collect(Collectors.toList());
 
         if (list.size() > 0) {
             return new BaseResponse(BaseResponseMessage.ORDER_PAYlISTFIND_SUCCESS, list);
