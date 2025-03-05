@@ -19,9 +19,8 @@ public class ChattingRoomDto {
     public static class ChattingRes {
         private Long roomIdx;
         private String identifier;
-        private Long productIdx;
-        private String title; // 추가
-        private String productImageUrl; // 책 이미지 URL 추가
+        private String title;
+        private String productImageUrl;
         private Long productPrice;
         private List<MessageDto.MessageRes> messages;
 
@@ -29,10 +28,13 @@ public class ChattingRoomDto {
             return ChattingRes.builder()
                     .roomIdx(room.getIdx())
                     .identifier(room.getIdentifier())
-                    .productIdx(room.getProductIdx())
-                    .title(room.getTitle())
-                    .productImageUrl(room.getProductImageUrl()) // 책 이미지
-                    .productPrice(room.getProductPrice())
+                    .title(room.getProduct().getBook().getTitle())
+                    .productImageUrl(
+                            !room.getProduct().getProductImageList().isEmpty()
+                                    ? room.getProduct().getProductImageList().get(0).getProductImgUrl()
+                                    : null
+                    )
+                    .productPrice(room.getProduct().getPrice())
                     .messages(
                             room.getMessages() == null
                                     ? null : room.getMessages().stream().map(MessageDto.MessageRes::from).collect(Collectors.toList())
@@ -41,3 +43,4 @@ public class ChattingRoomDto {
         }
     }
 }
+

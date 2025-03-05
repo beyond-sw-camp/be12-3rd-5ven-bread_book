@@ -30,7 +30,6 @@ public class ChattingRoomController {
 
         ChattingRoom room = chattingRoomService.createChattingRoom(identifier, productIdx, buyerId, sellerId);
 
-//        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CHATTINGROOM_SUCCESS, ChattingRoomDto.ChattingRes.from(room));
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_SUCCESS, ChattingRoomDto.ChattingRes.from(room)));
 
     }

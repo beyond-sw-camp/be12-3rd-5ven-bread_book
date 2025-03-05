@@ -1,5 +1,6 @@
 package com.example.breadbook.domain.chat.model;
 
+import com.example.breadbook.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +22,9 @@ public class ChattingRoom {
     @Column(nullable = false, unique = true)
     private String identifier;
 
-    @Column(name = "product_idx")
-    private Long productIdx;
-
-    @Column(name = "book_title")
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "product_idx")
+    private Product product;
 
     @Column(columnDefinition = "TEXT")
     private String lastChat;
@@ -36,9 +35,7 @@ public class ChattingRoom {
     @OneToMany(mappedBy = "room")
     private List<Message> messages = new ArrayList<>();
 
-    @Column(name = "product_image_url")
-    private String productImageUrl;
-
-    private Long productPrice;
-
+    @OneToMany(mappedBy = "room")
+    private List<Participant> participants = new ArrayList<>();
 }
+
