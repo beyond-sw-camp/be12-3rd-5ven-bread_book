@@ -58,8 +58,10 @@
 
 &nbsp; 
 ## 시스템 아키텍쳐
+![breadbook3rd drawio](https://github.com/user-attachments/assets/9e154374-4140-469f-bff9-0b6df6021501)
 
 &nbsp; 
+
 
 ## 기능테스트
 
