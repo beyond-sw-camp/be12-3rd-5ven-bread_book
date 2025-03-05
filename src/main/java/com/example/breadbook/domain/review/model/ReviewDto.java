@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 
 public class ReviewDto {
     @Getter
-    @AllArgsConstructor @NoArgsConstructor @Builder
+    @Builder
     public static class ReviewDtoReq{
         private Long memberIdx;
-        private Long productIdx;
+        private Long orderIdx;
+        private int los;
+        private Boolean agree;
         private String reviewText;
         private int rating;
     }

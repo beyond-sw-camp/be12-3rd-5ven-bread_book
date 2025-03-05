@@ -20,4 +20,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "LEFT JOIN FETCH p.member m " +
             "WHERE o.idx = :idx")
     Order findByOrderDetailse(Long idx);
+
+    @Query("SELECT o FROM Order o " +
+            "LEFT JOIN FETCH o.product p " +
+            "LEFT JOIN FETCH p.member m " +
+            "LEFT JOIN FETCH o.review r " +
+            "LEFT JOIN FETCH p.category c " +
+            "LEFT JOIN FETCH p.book b " +
+            "WHERE o.idx = :idx")
+    Order findByMemberAndProduct(Long idx);
 }

@@ -44,7 +44,7 @@ public class OrderDto {
         private Long productIdx;
         public static OrderListResp of(Order order){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            
+
             OrderListResp orderListResp= OrderListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
