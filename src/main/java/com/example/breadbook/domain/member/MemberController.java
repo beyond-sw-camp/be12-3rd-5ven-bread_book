@@ -1,5 +1,6 @@
 package com.example.breadbook.domain.member;
 
+import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.member.model.MemberDto;
 import com.example.breadbook.domain.member.service.MemberService;
 import com.example.breadbook.global.response.BaseResponse;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
@@ -45,6 +47,11 @@ public class MemberController {
             return ResponseEntity.badRequest().body(respDto);
         }
         return ResponseEntity.ok(respDto);
+    }
+
+    @PostMapping("/info")
+    public BaseResponse<MemberDto.MemberInfoResponse> info(@AuthenticationPrincipal Member member) {
+        return memberService.memberInfo(member);
     }
 
     @PostMapping("/id_info")

@@ -100,6 +100,12 @@ public class MemberService implements UserDetailsService {
         return MemberDto.SignupResponse.fromEntity(member);
     }
 
+    public BaseResponse<MemberDto.MemberInfoResponse> memberInfo(Member loginedMember) {
+        Member member = memberRepository.findById(loginedMember.getIdx()).orElseThrow();
+        MemberDto.MemberInfoResponse response = MemberDto.MemberInfoResponse.fromEntity(member);
+        return new BaseResponse<>(BaseResponseMessage.MEMBER_INFO_SUCCESS, response);
+    }
+
     public BaseResponse<String> forgetPassword(MemberDto.PasswordFindRequest dto) {
         String uuid = UUID.randomUUID().toString();
         LocalDateTime time = LocalDateTime.now().plusHours(1L);
@@ -136,7 +142,6 @@ public class MemberService implements UserDetailsService {
             memberRepository.save(member.updateMember(Member.builder()
                     .password(passwordEncoder.encode(dto.getNewPassword()))
                     .build()));
-            memberRepository.save(member);
             return new BaseResponse<>(BaseResponseMessage.RESET_PASSWORD_SUCCESS, "비밀번호 변경 성공");
         }
     }
