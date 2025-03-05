@@ -70,6 +70,7 @@ public class Member implements UserDetails {
 
     @Builder.Default
     @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
+    @BatchSize(size = 5)
     private List<Product> products = new ArrayList<>();
 
 

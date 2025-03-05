@@ -9,6 +9,7 @@ import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.order.model.OrderDto;
 import com.example.breadbook.domain.product.model.Product;
+import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.response.BaseResponseMessage;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ChattingRoomRepository chattingRoomRepository;
+    private final ProductRepository productRepository;
 
 //    @Transactional
 //    public BaseResponse<Order> registOrder(OrderDto.OrderDtoReq dto) {
@@ -48,12 +50,11 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public BaseResponse<List<OrderDto.PayListResp>> PayList(Long idx) {
-        List<Member> members = memberRepository.findMemberWithOrdersAndProducts(idx);
+        List<Member> members = memberRepository.findMemberWithProductsAndOrders(idx);
         List<OrderDto.PayListResp> list = new ArrayList<>();
 
-        for(Order order : members.get(0).getOrders()) {
-
-            list.add(OrderDto.PayListResp.of(order));
+        for(Product product : members.get(0).getProducts()) {
+            list.add(OrderDto.PayListResp.of(product));
         }
 
         if (list.size() > 0) {
