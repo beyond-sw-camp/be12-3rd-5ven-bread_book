@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class OrderDto {
 
@@ -13,8 +14,7 @@ public class OrderDto {
     @Getter
     public static class OrderDtoReq{
         private int amount;
-        private Long memberIdx;
-        private Long productIdx;
+        private Long chattingRoom;
     }
 
     @Getter
@@ -33,7 +33,7 @@ public class OrderDto {
     @Getter
     @Builder
     public static class OrderListResp{
-        private LocalDateTime orderCreatedAt;
+        private String orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
         private String bookImg;
@@ -42,16 +42,16 @@ public class OrderDto {
         private String userName;
         private Long reviewIdx;
         private Long productIdx;
-        private void setReviewIdx(Long reviewIdx){
-            this.reviewIdx = reviewIdx;
-        }
-        public static OrderListResp toResp(Order order){
+        public static OrderListResp of(Order order){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
             OrderListResp orderListResp= OrderListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
                     .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
-                    .orderCreatedAt(order.getCreatedAt())
+                    .orderCreatedAt(order.getCreatedAt().format(formatter))
                     .title(order.getProduct().getBook().getTitle())
                     .userName(order.getProduct().getMember().getUsername())
                     .productIdx(order.getProduct().getIdx())
@@ -66,7 +66,7 @@ public class OrderDto {
     @Getter
     @Builder
     public static class PayListResp{
-        private LocalDateTime orderCreatedAt;
+        private String orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
         private String bookImg;
@@ -74,16 +74,19 @@ public class OrderDto {
         private String title;
         private String userName;
         private Long productIdx;
-        public static PayListResp toResp(Order order){
+        public static PayListResp of(Product product){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Order order = product.getOrders().stream().findFirst().orElse(null);
+
             return PayListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
-                    .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
-                    .orderCreatedAt(order.getCreatedAt())
-                    .title(order.getProduct().getBook().getTitle())
-                    .userName(order.getProduct().getMember().getUsername())
-                    .productIdx(order.getProduct().getIdx())
+                    .bookImg(product.getProductImageList().get(0).getProductImgUrl())
+                    .orderCreatedAt(order.getCreatedAt().format(formatter))
+                    .title(product.getBook().getTitle())
+                    .userName((order != null && !product.getOrders().isEmpty()) ? order.getMember().getUsername() : null)
+                    .productIdx(product.getIdx())
                     .build();
         }
     }

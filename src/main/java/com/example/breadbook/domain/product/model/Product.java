@@ -13,7 +13,9 @@ import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -65,7 +67,7 @@ public class Product {
     @Builder.Default
     @OneToMany(mappedBy = "product")
     @BatchSize(size = 1)
-    private List<Order> orders = new ArrayList<>();
+    private Set<Order> orders = Collections.emptySet();
 
     @Builder.Default
     @OneToMany(mappedBy = "product")
