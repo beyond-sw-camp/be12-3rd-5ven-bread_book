@@ -1,6 +1,7 @@
 package com.example.breadbook.domain.member.model;
 
 
+import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.wish.model.Wish;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
@@ -65,8 +67,17 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Product> productList;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
+    private List<Product> products=new ArrayList<>();
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "member")
+    @BatchSize(size = 5)
+    private List<Order> orders=new ArrayList<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -105,6 +116,28 @@ public class Member implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public Member updateMember(Member member) {
+        return Member.builder()
+                .idx(this.getIdx())
+                .userid(this.userid)
+                .username(member.getUsername() == null ? this.username : member.getUsername())
+                .email(this.email)
+                .password(member.getPassword() == null ? this.password : member.getPassword())
+                .nickname(member.getNickname() == null ? this.nickname : member.getNickname())
+                .birthDate(member.getBirthDate() == null ? this.birthDate : member.getBirthDate())
+                .gender(member.getGender() == null ? this.gender : member.getGender())
+                .createdAt(this.createdAt)
+                .isAdmin(this.isAdmin)
+                .isDeleted(this.isDeleted)
+                .deletedAt(this.deletedAt)
+                .agree(this.agree)
+                .score(this.score)
+                .provider(this.provider)
+                .enabled(this.enabled)
+                .profileImgUrl(member.getProfileImgUrl() == null ? this.profileImgUrl : member.getProfileImgUrl())
+                .build();
     }
 
 

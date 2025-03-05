@@ -12,4 +12,5 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     Optional<Wish> findByMemberAndProduct(Member member, Product product);
     List<Wish> findAllByMemberAndCanceledFalse(Member member);
     //JPQL쿼리 자동생성=> SELECT w FROM Wish w WHERE w.member = :member AND w.canceled = false
+
 }

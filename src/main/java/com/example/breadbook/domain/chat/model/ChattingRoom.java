@@ -39,4 +39,6 @@ public class ChattingRoom {
     @Column(name = "product_image_url")
     private String productImageUrl;
 
+    private Long productPrice;
+
 }
