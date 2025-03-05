@@ -27,8 +27,8 @@ public class ProductController {
 
     @PostMapping("register")
     public ResponseEntity<BaseResponse<ProductDto.ProductResponse>> register(@AuthenticationPrincipal Member member,
-                                                                            @RequestPart ProductDto.ProductRegister dto,
-                                                                            @RequestPart MultipartFile[] imgFiles) {
+                                                                             @RequestPart ProductDto.ProductRegister dto,
+                                                                             @RequestPart MultipartFile[] imgFiles) {
         ProductDto.ProductResponse response = productService.registerProduct(dto, member, imgFiles);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
     }
@@ -40,11 +40,10 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<ProductDto.ListResponse>> list(
+    public ResponseEntity<BaseResponse<Page<ProductDto.ListResponse>>> list(
             @AuthenticationPrincipal Member member,
             @PageableDefault(size = 24, sort = "price", direction = Sort.Direction.DESC)Pageable pageable) {
         Page<ProductDto.ListResponse> response = productService.getProductList(member, pageable);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS,response));
     }
-
 }
