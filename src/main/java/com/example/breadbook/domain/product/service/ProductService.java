@@ -51,7 +51,7 @@ public class ProductService {
 
     public Page<ProductDto.ListResponse> getProductList(Member currentUser, Pageable pageable) {
         // 현재 로그인한 사용자의 위시리스트 조회
-        List<Wish> wishList = wishRepository.findByMemberIdx(currentUser.getIdx());
+        List<Wish> wishList = wishRepository.findAllByMemberAndCanceledFalse(currentUser);
         // 로그인하지 않은 상태라면? => 어떻게 할 지 생각해보기.. ㅠㅠ
 
         // wishList를 productIdx 기준으로 Map 변환 (N+1) 방지
