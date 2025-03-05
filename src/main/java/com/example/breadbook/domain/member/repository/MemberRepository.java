@@ -16,10 +16,20 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m " +
             "LEFT JOIN FETCH m.orders o " +  //N
             "LEFT JOIN FETCH o.product p " +  //N
-            "LEFT JOIN FETCH o.review r " +   //1
-            "LEFT JOIN FETCH p.book b " +     //1
-            "LEFT JOIN FETCH p.category c " +  //1
-            "LEFT JOIN FETCH p.member m2 " +  //1
+            "LEFT JOIN FETCH o.review r " +
+            "LEFT JOIN FETCH p.book b " +
+            "LEFT JOIN FETCH p.category c " +
+            "LEFT JOIN FETCH p.member m2 " +
             "WHERE m.idx = :idx")
     List<Member> findMemberWithOrdersAndProducts(@Param("idx") Long idx);
+
+
+    @Query("SELECT m FROM Member m " +
+            "LEFT JOIN FETCH m.products p " +
+            "LEFT JOIN FETCH p.book b " +
+            "LEFT JOIN FETCH p.orders o " +
+            "LEFT JOIN FETCH o.review r " +
+            "LEFT JOIN FETCH p.category c " +
+            "WHERE m.idx = :idx")
+    List<Member> findMemberWithProductsAndOrders(Long idx);
 }

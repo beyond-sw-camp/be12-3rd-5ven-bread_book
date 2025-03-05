@@ -26,7 +26,7 @@ public class Order {
     @JoinColumn(name = "member_idx", nullable = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_idx", nullable = false)
     private Product product;
 

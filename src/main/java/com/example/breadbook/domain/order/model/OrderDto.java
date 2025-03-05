@@ -74,18 +74,19 @@ public class OrderDto {
         private String title;
         private String userName;
         private Long productIdx;
-        public static PayListResp of(Order order){
+        public static PayListResp of(Product product){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Order order = product.getOrders().stream().findFirst().orElse(null);
 
             return PayListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
-                    .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
+                    .bookImg(product.getProductImageList().get(0).getProductImgUrl())
                     .orderCreatedAt(order.getCreatedAt().format(formatter))
-                    .title(order.getProduct().getBook().getTitle())
-                    .userName(order.getProduct().getMember().getUsername())
-                    .productIdx(order.getProduct().getIdx())
+                    .title(product.getBook().getTitle())
+                    .userName((order != null && !product.getOrders().isEmpty()) ? order.getMember().getUsername() : null)
+                    .productIdx(product.getIdx())
                     .build();
         }
     }
