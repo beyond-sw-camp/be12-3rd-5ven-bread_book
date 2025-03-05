@@ -3,6 +3,7 @@ package com.example.breadbook.domain.member.model;
 
 import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.product.model.Product;
+import com.example.breadbook.domain.wish.model.Wish;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,6 +63,10 @@ public class Member implements UserDetails {
 
     @ColumnDefault(value = "'/defaultProfileImg.jpg'")
     private String profileImgUrl;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wish> wishList = new ArrayList<>();
+
 
     @Builder.Default
     @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
