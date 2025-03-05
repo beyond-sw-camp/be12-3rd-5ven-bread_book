@@ -4,6 +4,7 @@ import com.example.breadbook.domain.book.model.Book;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.BookCondition;
 import com.example.breadbook.domain.product.ProductStatus;
+import com.example.breadbook.domain.product.ScoreCategory;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -45,8 +46,8 @@ public class ProductDto {
     @Getter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class ProductResponse {
         private Long idx;
-        private String authorName;
-
+        private String scoreCategory;
+        private String sellerName;
         private Book book;
         private Category category;
         private Long price;
@@ -61,7 +62,8 @@ public class ProductDto {
         public static ProductResponse of(Product product, List<String> productImageList) {
             return ProductResponse.builder()
                     .idx(product.getIdx())
-                    .authorName(product.getMember().getNickname())
+                    .scoreCategory(ScoreCategory.toCategoryString(product.getMember().getScore()))
+                    .sellerName(product.getMember().getNickname())
                     .book(product.getBook())
                     .category(product.getCategory())
                     .price(product.getPrice())
@@ -84,6 +86,7 @@ public class ProductDto {
     @AllArgsConstructor
     @Builder
     public static class ListResponse {
+        private Integer sellerScore;
         private String title;
         private String author;
         private String publisher;

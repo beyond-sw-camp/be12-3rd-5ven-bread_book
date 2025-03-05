@@ -46,4 +46,7 @@ public class ProductController {
         Page<ProductDto.ListResponse> response = productService.getProductList(member, pageable);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS,response));
     }
+
+    //@GetMapping("{productIdx}")
+
 }
