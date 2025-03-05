@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ChattingRoomRepository extends JpaRepository<ChattingRoom, Long> {
-    ChattingRoom findByIdentifier(String identifier);
 
 //    @Query("SELECT r FROM ChattingRoom r " +
 //            "LEFT JOIN FETCH r.product p " +
