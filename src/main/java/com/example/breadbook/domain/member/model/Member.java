@@ -70,7 +70,7 @@ public class Member implements UserDetails {
 
     @Builder.Default
     @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
-    private List<Product> products=new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
 
     @Builder.Default
