@@ -3,6 +3,7 @@ package com.example.breadbook.domain.product.service;
 import com.example.breadbook.domain.book.BookRepository;
 import com.example.breadbook.domain.book.model.Book;
 import com.example.breadbook.domain.member.service.MemberService;
+import com.example.breadbook.domain.product.ScoreCategory;
 import com.example.breadbook.domain.product.model.ProductImage;
 import com.example.breadbook.domain.product.repository.CategoryRepository;
 import com.example.breadbook.domain.product.model.Category;
@@ -85,6 +86,7 @@ public class ProductService {
         */
 
         return productRepository.findAll(pageable).map(product -> new ProductDto.ListResponse(
+                ScoreCategory.toCategoryString(product.getMember().getScore()),
                 product.getBook().getTitle(),
                 product.getBook().getAuthor(),
                 product.getBook().getPublisher(),
@@ -92,7 +94,7 @@ public class ProductService {
                 product.getPrice(),
                 product.getBookCondition(),
                 product.getProductImageList().isEmpty() ? null : product.getProductImageList().get(0).getProductImgUrl(),
-                wishCanceledMap.getOrDefault(product.getIdx(), false)
+                wishCanceledMap.getOrDefault(product.getIdx(), true)
         ));
     }
 }

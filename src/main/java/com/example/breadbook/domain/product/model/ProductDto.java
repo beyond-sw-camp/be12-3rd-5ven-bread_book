@@ -84,6 +84,7 @@ public class ProductDto {
     @AllArgsConstructor
     @Builder
     public static class ListResponse {
+        private String scoreCategory;
         private String title;
         private String author;
         private String publisher;
