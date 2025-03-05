@@ -4,18 +4,10 @@ import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.domain.wish.model.Wish;
-import com.example.breadbook.domain.wish.model.WishDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 @Service
