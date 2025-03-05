@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ProductDto {
     @Getter
-    public static class ProductRegister {
+    public static class RegisterRequest {
         // private Member member; //jwt 토큰
         // private Book book; //frontend 사용자 선택 => json 스트링 값 => 어떻게 바꿀 것?
         // private Category category; // frontend 사용자 선택 => json 스트링값 => 어떻게 바꿀 것?
@@ -96,5 +96,46 @@ public class ProductDto {
         private String firstImageUrl;
         private boolean isWishCanceled;
     }
+
+//    @Getter
+//    public static class DeleteResponse {
+//        private Long productIdx;
+//        private boolean isSuccess;
+//    }
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class DeleteResponse {
+        private Long idx;
+    }
+
+//    @Getter
+//    public static class Update {
+//        // private Member member; //jwt 토큰
+//        // private Book book; //frontend 사용자 선택 => json 스트링 값 => 어떻게 바꿀 것?
+//        // private Category category; // frontend 사용자 선택 => json 스트링값 => 어떻게 바꿀 것?
+//        private Long bookIdx;
+//        private String categoryName;
+//        private Long price;
+//        private BookCondition bookCondition;
+//        private String tradeMethod;
+//        private String tradeLocation;
+//        private String description;
+//        private ProductStatus productStatus;
+//
+//        public Product toEntity(Long productIdx, Member member, Book book, Category category) {
+//            return Product.builder()
+//                    .idx(productIdx)
+//                    .member(member)
+//                    .book(book)
+//                    .category(category)
+//                    .price(price)
+//                    .bookCondition(bookCondition)
+//                    .tradeMethod(tradeMethod)
+//                    .tradeLocation(tradeLocation)
+//                    .description(description)
+//                    .createdAt(LocalDateTime.now())
+//                    .productStatus(productStatus)
+//                    .build();
+//        }
+//    }
 
 }
