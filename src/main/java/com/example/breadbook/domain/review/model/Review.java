@@ -1,6 +1,7 @@
 package com.example.breadbook.domain.review.model;
 
 import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class Review {
     @JoinColumn(name = "member_idx", nullable = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_idx", nullable = false)
     private Product product;
 
@@ -37,4 +38,7 @@ public class Review {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @OneToOne
+    @JoinColumn(name = "order_idx", nullable = false)
+    private Order order;
 }

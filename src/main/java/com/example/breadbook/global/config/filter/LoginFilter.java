@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,6 +28,14 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     public LoginFilter(AntPathRequestMatcher antPathRequestMatcher, AuthenticationManager authenticationManager) {
         super(antPathRequestMatcher, authenticationManager);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, failed);
+        if(failed.getMessage().equals("No value present") || failed instanceof BadCredentialsException) {
+
+        }
     }
 
     // 원래는 form-data 형식으로 사용자 정보를 입력받았는데
@@ -61,8 +70,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         Member member = (Member) authResult.getPrincipal();
         String jwtToken = JwtUtil.generateToken(member.getIdx(), member.getEmail(),
-                member.getScore(), member.getUserid(), member.getBirthDate(),
-                member.getUsername(), member.getNickname(), member.getGender());
+                member.getUserid(),
+                member.getUsername(), member.getNickname(), member.getProvider());
 
 
 //        일반적인 객체 생성 및 객체의 변수에 값을 설정하는 방법

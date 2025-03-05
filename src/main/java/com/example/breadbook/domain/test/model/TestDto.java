@@ -10,4 +10,12 @@ public class TestDto {
     public static class TestResponse {
         private Long idx;
     }
+
+    @Builder
+    @Getter
+    public static class tokenUser{
+        private Long idx;
+        private String userId;
+        private String username;
+    }
 }

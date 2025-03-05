@@ -1,7 +1,9 @@
 package com.example.breadbook.global.config;
 
+import com.example.breadbook.domain.member.service.CustomOAuth2UserService;
 import com.example.breadbook.global.config.filter.JwtFilter;
 import com.example.breadbook.global.config.filter.LoginFilter;
+import com.example.breadbook.global.handler.OAuth2SuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,13 +17,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
     private final AuthenticationConfiguration configuration;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+//        configuration.setAllowedMethod(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,6 +60,7 @@ public class SecurityConfig {
         // <script>alert("asd")</script>, 일반적으로 XSS
         // <script>게시글 작성 스크립트</script>, 일반적으로 CSRF
         // CSRF : 크로스 사이트 요청 변조
+        http.cors(cors -> corsConfigurationSource());
         http.csrf(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.sessionManagement(AbstractHttpConfigurer::disable);
@@ -50,13 +73,26 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(
                 (auth) -> auth
-                        .requestMatchers("/user/signup", "/login","/logout",
-                                "/user/read/**",
+                        .requestMatchers("/user/signup", "/user/login","/logout",
+                                "/user/signup-oauth", "/user/auth/check", "/user/verify/**",
+                                "/user/id_info", "/user/password/reset", "/user/password/find",
                                 "/error", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/swagger-resources/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/api/chatting/rooms").permitAll()
+                        .requestMatchers("/api/chatting/rooms/**").permitAll()
+                        .requestMatchers("/api/chatting/room").permitAll()
+                        .requestMatchers("/api/chatting/room/**").permitAll()
+                        .requestMatchers("/swagger-resources/**","/cookies/user").permitAll()
 //                        .requestMatchers("/feed/register").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
         );
+
+        http.oauth2Login(config-> {
+            config.successHandler(new OAuth2SuccessHandler());
+            config.userInfoEndpoint(endpoint->
+                    endpoint.userService(customOAuth2UserService));
+        });
 
         http.addFilterAt(new LoginFilter(new AntPathRequestMatcher("/user/login", "POST"), configuration.getAuthenticationManager()), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);

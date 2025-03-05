@@ -1,17 +1,12 @@
 package com.example.breadbook.domain.order.model;
 
-import com.example.breadbook.domain.book.model.Book;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
-import com.example.breadbook.domain.review.model.Review;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
 
 public class OrderDto {
 
@@ -19,8 +14,7 @@ public class OrderDto {
     @Getter
     public static class OrderDtoReq{
         private int amount;
-        private Long memberIdx;
-        private Long productIdx;
+        private Long chattingRoom;
     }
 
     @Getter
@@ -39,7 +33,7 @@ public class OrderDto {
     @Getter
     @Builder
     public static class OrderListResp{
-        private LocalDateTime orderCreatedAt;
+        private String orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
         private String bookImg;
@@ -48,23 +42,22 @@ public class OrderDto {
         private String userName;
         private Long reviewIdx;
         private Long productIdx;
-        private void setReviewIdx(Long reviewIdx){
-            this.reviewIdx = reviewIdx;
-        }
-        public static OrderListResp toResp(Order order, Optional<Review> review){
-            OrderListResp orderListResp=OrderListResp.builder()
+        public static OrderListResp of(Order order){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
+            OrderListResp orderListResp= OrderListResp.builder()
+                    .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
-                    .orderStatus(order.getOrderStatus())
+                    .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
+                    .orderCreatedAt(order.getCreatedAt().format(formatter))
                     .title(order.getProduct().getBook().getTitle())
-                    .orderCreatedAt(order.getCreatedAt())
-                    .bookImg(order.getProduct().getBookImage())
+                    .userName(order.getProduct().getMember().getUsername())
                     .productIdx(order.getProduct().getIdx())
-                    .userName(order.getMember().getUsername())
+                    .reviewIdx(order.getReview() != null ? order.getReview().getIdx() : null)
                     .build();
-            if(review.isPresent()){
-                orderListResp.setReviewIdx(review.get().getIdx());
-            }
+
             return orderListResp;
         }
     }
@@ -73,7 +66,7 @@ public class OrderDto {
     @Getter
     @Builder
     public static class PayListResp{
-        private LocalDateTime orderCreatedAt;
+        private String orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
         private String bookImg;
@@ -81,16 +74,18 @@ public class OrderDto {
         private String title;
         private String userName;
         private Long productIdx;
-        public static PayListResp toResp(Order order){
+        public static PayListResp of(Order order){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
             return PayListResp.builder()
+                    .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
-                    .orderStatus(order.getOrderStatus())
-                    .orderCreatedAt(order.getCreatedAt())
-                    .bookImg(order.getProduct().getBookImage())
-                    .userName(order.getMember().getUsername())
-                    .productIdx(order.getProduct().getIdx())
+                    .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
+                    .orderCreatedAt(order.getCreatedAt().format(formatter))
                     .title(order.getProduct().getBook().getTitle())
+                    .userName(order.getProduct().getMember().getUsername())
+                    .productIdx(order.getProduct().getIdx())
                     .build();
         }
     }
@@ -108,16 +103,16 @@ public class OrderDto {
         private Long reviewIdx;
         private Long memberIdx;
 
-        public static OrderDetailsResp toResp(Order order,Optional<Review> review){
+        public static OrderDetailsResp toResp(Order order){
             return OrderDetailsResp.builder()
                     .orderCreatedAt(order.getCreatedAt())
-                    .bookImg(order.getProduct().getBookImage())
+                    .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
                     .orderStatus(order.getOrderStatus())
                     .title(order.getProduct().getBook().getTitle())
                     .amount(order.getAmount())
                     .orderIdx(order.getIdx())
-                    .memberIdx(order.getProduct().getMemberIdx())
-                    .reviewIdx(review.map(Review::getIdx).orElse(null))
+                    .memberIdx(order.getProduct().getMember().getIdx())
+                    .reviewIdx(order.getReview() != null ? order.getReview().getIdx() : null)
                     .build();
         }
     }
