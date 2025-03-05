@@ -58,8 +58,7 @@
 
 &nbsp; 
 ## 시스템 아키텍쳐
-![breadbook3rd drawio](https://github.com/user-attachments/assets/9e154374-4140-469f-bff9-0b6df6021501)
-
+![AWS-Architecture-Icons-Deck_For-Light-BG_02072025 pptx](https://github.com/user-attachments/assets/54d5b6ce-9171-40ab-b2fd-dab726d13fbf)
 &nbsp; 
 
 
@@ -69,6 +68,7 @@
 <summary> Member </summary>
 - 회원가입
 </details>
+
 
 
 
