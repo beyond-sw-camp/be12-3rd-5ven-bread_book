@@ -25,7 +25,6 @@ public class ProductDto {
         private String tradeLocation;
         private String description;
         private ProductStatus productStatus;
-        List<String> productImageList = new ArrayList<>();
 
         public Product toEntity(Member member, Book book, Category category) {
             return Product.builder()
@@ -59,7 +58,7 @@ public class ProductDto {
         @Setter
         List<String> productImageList = new ArrayList<>();
 
-        public static ProductResponse of(Product product) {
+        public static ProductResponse of(Product product, List<String> productImageList) {
             return ProductResponse.builder()
                     .idx(product.getIdx())
                     .authorName(product.getMember().getNickname())
@@ -72,9 +71,9 @@ public class ProductDto {
                     .description(product.getDescription())
                     .productStatus(product.getProductStatus())
                     .productImageList(
-                            product.getProductImageList() == null?
+                            productImageList == null?
                                     null : product.getProductImageList().stream()
-                                        .map(image-> image.getProductImgUrl())
+                                        .map(ProductImage::getProductImgUrl)
                                         .toList())
                     .build();
         }
