@@ -17,10 +17,10 @@ import java.util.Map;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("/regist")
-    public ResponseEntity<BaseResponse<Order>> regist(OrderDto.OrderDtoReq dto){
-        return ResponseEntity.ok(orderService.registOrder(dto));
-    }
+//    @PostMapping("/regist")
+//    public ResponseEntity<BaseResponse<Order>> regist(OrderDto.OrderDtoReq dto){
+//        return ResponseEntity.ok(orderService.registOrder(dto));
+//    }
 
     @PostMapping("/orderList")
     public ResponseEntity<BaseResponse<List<OrderDto.OrderListResp>>> orderList(@RequestBody Map<String, Long> requestBody){

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class OrderDto {
 
@@ -13,8 +14,7 @@ public class OrderDto {
     @Getter
     public static class OrderDtoReq{
         private int amount;
-        private Long memberIdx;
-        private Long productIdx;
+        private Long chattingRoom;
     }
 
     @Getter
@@ -33,7 +33,7 @@ public class OrderDto {
     @Getter
     @Builder
     public static class OrderListResp{
-        private LocalDateTime orderCreatedAt;
+        private String orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
         private String bookImg;
@@ -43,12 +43,15 @@ public class OrderDto {
         private Long reviewIdx;
         private Long productIdx;
         public static OrderListResp of(Order order){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
             OrderListResp orderListResp= OrderListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
                     .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
-                    .orderCreatedAt(order.getCreatedAt())
+                    .orderCreatedAt(order.getCreatedAt().format(formatter))
                     .title(order.getProduct().getBook().getTitle())
                     .userName(order.getProduct().getMember().getUsername())
                     .productIdx(order.getProduct().getIdx())
@@ -63,7 +66,7 @@ public class OrderDto {
     @Getter
     @Builder
     public static class PayListResp{
-        private LocalDateTime orderCreatedAt;
+        private String orderCreatedAt;
         private OrderStatus orderStatus;
         private Long orderIdx;
         private String bookImg;
@@ -72,12 +75,14 @@ public class OrderDto {
         private String userName;
         private Long productIdx;
         public static PayListResp of(Order order){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
             return PayListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
                     .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
-                    .orderCreatedAt(order.getCreatedAt())
+                    .orderCreatedAt(order.getCreatedAt().format(formatter))
                     .title(order.getProduct().getBook().getTitle())
                     .userName(order.getProduct().getMember().getUsername())
                     .productIdx(order.getProduct().getIdx())

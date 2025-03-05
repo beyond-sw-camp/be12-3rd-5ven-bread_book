@@ -2,6 +2,8 @@ package com.example.breadbook.domain.order;
 
 
 
+import com.example.breadbook.domain.chat.ChattingRoomRepository;
+import com.example.breadbook.domain.chat.model.ChattingRoom;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.order.model.Order;
@@ -21,25 +23,27 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
+    private final ChattingRoomRepository chattingRoomRepository;
 
-    @Transactional
-    public BaseResponse<Order> registOrder(OrderDto.OrderDtoReq dto) {
-        Member member = Member.builder()
-                .idx(dto.getMemberIdx())
-                .build();
-
-        Product product = Product.builder().idx(dto.getProductIdx()).build();
-
-        Order order = OrderDto.OrderRegistResp.toEntity(member, product, dto.getAmount());
-
-        try{
-            orderRepository.save(order);
-
-            return new BaseResponse(BaseResponseMessage.ORDER_REGISTER_SUCCESS, order);
-        } catch (Exception e) {
-            return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @Transactional
+//    public BaseResponse<Order> registOrder(OrderDto.OrderDtoReq dto) {
+//        List<ChattingRoom> chattingRoom = chattingRoomRepository.findByMemberAndProduct(dto.getChattingRoom());
+//
+//        Order order = new Order();
+//        for (Member member  : chattingRoom.getParticipant().getMember()){
+//            if(member.getIdx()!=chattingRoom.get(0).getProduct.getIdx()){
+//                order = OrderDto.OrderRegistResp.toEntity(member, chattingRoom.get(0).getProduct, dto.getAmount());
+//            }
+//        }
+//
+//        try{
+//            orderRepository.save(order);
+//
+//            return new BaseResponse(BaseResponseMessage.ORDER_REGISTER_SUCCESS, order);
+//        } catch (Exception e) {
+//            return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 
     @Transactional(readOnly = true)
