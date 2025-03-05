@@ -1,10 +1,10 @@
 package com.example.breadbook.domain.product;
 
-
 import com.example.breadbook.domain.member.model.Member;
-import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.model.ProductDto;
 import com.example.breadbook.domain.product.service.ProductService;
+import com.example.breadbook.global.response.BaseResponse;
+import com.example.breadbook.global.response.BaseResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,11 +26,17 @@ public class ProductController {
     /* @RequestPart와 @RequestBody의 차이??*/
 
     @PostMapping("register")
-    public ResponseEntity<ProductDto.ProductResponse> register(@AuthenticationPrincipal Member member,
-                                            @RequestPart ProductDto.ProductRegister dto,
-                                            @RequestPart MultipartFile[] imgFiles) {
+    public ResponseEntity<BaseResponse<ProductDto.ProductResponse>> register(@AuthenticationPrincipal Member member,
+                                                                            @RequestPart ProductDto.ProductRegister dto,
+                                                                            @RequestPart MultipartFile[] imgFiles) {
         ProductDto.ProductResponse response = productService.registerProduct(dto, member, imgFiles);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
+    }
+
+    @GetMapping("/{productIdx}")
+    public ResponseEntity<BaseResponse<ProductDto.ProductResponse>> readItem(@PathVariable Long productIdx) {
+        ProductDto.ProductResponse response = productService.getProductItem(productIdx);
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
     }
 
     @GetMapping("/list")
