@@ -4,6 +4,7 @@ package com.example.breadbook.domain.order;
 
 import com.example.breadbook.domain.chat.ChattingRoomRepository;
 import com.example.breadbook.domain.chat.model.ChattingRoom;
+import com.example.breadbook.domain.chat.model.Participant;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.order.model.Order;
@@ -25,27 +26,27 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ChattingRoomRepository chattingRoomRepository;
-    private final ProductRepository productRepository;
 
-//    @Transactional
-//    public BaseResponse<Order> registOrder(OrderDto.OrderDtoReq dto) {
-//        List<ChattingRoom> chattingRoom = chattingRoomRepository.findByMemberAndProduct(dto.getChattingRoom());
-//
-//        Order order = new Order();
-//        for (Member member  : chattingRoom.getParticipant().getMember()){
-//            if(member.getIdx()!=chattingRoom.get(0).getProduct.getIdx()){
-//                order = OrderDto.OrderRegistResp.toEntity(member, chattingRoom.get(0).getProduct, dto.getAmount());
-//            }
-//        }
-//
-//        try{
-//            orderRepository.save(order);
-//
-//            return new BaseResponse(BaseResponseMessage.ORDER_REGISTER_SUCCESS, order);
-//        } catch (Exception e) {
-//            return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @Transactional
+    public BaseResponse<Order> registOrder(OrderDto.OrderDtoReq dto) {
+
+        List<ChattingRoom> chattingRoom = chattingRoomRepository.findByMemberAndProduct(dto.getChattingRoom());
+
+        Order order = new Order();
+        for (Participant participant  : chattingRoom.get(0).getParticipants()){
+            if(participant.getMember().getIdx()!=chattingRoom.get(0).getProduct().getIdx()){
+                order = OrderDto.OrderRegistResp.toEntity(participant.getMember(), chattingRoom.get(0).getProduct(), dto.getAmount());
+            }
+        }
+
+        try{
+            Order result =orderRepository.save(order);
+
+            return new BaseResponse(BaseResponseMessage.ORDER_REGISTER_SUCCESS, result);
+        } catch (Exception e) {
+            return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
     @Transactional(readOnly = true)
