@@ -8,6 +8,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/review")
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class ReviewController {
     }
 
     @GetMapping("/find/{idx}")
-    public ResponseEntity<BaseResponse<Review>> reviewFind(@PathVariable Long productIdx) {
-        return ResponseEntity.ok(reviewService.findReview(productIdx));
+    public ResponseEntity<BaseResponse<List<Review>>> reviewFind(@PathVariable Long memberIdx) {
+        return ResponseEntity.ok(reviewService.findReview(memberIdx));
     }
 }

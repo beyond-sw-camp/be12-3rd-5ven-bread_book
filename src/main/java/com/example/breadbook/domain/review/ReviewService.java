@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,11 +60,16 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public BaseResponse<Review> findReview(Long productIdx) {
-        Optional<Product> product = productRepository.findById(productIdx);
-        Optional<Review> result = reviewRepository.findByProduct(product.get());
-        if(result.isPresent()){
-            return new BaseResponse(BaseResponseMessage.REVIEW_FIND_SUCCESS,result.get());
+    public BaseResponse<List<Review>> findReview(Long memberIdx) {
+        List<Member> list = memberRepository.findByMemberAndReview(memberIdx);
+        List<ReviewDto.ReviewDtoResp> result = new ArrayList<>();
+        for (Product product : list.get(0).getProducts()) {
+            if(product.getReviews()!=null){
+                result.add(ReviewDto.ReviewDtoResp.of(product));
+            }
+        }
+        if(result.size()>0){
+            return new BaseResponse(BaseResponseMessage.REVIEW_FIND_SUCCESS,result);
         }
         return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
     }
