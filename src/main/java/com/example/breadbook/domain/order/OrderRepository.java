@@ -2,6 +2,9 @@ package com.example.breadbook.domain.order;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.order.model.Order;
+import com.example.breadbook.domain.product.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -29,4 +32,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "LEFT JOIN FETCH p.book b " +
             "WHERE o.idx = :idx")
     Order findByMemberAndProduct(Long idx);
+
 }

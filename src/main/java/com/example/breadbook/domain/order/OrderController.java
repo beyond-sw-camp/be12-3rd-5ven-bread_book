@@ -30,9 +30,8 @@ public class OrderController {
     }
 
     @PostMapping("/payList")
-    public ResponseEntity<BaseResponse<List<OrderDto.PayListResp>>> payList(@RequestBody Map<String, Long> requestBody){
-        Long idx = requestBody.get("idx");
-        return ResponseEntity.ok(orderService.PayList(idx));
+    public ResponseEntity<BaseResponse<List<OrderDto.PayListResp>>> payList(@RequestBody OrderDto.OrderListReq dto,@AuthenticationPrincipal Member member){
+        return ResponseEntity.ok(orderService.PayList(dto,member));
     }
 
     @PostMapping("/orderDetails/{idx}")

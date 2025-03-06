@@ -7,6 +7,7 @@ import com.example.breadbook.global.response.BaseResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +37,9 @@ public class ChattingRoomController {
 
     @Operation(summary = "채팅방 확인 또는 생성", description = "상품 ID와 구매자 ID를 기반으로 기존 채팅방이 있는지 확인하고, 없으면 새로 생성합니다.")
     @PostMapping("/rooms/check")
-    public ResponseEntity<BaseResponse<ChattingRoomDto.ChattingRes>> getOrCreateChatRoom(@RequestBody ChattingRoomDto.ChattingReq request) {
+    public ResponseEntity<BaseResponse<ChattingRoomDto.ChattingRes>> getOrCreateChatRoom(@Valid @RequestBody ChattingRoomDto.ChattingReq request) {
         ChattingRoom room = chattingRoomService.createChattingRoom(request.getUserIdx(), request.getProductIdx());
-        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_SUCCESS, ChattingRoomDto.ChattingRes.from(room))); // ✅ identifier 반환
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_SUCCESS, ChattingRoomDto.ChattingRes.from(room)));
     }
 
 
