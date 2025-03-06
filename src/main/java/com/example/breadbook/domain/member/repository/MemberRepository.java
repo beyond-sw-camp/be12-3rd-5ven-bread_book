@@ -39,5 +39,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "LEFT JOIN FETCH p.orders o " +
             "LEFT JOIN FETCH o.review r " +
             "WHERE m.idx = :idx")
-    List<Member> findByMemberAndReview(Long memberIdx);
+    List<Member> findByMemberAndReview(Long idx);
 }
