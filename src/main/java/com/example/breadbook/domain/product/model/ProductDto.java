@@ -72,6 +72,20 @@ public class ProductDto {
             response.setProductImageList(productImageList);
             return response;
         }
+        public static ProductResponse of(Product product) {
+            ProductResponse response = ProductResponse.builder().idx(product.getIdx())
+                    .scoreCategory(ScoreCategory.toCategoryString(product.getMember().getScore()))
+                    .sellerName(product.getMember().getNickname())
+                    .book(product.getBook())
+                    .category(product.getCategory())
+                    .price(product.getPrice())
+                    .bookCondition(product.getBookCondition())
+                    .tradeMethod(product.getTradeMethod())
+                    .tradeLocation(product.getTradeLocation())
+                    .description(product.getDescription())
+                    .productStatus(product.getProductStatus()).build();
+            return response;
+        }
     }
 
     @Getter

@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     public Product findByIdx(Long idx);
-
+    public Boolean existsByIdx(Long idx);
     @Query("SELECT p FROM Product p " +
             "LEFT JOIN FETCH p.book b " +
             "LEFT JOIN FETCH p.orders o " +

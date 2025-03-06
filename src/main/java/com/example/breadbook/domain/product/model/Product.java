@@ -19,12 +19,14 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter
     private Long idx;  // 판매 상품 고유 ID
 
     /* 외래키 */
@@ -56,7 +58,7 @@ public class Product {
 
     /* ENUM 열거형 상수 */
     @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus;  // 판매 상태 (ENUM)
+    private ProductStatus productStatus = ProductStatus.판매중;  // 판매 상태 (ENUM)
 
     @Setter
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
