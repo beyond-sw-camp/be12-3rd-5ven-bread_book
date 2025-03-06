@@ -25,10 +25,5 @@ public class Category {
     @JoinColumn(name = "parent_idx", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Category parent;  // 부모 카테고리
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Category> subCategories = new ArrayList<>();  // 자식 카테고리 리스트
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();  // 생성일시
 }
 
