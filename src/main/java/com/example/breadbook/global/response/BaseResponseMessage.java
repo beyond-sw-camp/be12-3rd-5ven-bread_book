@@ -22,6 +22,8 @@ public enum BaseResponseMessage {
     LOGIN_ID_PW_FAILED(false, 2401, "ID나 비밀번호가 틀렸습니다."),
     LOGIN_VERIFY_DISABLED(false, 2403, "이메일이 인증되지 않았습니다."),
     TOKEN_EXPIRED(false, 2444, "토큰이 만료되었습니다. 다시 로그인해주세요"),
+    MEMBER_INFO_SUCCESS(true, 2201, "회원 정보 요청에 성공했습니다."),
+    INFO_MODIFY_SUCCESS(true, 2201, "회원 정보 수정에 성공했습니다."),
     EMAIL_VERIFY_SUCCESS(true, 2201, "이메일 인증에 성공했습니다."),
     EMAIL_VERIFY_NULL(false, 2404, "해당 uuid가 없습니다."),
     FIND_ID_SUCCESS(true, 2201, "ID를 성공적으로 찾았습니다."),

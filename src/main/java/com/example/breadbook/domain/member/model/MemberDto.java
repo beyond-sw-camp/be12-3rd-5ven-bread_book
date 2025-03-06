@@ -133,4 +133,44 @@ public class MemberDto {
         private String newPassword;
     }
 
+
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class MemberModifyRequest {
+        private String nickname;
+        private LocalDate birthDate;
+        private Member.GenderType gender;
+        public Member toEntity(String profileImgUrl) {
+            return Member.builder()
+                    .nickname(nickname)
+                    .birthDate(birthDate)
+                    .gender(gender)
+                    .profileImgUrl(profileImgUrl)
+                    .build();
+        }
+    }
+
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class MemberInfoResponse {
+        private Long idx;
+        private String userid;
+        private String username;
+        private String email;
+        private String nickname;
+        private LocalDate birthDate;
+        private Member.GenderType gender;
+        private String profileImgUrl;
+        public static MemberInfoResponse fromEntity(Member member) {
+            return MemberInfoResponse.builder()
+                    .idx(member.getIdx())
+                    .userid(member.getUserid())
+                    .username(member.getUsername())
+                    .email(member.getEmail())
+                    .nickname(member.getNickname())
+                    .birthDate(member.getBirthDate())
+                    .gender(member.getGender())
+                    .profileImgUrl(member.getProfileImgUrl())
+                    .build();
+        }
+    }
+
 }

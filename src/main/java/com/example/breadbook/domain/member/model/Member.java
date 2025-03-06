@@ -142,6 +142,7 @@ public class Member implements UserDetails {
                 .provider(this.provider)
                 .enabled(this.enabled)
                 .profileImgUrl(member.getProfileImgUrl() == null ? this.profileImgUrl : member.getProfileImgUrl())
+                .wishList(this.wishList)
                 .build();
     }
 
