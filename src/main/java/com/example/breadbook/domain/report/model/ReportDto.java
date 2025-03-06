@@ -13,6 +13,7 @@ import java.util.Date;
 public class ReportDto {
     @Getter
     public static class ReportRegister {
+        @
         private String report_reason;
         private LocalDateTime create_at;
 
