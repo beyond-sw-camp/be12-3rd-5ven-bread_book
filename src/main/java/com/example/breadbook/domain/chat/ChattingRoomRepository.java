@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface ChattingRoomRepository extends JpaRepository<ChattingRoom, Long> {
 
-//    @Query("SELECT r FROM ChattingRoom r " +
-//            "LEFT JOIN FETCH r.product p " +
-//            "LEFT JOIN FETCH r.participant c " +
-//            "LEFT JOIN FETCH c.member m " +
-//            "WHERE c.idx = :idx")
-//    List<ChattingRoom> findByMemberAndProduct(Long chattingRoom);
+    @Query("SELECT r FROM ChattingRoom r " +
+            "LEFT JOIN FETCH r.product p " +
+            "LEFT JOIN FETCH r.participants c " +
+            "LEFT JOIN FETCH c.member m " +
+            "WHERE r.idx = :idx")
+    List<ChattingRoom> findByMemberAndProduct(Long idx);
 }

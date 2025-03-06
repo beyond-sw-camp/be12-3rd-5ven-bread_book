@@ -79,6 +79,10 @@ public class Member implements UserDetails {
     @BatchSize(size = 5)
     private List<Order> orders=new ArrayList<>();
 
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

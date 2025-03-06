@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class ProductService {
 
 
     @Transactional
-    public ProductDto.ProductResponse registerProduct(ProductDto.ProductRegister dto, Member member, MultipartFile[] imgFiles) {
+    public ProductDto.ProductResponse registerProduct(ProductDto.RegisterRequest dto, Member member, MultipartFile[] imgFiles) {
         Book book = bookRepository.findById(dto.getBookIdx()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 책"));
         Category category = categoryRepository.findByName(dto.getCategoryName()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리"));
 
@@ -53,6 +54,13 @@ public class ProductService {
         response.setProductImageList(uploadFilePaths);
         return response;
     }
+
+//    @Transactional
+//    public ProductDto.Update updateProduct(Long productIdx, ProductDto.Update dto, Member currentUser,MultipartFile[] imgFiles) throws Exception {
+//        Book book = bookRepository.findById(dto.getBookIdx()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 책"));
+//        Category category = categoryRepository.findByName(dto.getCategoryName()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리"));
+//        Product product = productRepository.save(dto.toEntity())
+//    }
 
     @Transactional
     public ProductDto.ProductResponse getProductItem(Long productIdx) {
@@ -85,6 +93,7 @@ public class ProductService {
         */
 
         return productRepository.findAll(pageable).map(product -> new ProductDto.ListResponse(
+                product.getMember().getScore(),
                 product.getBook().getTitle(),
                 product.getBook().getAuthor(),
                 product.getBook().getPublisher(),
@@ -92,7 +101,25 @@ public class ProductService {
                 product.getPrice(),
                 product.getBookCondition(),
                 product.getProductImageList().isEmpty() ? null : product.getProductImageList().get(0).getProductImgUrl(),
-                wishCanceledMap.getOrDefault(product.getIdx(), false)
+                wishCanceledMap.getOrDefault(product.getIdx(), true)
         ));
     }
+
+    @Transactional
+    public ProductDto.DeleteResponse deleteProduct(Long productIdx, Member currentUser) throws Exception {
+        Optional<Product> product = productRepository.findById(productIdx);
+        if (!product.get().getMember().equals(currentUser)) {
+            throw new Exception("상품 삭제 권한이 없는 사용자입니다.");
+        }
+        else {
+            productRepository.deleteById(productIdx);
+            ProductDto.DeleteResponse dto = new ProductDto.DeleteResponse();
+            dto.builder().idx(productIdx).build();
+            return dto;
+        }
+    }
+
+
+
+
 }

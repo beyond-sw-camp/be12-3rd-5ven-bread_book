@@ -1,6 +1,7 @@
 package com.example.breadbook.domain.order.model;
 
 import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.product.ProductStatus;
 import com.example.breadbook.domain.product.model.Product;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class OrderDto {
-
 
     @Getter
     public static class OrderDtoReq{
@@ -45,7 +45,6 @@ public class OrderDto {
         public static OrderListResp of(Order order){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-
             OrderListResp orderListResp= OrderListResp.builder()
                     .orderStatus(order.getOrderStatus())
                     .orderIdx(order.getIdx())
@@ -67,7 +66,7 @@ public class OrderDto {
     @Builder
     public static class PayListResp{
         private String orderCreatedAt;
-        private OrderStatus orderStatus;
+        private ProductStatus productStatus;
         private Long orderIdx;
         private String bookImg;
         private int amount;
@@ -79,7 +78,7 @@ public class OrderDto {
             Order order = product.getOrders().stream().findFirst().orElse(null);
 
             return PayListResp.builder()
-                    .orderStatus(order.getOrderStatus())
+                    .productStatus(product.getProductStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
                     .bookImg(product.getProductImageList().get(0).getProductImgUrl())
@@ -95,7 +94,7 @@ public class OrderDto {
     @Getter
     @Builder
     public static class OrderDetailsResp {
-        private LocalDateTime orderCreatedAt ;
+        private String orderCreatedAt ;
         private String bookImg;
         private OrderStatus orderStatus;
         private String title;
@@ -105,8 +104,9 @@ public class OrderDto {
         private Long memberIdx;
 
         public static OrderDetailsResp toResp(Order order){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return OrderDetailsResp.builder()
-                    .orderCreatedAt(order.getCreatedAt())
+                    .orderCreatedAt(order.getCreatedAt().format(formatter))
                     .bookImg(order.getProduct().getProductImageList().get(0).getProductImgUrl())
                     .orderStatus(order.getOrderStatus())
                     .title(order.getProduct().getBook().getTitle())

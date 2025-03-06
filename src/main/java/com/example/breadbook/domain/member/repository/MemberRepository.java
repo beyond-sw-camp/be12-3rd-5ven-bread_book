@@ -32,4 +32,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "LEFT JOIN FETCH p.category c " +
             "WHERE m.idx = :idx")
     List<Member> findMemberWithProductsAndOrders(Long idx);
+
+    @Query("SELECT m FROM Member m " +
+            "LEFT JOIN FETCH m.products p " +
+            "LEFT JOIN FETCH p.member m2 " +
+            "LEFT JOIN FETCH p.orders o " +
+            "LEFT JOIN FETCH o.review r " +
+            "WHERE m.idx = :idx")
+    List<Member> findByMemberAndReview(Long memberIdx);
 }

@@ -4,6 +4,7 @@ import com.example.breadbook.domain.book.model.Book;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.BookCondition;
 import com.example.breadbook.domain.product.ProductStatus;
+import com.example.breadbook.domain.product.ScoreCategory;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class ProductDto {
     @Getter
-    public static class ProductRegister {
+    public static class RegisterRequest {
         // private Member member; //jwt 토큰
         // private Book book; //frontend 사용자 선택 => json 스트링 값 => 어떻게 바꿀 것?
         // private Category category; // frontend 사용자 선택 => json 스트링값 => 어떻게 바꿀 것?
@@ -45,8 +46,8 @@ public class ProductDto {
     @Getter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class ProductResponse {
         private Long idx;
-        private String authorName;
-
+        private String scoreCategory;
+        private String sellerName;
         private Book book;
         private Category category;
         private Long price;
@@ -61,7 +62,8 @@ public class ProductDto {
         public static ProductResponse of(Product product, List<String> productImageList) {
             return ProductResponse.builder()
                     .idx(product.getIdx())
-                    .authorName(product.getMember().getNickname())
+                    .scoreCategory(ScoreCategory.toCategoryString(product.getMember().getScore()))
+                    .sellerName(product.getMember().getNickname())
                     .book(product.getBook())
                     .category(product.getCategory())
                     .price(product.getPrice())
@@ -84,6 +86,7 @@ public class ProductDto {
     @AllArgsConstructor
     @Builder
     public static class ListResponse {
+        private Integer sellerScore;
         private String title;
         private String author;
         private String publisher;
@@ -93,5 +96,46 @@ public class ProductDto {
         private String firstImageUrl;
         private boolean isWishCanceled;
     }
+
+//    @Getter
+//    public static class DeleteResponse {
+//        private Long productIdx;
+//        private boolean isSuccess;
+//    }
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class DeleteResponse {
+        private Long idx;
+    }
+
+//    @Getter
+//    public static class Update {
+//        // private Member member; //jwt 토큰
+//        // private Book book; //frontend 사용자 선택 => json 스트링 값 => 어떻게 바꿀 것?
+//        // private Category category; // frontend 사용자 선택 => json 스트링값 => 어떻게 바꿀 것?
+//        private Long bookIdx;
+//        private String categoryName;
+//        private Long price;
+//        private BookCondition bookCondition;
+//        private String tradeMethod;
+//        private String tradeLocation;
+//        private String description;
+//        private ProductStatus productStatus;
+//
+//        public Product toEntity(Long productIdx, Member member, Book book, Category category) {
+//            return Product.builder()
+//                    .idx(productIdx)
+//                    .member(member)
+//                    .book(book)
+//                    .category(category)
+//                    .price(price)
+//                    .bookCondition(bookCondition)
+//                    .tradeMethod(tradeMethod)
+//                    .tradeLocation(tradeLocation)
+//                    .description(description)
+//                    .createdAt(LocalDateTime.now())
+//                    .productStatus(productStatus)
+//                    .build();
+//        }
+//    }
 
 }

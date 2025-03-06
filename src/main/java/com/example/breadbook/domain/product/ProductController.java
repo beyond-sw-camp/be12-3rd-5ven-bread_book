@@ -15,8 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/product")
@@ -27,7 +25,7 @@ public class ProductController {
 
     @PostMapping("register")
     public ResponseEntity<BaseResponse<ProductDto.ProductResponse>> register(@AuthenticationPrincipal Member member,
-                                                                             @RequestPart ProductDto.ProductRegister dto,
+                                                                             @RequestPart ProductDto.RegisterRequest dto,
                                                                              @RequestPart MultipartFile[] imgFiles) {
         ProductDto.ProductResponse response = productService.registerProduct(dto, member, imgFiles);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
@@ -46,4 +44,24 @@ public class ProductController {
         Page<ProductDto.ListResponse> response = productService.getProductList(member, pageable);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS,response));
     }
+
+    @DeleteMapping("/delete/{productIdx}")
+    public ResponseEntity<BaseResponse<ProductDto.DeleteResponse>> deleteItem(@PathVariable Long productIdx, @AuthenticationPrincipal Member member) throws Exception {
+        ProductDto.DeleteResponse response = productService.deleteProduct(productIdx, member);
+
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
+    }
+
+    //@PutMapping("/update/{productIdx}")
+    //public ResponseEntity<BaseResponse<ProductDto.ProductResponse>>
+
+//    @PutMapping("/update/{productIdx}")
+//    public ResponseEntity<BaseResponse<ProductDto.ProductResponse>> update(@AuthenticationPrincipal Member member,
+//                                                                             @PathVariable Long productIdx,
+//                                                                             @RequestPart ProductDto.Update dto,
+//                                                                             @RequestPart MultipartFile[] imgFiles) {
+//        ProductDto.ProductResponse response = productService.updateProduct(productIdx, dto, member, imgFiles);
+//        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
+//    }
+
 }
