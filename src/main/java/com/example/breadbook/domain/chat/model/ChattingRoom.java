@@ -34,7 +34,7 @@ public class ChattingRoom {
     private String lastChat;
 
     @ManyToOne
-    @JoinColumn(name = "buyer_id", nullable = false) // ✅ buyer 필드 추가
+    @JoinColumn(name = "buyer_id", nullable = false) // buyer 필드 추가
     private Member buyer;
 
 

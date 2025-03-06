@@ -25,37 +25,37 @@ public class ChattingRoomService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
 
-    // ✅ 채팅방 생성 (identifier 자동 생성)
+    //  채팅방 생성 (identifier 자동 생성)
     @Transactional
     public ChattingRoom createChattingRoom(Long productIdx, Long buyerIdx) {
         Product product = productRepository.findById(productIdx)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
-        // ✅ 동일한 productIdx와 buyerId로 생성된 채팅방이 있는지 확인 (중복 방지)
+        //  동일한 productIdx와 buyerId로 생성된 채팅방이 있는지 확인 (중복 방지)
         Optional<ChattingRoom> existingRoom = chattingRoomRepository.findByProductIdxAndBuyerIdx(productIdx, buyerIdx);
         if (existingRoom.isPresent()) {
             return existingRoom.get(); // 이미 존재하는 채팅방 반환
         }
 
-        // ✅ 새로운 채팅방 생성
+        //  새로운 채팅방 생성
         Member buyer = memberRepository.findById(buyerIdx)
                 .orElseThrow(() -> new IllegalArgumentException("구매자를 찾을 수 없습니다."));
 
-        Member seller = product.getMember(); // ✅ 상품의 판매자 조회
+        Member seller = product.getMember(); //  상품의 판매자 조회
 
         ChattingRoom room = new ChattingRoom();
-        room.setIdentifier(UUID.randomUUID().toString()); // ✅ UUID 기반 identifier 자동 생성
+        room.setIdentifier(UUID.randomUUID().toString()); //  UUID 기반 identifier 자동 생성
         room.setProduct(product);
-        room.setBuyer(buyer); // ✅ buyer 저장 (성능 최적화)
+        room.setBuyer(buyer);
 
         ChattingRoom savedRoom = chattingRoomRepository.save(room);
 
-        // ✅ 채팅방 참여자 추가
+        //  채팅방 참여자 추가
         List<Participant> participants = List.of(
                 new Participant(savedRoom, buyer),
                 new Participant(savedRoom, seller)
         );
-        participantRepository.saveAll(participants); // ✅ 성능 최적화 (Bulk Insert)
+        participantRepository.saveAll(participants); // 성능 최적화 (Bulk Insert)
 
         return savedRoom;
     }
@@ -66,7 +66,7 @@ public class ChattingRoomService {
         return chattingRoomRepository.findAll();
     }
 
-    // ✅ identifier 기반으로 특정 채팅방 및 메시지 조회
+    // identifier 기반으로 특정 채팅방 및 메시지 조회
     @Transactional(readOnly = true)
     public ChattingRoom getRoomWithMessages(String identifier) {
         ChattingRoom room = chattingRoomRepository.findByIdentifier(identifier)
