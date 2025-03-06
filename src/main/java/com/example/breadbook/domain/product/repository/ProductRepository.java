@@ -20,14 +20,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "LEFT JOIN FETCH o.member m2 " +
             "WHERE p.member.idx = :memberIdx")
     Page<Product> findByProductWithMemberOrder(@Param("memberIdx") Long memberIdx, Pageable pageable);
+
     @Query("SELECT p FROM Product p " +
             "LEFT JOIN FETCH p.book b " +
             "LEFT JOIN FETCH p.orders o " +
             "LEFT JOIN FETCH o.review r " +
             "LEFT JOIN FETCH p.category c " +
             "LEFT JOIN FETCH p.member m " +
+            "LEFT JOIN FETCH o.member m2 " +
             "WHERE p.member.idx = :memberIdx")
     Page<Product> findByProductWithMemberPay(@Param("memberIdx") Long memberIdx, Pageable pageable);
+
 }
 
 

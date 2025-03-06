@@ -1,5 +1,6 @@
 package com.example.breadbook.domain.review.model;
 
+import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.product.model.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -45,14 +46,21 @@ public class ReviewDto {
 
         public static ReviewDtoResp of(Product product) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Review review = product.getReviews().stream().findFirst().orElse(null);
 
             return ReviewDtoResp.builder()
-                    .username(product.getMember().getUsername())
+                    .username(review != null && !product.getReviews().isEmpty() ? review.getMember().getUsername():null)
                     .title(product.getBook().getTitle())
-                    .reviewText(product.getReviews().get(0).getReviewText())
-                    .createdAt(product.getReviews().get(0).getCreatedAt().format(formatter))
+                    .reviewText(review != null && !product.getReviews().isEmpty() ? review.getReviewText(): null)
+                    .createdAt(review != null && !product.getReviews().isEmpty() ? review.getCreatedAt().format(formatter):null)
                     .imageUrl(product.getBook().getTitle())
                     .build();
         }
+    }
+
+    @Getter
+    public static class ReviewListReq{
+        private int page;
+        private Long memberIdx;
     }
 }

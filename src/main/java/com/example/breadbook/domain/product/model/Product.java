@@ -71,6 +71,7 @@ public class Product {
 
     @Builder.Default
     @OneToMany(mappedBy = "product")
+    @BatchSize(size = 5)
     private List<Review> reviews = new ArrayList<>();
 
 }
