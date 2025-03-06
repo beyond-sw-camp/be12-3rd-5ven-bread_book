@@ -97,6 +97,7 @@ public class ProductDto {
 //    }
     @Getter @Builder @AllArgsConstructor @NoArgsConstructor
     public static class DeleteResponse {
+        @Setter
         private Long idx;
     }
 

@@ -108,14 +108,14 @@ public class ProductService {
 
     @Transactional
     public ProductDto.DeleteResponse deleteProduct(Long productIdx, Member currentUser) throws Exception {
-        Optional<Product> product = productRepository.findById(productIdx);
-        if (!product.get().getMember().equals(currentUser)) {
+        Product product = productRepository.findByIdx(productIdx);
+        if (!(product.getMember().getIdx()).equals(currentUser.getIdx())) {
             throw new Exception("상품 삭제 권한이 없는 사용자입니다.");
         }
         else {
             productRepository.deleteById(productIdx);
             ProductDto.DeleteResponse dto = new ProductDto.DeleteResponse();
-            dto.builder().idx(productIdx).build();
+            dto.setIdx(productIdx);
             return dto;
         }
     }

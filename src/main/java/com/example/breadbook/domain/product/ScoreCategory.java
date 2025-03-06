@@ -11,8 +11,8 @@ public enum ScoreCategory {
     BREAD_TOP(200, Integer.MAX_VALUE, "샌드위치"),
     BREAD_SECOND(180, 199, "식빵"),
     BREAD_THIRD(100, 179, "반죽"),
-    BREAD_FOURTH(0, 99, "밀가루"),
-    BREAD_NEW(-50, -1, "");
+    BREAD_FOURTH(1, 99, "밀가루"),
+    BREAD_NEW(-50, 0, "씨앗");
 
     private final int min;
     private final int max;
