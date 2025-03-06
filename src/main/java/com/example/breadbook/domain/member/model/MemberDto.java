@@ -49,7 +49,7 @@ public class MemberDto {
 
 
     @Getter @Builder @AllArgsConstructor @NoArgsConstructor
-    @Schema(description = "Oauth 회원가입 요 DTO")
+    @Schema(description = "Oauth 회원가입 용 DTO")
     public static class SignupOauthRequest {
         @Schema(description = "회원이름", example = "John Doe")
         private String userName;
