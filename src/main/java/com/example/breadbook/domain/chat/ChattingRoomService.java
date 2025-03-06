@@ -9,10 +9,13 @@ import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,44 +26,51 @@ public class ChattingRoomService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
 
-    // 1:1 채팅방 생성 (판매자 & 구매자)
+    //  채팅방 생성 (identifier 자동 생성)
     @Transactional
-    public ChattingRoom createChattingRoom(String identifier, Long productIdx, Long buyerId, Long sellerId) {
-
+    public ChattingRoom createChattingRoom(Long productIdx, Long buyerIdx) {
         Product product = productRepository.findById(productIdx)
-                .orElseThrow(() -> {
-                    return new IllegalArgumentException("상품을 찾을 수 없습니다.");
-                });
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+        //  동일한 productIdx와 buyerId로 생성된 채팅방이 있는지 확인 (중복 방지)
+        Optional<ChattingRoom> existingRoom = chattingRoomRepository.findByProductIdxAndBuyerIdx(productIdx, buyerIdx);
+        if (existingRoom.isPresent()) {
+            return existingRoom.get(); // 이미 존재하는 채팅방 반환
+        }
+
+        //  새로운 채팅방 생성
+        Member buyer = memberRepository.findById(buyerIdx)
+                .orElseThrow(() -> new IllegalArgumentException("구매자를 찾을 수 없습니다."));
+
+        Member seller = product.getMember(); //  상품의 판매자 조회
 
         ChattingRoom room = new ChattingRoom();
-        room.setIdentifier(identifier);
+        room.setIdentifier(UUID.randomUUID().toString()); //  UUID 기반 identifier 자동 생성
         room.setProduct(product);
-
+        room.setBuyer(buyer);
 
         ChattingRoom savedRoom = chattingRoomRepository.save(room);
 
-        // Member 조회
-        Member buyer = memberRepository.findById(buyerId)
-                .orElseThrow(() -> new IllegalArgumentException("구매자를 찾을 수 없습니다."));
-        Member seller = memberRepository.findById(sellerId)
-                .orElseThrow(() -> new IllegalArgumentException("판매자를 찾을 수 없습니다."));
-
-        // 채팅방 참여자 추가
-        participantRepository.save(new Participant(savedRoom, buyer));
-        participantRepository.save(new Participant(savedRoom, seller));
+        //  채팅방 참여자 추가
+        List<Participant> participants = List.of(
+                new Participant(savedRoom, buyer),
+                new Participant(savedRoom, seller)
+        );
+        participantRepository.saveAll(participants); // 성능 최적화 (Bulk Insert)
 
         return savedRoom;
     }
+
 
     // 모든 채팅방 조회
     public List<ChattingRoom> getAllRooms() {
         return chattingRoomRepository.findAll();
     }
 
-    // 특정 채팅방 및 메시지 조회
+    // identifier 기반으로 특정 채팅방 및 메시지 조회
     @Transactional(readOnly = true)
-    public ChattingRoom getRoomWithMessages(Long roomIdx) {
-        ChattingRoom room = chattingRoomRepository.findById(roomIdx)
+    public ChattingRoom getRoomWithMessages(String identifier) {
+        ChattingRoom room = chattingRoomRepository.findByIdentifier(identifier)
                 .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
         List<Message> messages = messageRepository.findByRoom(room);
         room.setMessages(messages);
