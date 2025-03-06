@@ -14,6 +14,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -47,6 +48,15 @@ public class MemberController {
             return ResponseEntity.badRequest().body(respDto);
         }
         return ResponseEntity.ok(respDto);
+    }
+
+    @PostMapping("/modify")
+    public ResponseEntity<BaseResponse<MemberDto.MemberInfoResponse>> modify(
+            @AuthenticationPrincipal Member member,
+            @RequestPart MemberDto.MemberModifyRequest dto,
+            @RequestPart(required = false) MultipartFile file) {
+        BaseResponse<MemberDto.MemberInfoResponse> response = memberService.modifyMember(member, dto, file);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/info")

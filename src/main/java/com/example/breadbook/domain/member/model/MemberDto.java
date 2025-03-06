@@ -133,6 +133,22 @@ public class MemberDto {
         private String newPassword;
     }
 
+
+    @Getter @Builder @AllArgsConstructor @NoArgsConstructor
+    public static class MemberModifyRequest {
+        private String nickname;
+        private LocalDate birthDate;
+        private Member.GenderType gender;
+        public Member toEntity(String profileImgUrl) {
+            return Member.builder()
+                    .nickname(nickname)
+                    .birthDate(birthDate)
+                    .gender(gender)
+                    .profileImgUrl(profileImgUrl)
+                    .build();
+        }
+    }
+
     @Getter @Builder @AllArgsConstructor @NoArgsConstructor
     public static class MemberInfoResponse {
         private Long idx;
