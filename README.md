@@ -62,7 +62,7 @@
 &nbsp; 
 
 ## API 문서
-[API Swagger-ui](http://www.breadbook.kro.kr:8080/swagger-ui/index.html)
+[API Swagger-ui](http://api.breadbook.kro.kr:8080/swagger-ui/index.html)
 <br>
 
 
