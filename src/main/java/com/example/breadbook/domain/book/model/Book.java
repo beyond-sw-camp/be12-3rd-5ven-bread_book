@@ -14,8 +14,8 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;  // 책 고유 ID
 
-    @Column(unique = true, nullable = false, length = 20)
-    private String isbn;  // ISBN 번호
+    @Column(unique = true, nullable = false, length = 13)
+    private Long isbn;  // ISBN 번호
 
     @Column(nullable = false, length = 255)
     private String title;  // 책 제목
