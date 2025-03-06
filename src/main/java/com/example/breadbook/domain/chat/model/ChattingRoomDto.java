@@ -37,7 +37,7 @@ public class ChattingRoomDto {
         @Schema(description = "채팅방 제목(상품명)", example = "한강")
         private String title;
 
-        @Schema(description = "상품 대표 이미지 URL", example = "https://example.com/image.jpg")
+        @Schema(description = "상품 대표 이미지 URL", example = "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788932024639.jpg")
         private String productImageUrl;
 
         @Schema(description = "상품 가격", example = "30000")
