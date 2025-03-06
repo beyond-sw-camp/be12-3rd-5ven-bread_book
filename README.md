@@ -58,8 +58,12 @@
 
 &nbsp; 
 ## 시스템 아키텍쳐
-![AWS-Architecture-Icons-Deck_For-Light-BG_02072025 pptx](https://github.com/user-attachments/assets/54d5b6ce-9171-40ab-b2fd-dab726d13fbf)
+![AWS-Architecture-Icons-Deck_For-Light-BG_02072025 pptx](https://github.com/user-attachments/assets/b5e2ff30-3021-47e1-968a-873c9a6ce6e7)
 &nbsp; 
+
+## API 문서
+[API Swagger-ui](http://api.breadbook.kro.kr:8080/swagger-ui/index.html)
+<br>
 
 
 ## 기능테스트
