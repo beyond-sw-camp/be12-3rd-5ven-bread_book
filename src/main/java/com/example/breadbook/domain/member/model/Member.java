@@ -5,14 +5,12 @@ import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.wish.model.Wish;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,13 +69,18 @@ public class Member implements UserDetails {
     @Builder.Default
     @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
     @BatchSize(size = 5)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Product> products = new ArrayList<>();
 
 
     @Builder.Default
     @OneToMany(mappedBy = "member")
-    @BatchSize(size = 5)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Order> orders=new ArrayList<>();
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
 
 
     @Override
@@ -138,6 +141,7 @@ public class Member implements UserDetails {
                 .provider(this.provider)
                 .enabled(this.enabled)
                 .profileImgUrl(member.getProfileImgUrl() == null ? this.profileImgUrl : member.getProfileImgUrl())
+                .wishList(this.wishList)
                 .build();
     }
 

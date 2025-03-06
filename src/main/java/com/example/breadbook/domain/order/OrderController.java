@@ -1,11 +1,13 @@
 package com.example.breadbook.domain.order;
 
+import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.order.model.OrderDto;
 import com.example.breadbook.global.response.BaseResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,10 +25,8 @@ public class OrderController {
     }
 
     @PostMapping("/orderList")
-    public ResponseEntity<BaseResponse<List<OrderDto.OrderListResp>>> orderList(@RequestBody Map<String, Long> requestBody){
-        Long idx = requestBody.get("idx");
-        System.out.println(idx);
-        return ResponseEntity.ok(orderService.orderList(idx));
+    public ResponseEntity<BaseResponse<List<OrderDto.OrderListResp>>> orderList(@RequestBody OrderDto.OrderListReq dto,@AuthenticationPrincipal Member member){
+        return ResponseEntity.ok(orderService.orderList(dto,member));
     }
 
     @PostMapping("/payList")

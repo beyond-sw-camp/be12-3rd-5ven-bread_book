@@ -22,15 +22,9 @@ public class NotificationService {
     }
 
     @Transactional(readOnly = true)
-    public List<NotificationDto.NotificationResponse> list() {
-        List<Notification> notificationList = notificationRepository.findAll();
+    public List<NotificationDto.NotificationResponse> list(Long userIdx) {
+        List<Notification> notificationList = notificationRepository.findByMemberIdx(userIdx);
 
         return notificationList.stream().map(NotificationDto.NotificationResponse::from).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public NotificationDto.NotificationResponse read(Long notificationIdx) {
-        Notification notification = notificationRepository.findById(notificationIdx).orElseThrow();
-        return NotificationDto.NotificationResponse.from(notification);
     }
 }

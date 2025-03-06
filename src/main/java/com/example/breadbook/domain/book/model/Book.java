@@ -27,4 +27,6 @@ public class Book {
     private String publisher;  // 출판사
 
     private LocalDate publicationDate;  // 출판일
+
+    private String bookImageUrl;
 }
