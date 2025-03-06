@@ -24,12 +24,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
     @Transactional
-    public BaseResponse<Review> regist(ReviewDto.ReviewDtoReq dto) {
+    public BaseResponse<Long> regist(ReviewDto.ReviewDtoReq dto) {
         Order order = orderRepository.findByMemberAndProduct(dto.getOrderIdx());
 
         Review review = Review.builder()
@@ -51,7 +50,7 @@ public class ReviewService {
 
         updateMemberScore(member); // 별도 트랜잭션으로 점수 업데이트
         reviewRepository.save(review);
-        return new BaseResponse<>(BaseResponseMessage.REVIEW_REGISTER_SUCCESS, review);
+        return new BaseResponse<>(BaseResponseMessage.REVIEW_REGISTER_SUCCESS, review.getProduct().getIdx());
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -74,8 +73,14 @@ public class ReviewService {
         return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
     }
 
-    @Transactional(readOnly = true)
-    public Review findOderDetails(Long reviewIdx) {
-        return reviewRepository.findById(reviewIdx).orElse(null);
+
+    public BaseResponse<Long> deleteReview(Long reviewIdx) {
+        Review review= reviewRepository.findById(reviewIdx).get();
+        try{
+            reviewRepository.delete(review);
+            return new BaseResponse(BaseResponseMessage.REVIEW_DELETE_SUCCESS,review.getIdx());
+        }catch (Exception e){
+            return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
+        }
     }
 }
