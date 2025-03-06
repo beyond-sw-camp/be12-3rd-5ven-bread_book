@@ -45,7 +45,7 @@ public class MemberService implements UserDetailsService {
         message.setTo(email);
         message.setSubject("[가입인증] 책빵 가입 이메일 인증");
         message.setText(
-                "책빵 가입을 위해 아래 링크를 통해 인증을 진행해주세요.\n http://localhost:5173/email_verify/" + uuid
+                "책빵 가입을 위해 아래 링크를 통해 인증을 진행해주세요.\n https://www.breaadbook.kro.kr/email_verify/" + uuid
         );
 
         mailSender.send(message);
@@ -56,7 +56,7 @@ public class MemberService implements UserDetailsService {
         message.setTo(email);
         message.setSubject("[비밀번호 재설정] 책빵 가입 비밀번호 재설정 안내");
         message.setText(
-                "아래 링크를 통해 비밀번호 재설정을 진행해주세요.\n http://localhost:5173/change_pw/" + uuid
+                "아래 링크를 통해 비밀번호 재설정을 진행해주세요.\n https://www.breadbook.kro.kr/change_pw/" + uuid
         );
 
         mailSender.send(message);
