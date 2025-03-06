@@ -67,7 +67,7 @@ public class Product {
     @Builder.Default
     @OneToMany(mappedBy = "product")
     @BatchSize(size = 1)
-    private Set<Order> orders = Collections.emptySet();
+    private List<Order> orders = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "product")
