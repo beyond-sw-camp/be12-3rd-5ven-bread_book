@@ -48,7 +48,8 @@ public class ProductService {
         Product product = productRepository.save(dto.toEntity(member, book, category));
 
         List<String> uploadFilePaths = localImageService.upload(imgFiles);
-        productImageService.createProductImage(uploadFilePaths, product);
+        List<ProductImage> productImageList = productImageService.createProductImage(uploadFilePaths, product);
+
 
         ProductDto.ProductResponse response =  ProductDto.ProductResponse.of(product, uploadFilePaths);
         response.setProductImageList(uploadFilePaths);
