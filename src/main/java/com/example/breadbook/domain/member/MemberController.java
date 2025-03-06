@@ -7,6 +7,7 @@ import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.utils.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
+@Tag(name = "회원 기능")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
