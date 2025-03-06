@@ -25,7 +25,6 @@ public class ProductDto {
         private String tradeMethod;
         private String tradeLocation;
         private String description;
-        private ProductStatus productStatus;
 
         public Product toEntity(Member member, Book book, Category category) {
             return Product.builder()
@@ -38,7 +37,6 @@ public class ProductDto {
                     .tradeLocation(tradeLocation)
                     .description(description)
                     .createdAt(LocalDateTime.now())
-                    .productStatus(productStatus)
                     .build();
         }
     }
@@ -60,8 +58,7 @@ public class ProductDto {
         List<String> productImageList = new ArrayList<>();
 
         public static ProductResponse of(Product product, List<String> productImageList) {
-            return ProductResponse.builder()
-                    .idx(product.getIdx())
+            ProductResponse response = ProductResponse.builder().idx(product.getIdx())
                     .scoreCategory(ScoreCategory.toCategoryString(product.getMember().getScore()))
                     .sellerName(product.getMember().getNickname())
                     .book(product.getBook())
@@ -71,13 +68,9 @@ public class ProductDto {
                     .tradeMethod(product.getTradeMethod())
                     .tradeLocation(product.getTradeLocation())
                     .description(product.getDescription())
-                    .productStatus(product.getProductStatus())
-                    .productImageList(
-                            productImageList == null?
-                                    null : product.getProductImageList().stream()
-                                        .map(ProductImage::getProductImgUrl)
-                                        .toList())
-                    .build();
+                    .productStatus(product.getProductStatus()).build();
+            response.setProductImageList(productImageList);
+            return response;
         }
     }
 
