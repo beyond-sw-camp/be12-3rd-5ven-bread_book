@@ -3,6 +3,7 @@ package com.example.breadbook.domain.book;
 import com.example.breadbook.domain.book.model.BookDto;
 import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.response.BaseResponseMessage;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Tag(name = "책 정보 등록 기능")
 @RestController
 @RequestMapping("/book")
 @RequiredArgsConstructor
