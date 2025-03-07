@@ -88,23 +88,6 @@ public class ChattingRoomService {
             return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_FAIL);
         }
     }
-
-    // 메시지 저장
-    @Transactional
-    public Message saveMessage(Long roomIdx, Long userIdx, String messageText) {
-        ChattingRoom room = chattingRoomRepository.findById(roomIdx)
-                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
-        Member sender = memberRepository.findById(userIdx)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
-        Message message = new Message();
-        message.setRoom(room);
-        message.setSendUserIdx(sender.getIdx());
-        message.setMessage(messageText);
-
-        return messageRepository.save(message);
-    }
-
     // identifier 기반으로 특정 채팅방 및 메시지 조회
     @Transactional(readOnly = true)
     public BaseResponse<ChattingRoomDto.ChattingRes> getRoomWithMessages(String identifier) {

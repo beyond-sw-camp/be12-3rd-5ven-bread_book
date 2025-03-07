@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "ChattingRoom", description = "채팅방 컨트롤러")
+@Tag(name = "채팅 기능", description = "채팅방 컨트롤러")
 @RestController
 @RequestMapping("/chatting")
 @RequiredArgsConstructor
