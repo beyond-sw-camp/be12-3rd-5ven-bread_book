@@ -30,7 +30,7 @@ public class MessageDto {
         private Long sendUserIdx;
 
         @NotBlank(message = "메시지 내용은 필수 입력값입니다.")
-        @Size(min = 1, max = 500, message = "메시지 내용은 1자 이상 100자 이하이어야 합니다.")
+        @Size(min = 1, max = 100, message = "메시지 내용은 1자 이상 100자 이하이어야 합니다.")
         @Schema(description = "메시지 내용", example = "안녕하세요! 거래 가능할까요?")
         private String message;
 
