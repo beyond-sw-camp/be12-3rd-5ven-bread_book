@@ -11,6 +11,7 @@ import java.io.IOException;
 public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public ResponseEntity<String> IOException(IOException e) {
+        e.printStackTrace();
         return ResponseEntity.badRequest().body("에러");
     }
 }

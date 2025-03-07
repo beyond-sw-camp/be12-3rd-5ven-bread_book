@@ -28,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        if(jwtToken != null) {
+        if(jwtToken != null && !jwtToken.isEmpty()) {
             Member member = JwtUtil.getMember(jwtToken);
 
             if(member != null) {
