@@ -88,7 +88,7 @@ public class OrderDto {
                     .productStatus(product.getProductStatus())
                     .orderIdx(order.getIdx())
                     .amount(order.getAmount())
-                    .bookImg(product.getProductImageList().get(0).getProductImgUrl())
+                    .bookImg(product.getBook().getBookImageUrl())
                     .orderCreatedAt(order.getCreatedAt().format(formatter))
                     .title(product.getBook().getTitle())
                     .userName((order != null && !product.getOrders().isEmpty()) ? order.getMember().getUsername() : null)

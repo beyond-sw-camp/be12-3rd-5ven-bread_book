@@ -21,7 +21,7 @@ public class NotificationDto {
     public static class NotificationRegister {
         @Schema(description = "알림메시지", required = true, example = "알림입니다.")
         private String message;
-        @Schema(description = "알림 생성 시간", required = true, example = "알림입니다.")
+        @Schema(description = "알림 생성 시간", required = true, example = "yyyy-mm-dd")
         private LocalDateTime created_at;
 
         public Notification toEntity(Member member, Product product) {

@@ -13,6 +13,7 @@ public class BookDto {
         private String author;
         private String publisher;
         private LocalDate publicationDate;
+        private String bookImageUrl;
 
         public Book toEntity() {
             return Book.builder()
@@ -21,12 +22,14 @@ public class BookDto {
                     .author(author)
                     .publisher(publisher)
                     .publicationDate(publicationDate)
+                    .bookImageUrl(bookImageUrl)
                     .build();
         }
     }
 
     @Getter
     public static class BookResponse {
+        private Long idx;
         private String title;
         private String author;
         private String publisher;
@@ -34,6 +37,7 @@ public class BookDto {
 
         public static BookResponse from(Book book) {
             BookResponse response = new BookResponse();
+            response.idx = book.getIdx();
             response.title = book.getTitle();
             response.author = book.getAuthor();
             response.publisher = book.getPublisher();
