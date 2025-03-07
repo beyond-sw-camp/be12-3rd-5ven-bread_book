@@ -20,12 +20,12 @@ public class Wish {
     private Long idx;
 
     @Schema(description = "상품의 고유값", example = "10")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_idx", nullable = false)
     private Product product;
 
     @Schema(description = "찜한 사용자")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_idx", nullable = false)
     private Member member;
 

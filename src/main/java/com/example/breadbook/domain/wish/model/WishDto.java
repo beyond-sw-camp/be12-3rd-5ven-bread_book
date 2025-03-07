@@ -17,9 +17,7 @@ public class WishDto {
         private Boolean canceled;
 
         public static RegisterResponse of(Wish wish) {
-            RegisterResponse response = new RegisterResponse();
-            response.builder().productIdx(wish.getProduct().getIdx()).canceled(wish.isCanceled()).build();
-            return response;
+            return builder().productIdx(wish.getProduct().getIdx()).canceled(wish.isCanceled()).build();
         }
     }
 }
