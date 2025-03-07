@@ -28,7 +28,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.regist(dto));
     }
 
-    @GetMapping("/find")
+    @GetMapping("/{idx}")
     @Operation(summary = "리뷰 목록", description = "자신의 상품의 리뷰를 확인하는 기능입니다.")
     public ResponseEntity<BaseResponse<List<ReviewDto.ReviewDtoResp>>> reviewFind(@RequestBody ReviewDto.ReviewListReq dto) {
         return ResponseEntity.ok(reviewService.findReview(dto));

@@ -5,6 +5,7 @@ import com.example.breadbook.domain.notification.model.NotificationDto;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
