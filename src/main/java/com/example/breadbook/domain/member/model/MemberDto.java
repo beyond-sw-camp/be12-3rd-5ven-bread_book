@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +22,12 @@ public class MemberDto {
     @Schema(description = "회원가입 요청 DTO")
     public static class SignupRequest {
         @Schema(description = "회원 ID", example = "test01")
-        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$", message = "영어 대소문자, 숫자 혼합하여 6~20글자 사이")
+        @NotBlank(message = "ID는 필수값입니다.")
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$", message = "ID는 영어 대소문자, 숫자 혼합하여 6~20글자 사이")
         private String userId;
         @Schema(description = "비밀번호", example = "qwer1234")
-        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$", message = "영어 대소문자, 숫자 혼합하여 8~20글자 사이")
+        @NotBlank(message = "비밀번호는 필수값입니다.")
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$", message = "비밀번호는 영어 대소문자, 숫자 혼합하여 8~20글자 사이")
         private String password;
         @Schema(description = "회원이름", example = "John Doe")
         @NotBlank(message = "이름은 필수값입니다.")
@@ -38,10 +41,10 @@ public class MemberDto {
         private String nickName;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         @Schema(description = "생년월일", example = "1997-06-15")
-        @NotBlank(message = "생년월일은 필수값입니다.")
+        @NotNull(message = "생년월일은 필수값입니다.")
         private LocalDate birthDate;
         @Schema(description = "성별", example = "female")
-        @NotBlank(message = "성별은 필수값입니다.")
+        @NotNull(message = "성별은 필수값입니다.")
         private Member.GenderType gender;
 
         public Member toEntity(String encodedPassword) {
@@ -74,10 +77,10 @@ public class MemberDto {
         private String nickName;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         @Schema(description = "생년월일", example = "1997-06-15")
-        @NotBlank(message = "생년월일은 필수값입니다.")
+        @NotNull(message = "생년월일은 필수값입니다.")
         private LocalDate birthDate;
         @Schema(description = "성별", example = "female")
-        @NotBlank(message = "성별은 필수값입니다.")
+        @NotNull(message = "성별은 필수값입니다.")
         private Member.GenderType gender;
         public Member toEntity(String userId, String provider) {
             return Member.builder()
@@ -188,10 +191,12 @@ public class MemberDto {
         @Schema(description = "비밀번호 재설정 회원을 특정하기 위한 uuid", example = "6a7b31fb-79cf-4089-a417-2dfea2c54829")
         private String uuid;
         @Schema(description = "이전 비밀번호", example = "qwer1234")
-        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$", message = "영어 대소문자, 숫자 혼합하여 8~20글자 사이")
+        @NotBlank(message = "현재 비밀번호를 입력해주세요.")
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$", message = "비밀번호는 영어 대소문자, 숫자 혼합하여 8~20글자 사이")
         private String oldPassword;
         @Schema(description = "새 비밀번호", example = "uiop7890")
-        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$", message = "영어 대소문자, 숫자 혼합하여 8~20글자 사이")
+        @NotBlank(message = "새로운 비밀번호를 입력해주세요")
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$", message = "비밀번호는 영어 대소문자, 숫자 혼합하여 8~20글자 사이")
         private String newPassword;
     }
 
@@ -203,10 +208,10 @@ public class MemberDto {
         @NotBlank(message = "닉네임은 필수값입니다.")
         private String nickname;
         @Schema(description = "생년월일", example = "1997-06-15")
-        @NotBlank(message = "생년월일은 필수값입니다.")
+        @NotNull(message = "생년월일은 필수값입니다.")
         private LocalDate birthDate;
         @Schema(description = "성별", example = "female")
-        @NotBlank(message = "성별은 필수값입니다.")
+        @NotNull(message = "성별은 필수값입니다.")
         private Member.GenderType gender;
         public Member toEntity(String profileImgUrl) {
             return Member.builder()
