@@ -1,21 +1,20 @@
 package com.example.breadbook.domain.chat;
 
-import com.example.breadbook.domain.book.BookRepository;
-import com.example.breadbook.domain.chat.model.ChattingRoom;
-import com.example.breadbook.domain.chat.model.Message;
-import com.example.breadbook.domain.chat.model.Participant;
+import com.example.breadbook.domain.chat.model.*;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.repository.ProductRepository;
+import com.example.breadbook.global.response.BaseResponse;
+import com.example.breadbook.global.response.BaseResponseMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,53 +27,66 @@ public class ChattingRoomService {
 
     //  채팅방 생성 (identifier 자동 생성)
     @Transactional
-    public ChattingRoom createChattingRoom(Long productIdx, Long buyerIdx) {
-        Product product = productRepository.findById(productIdx)
-                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+    public BaseResponse<ChattingRoomDto.ChattingRes> createChattingRoom(Long productIdx, Long buyerIdx) {
+        try {
+            Product product = productRepository.findById(productIdx)
+                    .orElse(null);
+            if (product == null) {
+                return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_PRODUCT_NULL);
+            }
 
-        //  동일한 productIdx와 buyerId로 생성된 채팅방이 있는지 확인 (중복 방지)
-        Optional<ChattingRoom> existingRoom = chattingRoomRepository.findByProductIdxAndBuyerIdx(productIdx, buyerIdx);
-        if (existingRoom.isPresent()) {
-            return existingRoom.get(); // 이미 존재하는 채팅방 반환
+            // 기존 채팅방이 있는지 확인
+            Optional<ChattingRoom> existingRoom = chattingRoomRepository.findByProductIdxAndBuyerIdx(productIdx, buyerIdx);
+            if (existingRoom.isPresent()) {
+                return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_SUCCESS, ChattingRoomDto.ChattingRes.from(existingRoom.get()));
+            }
+
+            Member buyer = memberRepository.findById(buyerIdx)
+                    .orElse(null);
+            if (buyer == null) {
+                return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_BUYER_NULL);
+            }
+
+            Member seller = product.getMember(); // 판매자 조회
+
+            ChattingRoom room = new ChattingRoom();
+            room.setIdentifier(UUID.randomUUID().toString()); // UUID 기반 identifier 자동 생성
+            room.setProduct(product);
+            room.setBuyer(buyer);
+
+            ChattingRoom savedRoom = chattingRoomRepository.save(room);
+
+            // 채팅방 참여자 추가 (Bulk Insert)
+            List<Participant> participants = List.of(
+                    new Participant(savedRoom, buyer),
+                    new Participant(savedRoom, seller)
+            );
+            participantRepository.saveAll(participants);
+
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_SUCCESS, ChattingRoomDto.ChattingRes.from(savedRoom));
+        } catch (Exception e) {
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_NULL);
         }
-
-        //  새로운 채팅방 생성
-        Member buyer = memberRepository.findById(buyerIdx)
-                .orElseThrow(() -> new IllegalArgumentException("구매자를 찾을 수 없습니다."));
-
-        Member seller = product.getMember(); //  상품의 판매자 조회
-
-        ChattingRoom room = new ChattingRoom();
-        room.setIdentifier(UUID.randomUUID().toString()); //  UUID 기반 identifier 자동 생성
-        room.setProduct(product);
-        room.setBuyer(buyer);
-
-        ChattingRoom savedRoom = chattingRoomRepository.save(room);
-
-        //  채팅방 참여자 추가
-        List<Participant> participants = List.of(
-                new Participant(savedRoom, buyer),
-                new Participant(savedRoom, seller)
-        );
-        participantRepository.saveAll(participants); // 성능 최적화 (Bulk Insert)
-
-        return savedRoom;
     }
-
 
     // 모든 채팅방 조회
-    public List<ChattingRoom> getAllRooms() {
-        return chattingRoomRepository.findAll();
-    }
-
-    // identifier 기반으로 특정 채팅방 및 메시지 조회
     @Transactional(readOnly = true)
-    public ChattingRoom getRoomWithMessages(String identifier) {
-        ChattingRoom room = chattingRoomRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
-        List<Message> messages = messageRepository.findByRoom(room);
-        room.setMessages(messages);
-        return room;
+    public BaseResponse<List<ChattingRoomDto.ChattingRes>> getAllRooms() {
+        try {
+            List<ChattingRoom> rooms = chattingRoomRepository.findAll();
+
+            if (rooms.isEmpty()) {
+                return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_ROOM_NULL);
+            }
+
+            List<ChattingRoomDto.ChattingRes> response = rooms.stream()
+                    .map(ChattingRoomDto.ChattingRes::from)
+                    .collect(Collectors.toList());
+
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_SUCCESS, response);
+        } catch (Exception e) {
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_FAIL);
+        }
     }
 
     // 메시지 저장
@@ -93,16 +105,46 @@ public class ChattingRoomService {
         return messageRepository.save(message);
     }
 
+    // identifier 기반으로 특정 채팅방 및 메시지 조회
+    @Transactional(readOnly = true)
+    public BaseResponse<ChattingRoomDto.ChattingRes> getRoomWithMessages(String identifier) {
+        try {
+            ChattingRoom room = chattingRoomRepository.findByIdentifier(identifier)
+                    .orElse(null);
+            if (room == null) {
+                return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_ROOM_NULL);
+            }
+
+            List<Message> messages = messageRepository.findByRoom(room);
+            room.setMessages(messages);
+
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_IDENTIFIER_SUCCESS, ChattingRoomDto.ChattingRes.from(room));
+        } catch (Exception e) {
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_IDENTIFIER_FAIL);
+        }
+    }
+
+
+
     // 특정 유저가 속한 채팅방 목록 조회
     @Transactional(readOnly = true)
-    public List<ChattingRoom> getUserChatRooms(Long userIdx) {
-        Member user = memberRepository.findById(userIdx)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    public BaseResponse<List<ChattingRoomDto.ChattingRes>> getUserChatRooms(Long userIdx) {
+        try {
+            Member user = memberRepository.findById(userIdx)
+                    .orElse(null);
+            if (user == null) {
+                return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_DETAIL_USER_FAIL);
+            }
 
-        List<Participant> participants = participantRepository.findByMember(user);
-        return participants.stream()
-                .map(Participant::getRoom)
-                .distinct()
-                .toList();
+            List<Participant> participants = participantRepository.findByMember(user);
+            List<ChattingRoomDto.ChattingRes> chatRooms = participants.stream()
+                    .map(p -> ChattingRoomDto.ChattingRes.from(p.getRoom()))
+                    .distinct()
+                    .toList();
+
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_DETAIL_USER_SUCCESS, chatRooms);
+        } catch (Exception e) {
+            return new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_LIST_DETAIL_USER_FAIL);
+        }
     }
 }
