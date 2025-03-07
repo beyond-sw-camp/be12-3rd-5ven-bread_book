@@ -2,6 +2,9 @@ package com.example.breadbook.domain.wish;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
+import com.example.breadbook.domain.wish.model.WishDto;
+import com.example.breadbook.global.response.BaseResponse;
+import com.example.breadbook.global.response.BaseResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +23,9 @@ public class WishController {
 
     @Operation(summary = "찜하기/취소하기", description = "상품을 찜하거나, 찜한 상품을 해제할 수 있는 기능이다.")
     @PostMapping("/toggle/{productId}")
-    public ResponseEntity<Void> toggleWish(@PathVariable Long productId, @AuthenticationPrincipal Member member) {
-        wishService.toggleWish(productId, member);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BaseResponse<WishDto.RegisterResponse>> toggleWish(@PathVariable Long productId, @AuthenticationPrincipal Member member) {
+        WishDto.RegisterResponse res = wishService.toggleWish(productId, member);
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, res));
     }
 
     @Operation(summary = "찜 목록 열람", description = "현재 사용자가 찜한 상품들의 목록을 보여주는 기능이다.")
