@@ -50,6 +50,12 @@ public class ChatMessageConsumer {
 
         log.info("메시지 저장 완료: {}", message.getIdx());
 
+        // lastChat 업데이트
+        room.setLastChat(event.getMessage());
+        chattingRoomRepository.save(room);
+
+        log.info("채팅방 lastChat 업데이트: {}", room.getLastChat());
+
         // WebSocket으로 클라이언트에 전송
         messagingTemplate.convertAndSend("/topic/room/" + event.getRoomIdx(), MessageDto.MessageRes.from(message));
     }

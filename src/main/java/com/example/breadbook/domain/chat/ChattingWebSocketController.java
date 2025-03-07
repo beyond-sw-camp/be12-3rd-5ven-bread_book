@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "ChattingWebSocket", description = "웹소켓 채팅 컨트롤러")
+@Tag(name = "웹소켓 채팅", description = "웹소켓 채팅 컨트롤러")
 public class ChattingWebSocketController {
-    private final SimpMessagingTemplate messagingTemplate;
-    private final ChattingRoomService chattingRoomService;
     private final KafkaTemplate<String, ChatMessageEvent> kafkaTemplate;
 
     @MessageMapping("/chat/{roomIdx}")
