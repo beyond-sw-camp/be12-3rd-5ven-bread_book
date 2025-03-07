@@ -60,6 +60,11 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.판매중;  // 판매 상태 (ENUM)
 
+
+    public void setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
+    }
+
     @Setter
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImageList = new ArrayList<>();

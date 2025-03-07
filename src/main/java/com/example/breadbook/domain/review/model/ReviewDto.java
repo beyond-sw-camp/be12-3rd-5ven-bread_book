@@ -46,13 +46,13 @@ public class ReviewDto {
 
         public static ReviewDtoResp of(Product product) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            Review review = product.getReviews().stream().findFirst().orElse(null);
+            Review review = product.getOrders().stream().findFirst().orElse(null).getReview();
 
             return ReviewDtoResp.builder()
-                    .username(review != null && !product.getReviews().isEmpty() ? review.getMember().getUsername():null)
+                    .username(review != null ? review.getMember().getUsername():null)
                     .title(product.getBook().getTitle())
-                    .reviewText(review != null && !product.getReviews().isEmpty() ? review.getReviewText(): null)
-                    .createdAt(review != null && !product.getReviews().isEmpty() ? review.getCreatedAt().format(formatter):null)
+                    .reviewText(review != null ? review.getReviewText(): null)
+                    .createdAt(review != null ? review.getCreatedAt().format(formatter):null)
                     .imageUrl(product.getBook().getTitle())
                     .build();
         }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -30,14 +31,14 @@ public class MemberController {
 
     @Operation(summary = "회원가입", description = "주어진 정보로 회원가입")
     @PostMapping("/signup")
-    public ResponseEntity<MemberDto.SignupResponse> signup(@RequestBody MemberDto.SignupRequest dto) {
+    public ResponseEntity<MemberDto.SignupResponse> signup(@RequestBody @Valid MemberDto.SignupRequest dto) {
         return ResponseEntity.ok(memberService.signup(dto));
     }
 
     @Operation(summary = "Oauth 회원가입", description = "Oauth로 로그인하여 회원가입")
     @PostMapping("/signup_oauth")
     public ResponseEntity<MemberDto.SignupResponse> signupOauth(@CookieValue(name = "SUTOKEN") String token,
-                                                                @RequestBody MemberDto.SignupOauthRequest dto,
+                                                                @Valid @RequestBody MemberDto.SignupOauthRequest dto,
                                                                 HttpServletResponse response) {
 
         MemberDto.SignupResponse respDto = memberService.signupOauth(token, dto);
@@ -59,7 +60,7 @@ public class MemberController {
     @PostMapping("/modify")
     public ResponseEntity<BaseResponse<MemberDto.MemberInfoResponse>> modify(
             @AuthenticationPrincipal Member member,
-            @RequestPart MemberDto.MemberModifyRequest dto,
+            @RequestPart @Valid MemberDto.MemberModifyRequest dto,
             @RequestPart(required = false) MultipartFile file) {
         BaseResponse<MemberDto.MemberInfoResponse> response = memberService.modifyMember(member, dto, file);
         return ResponseEntity.ok(response);
@@ -85,7 +86,7 @@ public class MemberController {
 
     @Operation(summary = "비밀번호 재설정", description = "이메일 또는 정보수정 페이지를 통해 비밀번호 재설정")
     @PostMapping("/password/reset")
-    public BaseResponse<String> resetPassword(@RequestBody MemberDto.PasswordResetRequest dto,
+    public BaseResponse<String> resetPassword(@RequestBody @Valid MemberDto.PasswordResetRequest dto,
                                               @CookieValue(name = "ATOKEN", required = false) String token) {
         return memberService.resetPassword(dto, token);
     }
