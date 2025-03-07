@@ -28,14 +28,14 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.regist(dto));
     }
 
-    @GetMapping("/find")
+    @PostMapping("/find")
     @Operation(summary = "리뷰 목록", description = "자신 상품의 리뷰를 확인하는 기능입니다.")
     public ResponseEntity<BaseResponse<List<ReviewDto.ReviewDtoResp>>> reviewFind(@RequestBody ReviewDto.ReviewListReq dto) {
         return ResponseEntity.ok(reviewService.findReview(dto));
     }
 
     @DeleteMapping("/delete/{reviewIdx}")
-    @Operation(summary = "리뷰 목록", description = "작성된 리뷰를 삭제하는 기능입니다.")
+    @Operation(summary = "리뷰 삭제", description = "작성된 리뷰를 삭제하는 기능입니다.")
     public ResponseEntity<BaseResponse<Long>> deleteItem(@PathVariable Long reviewIdx) throws Exception {
 
         return ResponseEntity.ok(reviewService.deleteReview(reviewIdx));

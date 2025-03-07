@@ -66,9 +66,9 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public BaseResponse<List<ReviewDto.ReviewDtoResp>> findReview(ReviewDto.ReviewListReq dto) {
         Pageable pageable = PageRequest.of(dto.getPage(), 5);
-        Page<Product> products = productRepository.findByProductWithMemberPay(dto.getMemberIdx(),pageable);
+        Page<Review> reviews = reviewRepository.findByReviewWithMember(dto.getMemberIdx(),pageable);
 
-        List<ReviewDto.ReviewDtoResp> result = products.getContent().stream().map(ReviewDto.ReviewDtoResp::of).toList();
+        List<ReviewDto.ReviewDtoResp> result = reviews.getContent().stream().map(ReviewDto.ReviewDtoResp::of).toList();
 
         if(result.size()>0){
             return new BaseResponse(BaseResponseMessage.REVIEW_FIND_SUCCESS,result);

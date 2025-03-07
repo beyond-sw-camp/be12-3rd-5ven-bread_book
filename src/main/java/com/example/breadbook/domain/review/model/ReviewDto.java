@@ -31,29 +31,37 @@ public class ReviewDto {
     }
 
     @Getter
-    @Builder
+    @Builder @NoArgsConstructor @AllArgsConstructor
     public static class ReviewDtoResp{
-        @Schema(description = "리뷰 작성자의 이름", example = "홍길동")
+        @Schema(description = "리뷰 작성자의 이름")
         private String username;
-        @Schema(description = "리뷰 상품의 이름", example = "어린왕자")
+        @Schema(description = "리뷰 상품의 이름")
         private String title;
-        @Schema(description = "리뷰 내용", example = "상품 상태가 좋고, 거래도 깔끔하게 했습니다. 너무 너무 좋아요. 좋은 상품 감사합니다.")
+        @Schema(description = "리뷰 내용")
         private String reviewText;
-        @Schema(description = "2024-11-20")
+        @Schema(description = "리뷰 작성 날짜")
         private String createdAt;
-        @Schema(description = "https://www.madtimes.org/news/photo/202107/8707_19214_1235.jpg")
+        @Schema(description = "책 이미지")
         private String imageUrl;
+        @Schema(description = "리뷰 넘버")
+        private Long reviewIdx;
+        @Schema(description = "판매자 넘버")
+        private Long memberIdx;
 
-        public static ReviewDtoResp of(Product product) {
+        public static ReviewDtoResp of(Review review) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            Review review = product.getOrders().stream().findFirst().orElse(null).getReview();
+            if(review == null){
 
+                return new ReviewDtoResp();
+            }
             return ReviewDtoResp.builder()
-                    .username(review != null ? review.getMember().getUsername():null)
-                    .title(product.getBook().getTitle())
-                    .reviewText(review != null ? review.getReviewText(): null)
-                    .createdAt(review != null ? review.getCreatedAt().format(formatter):null)
-                    .imageUrl(product.getBook().getTitle())
+                    .username(review.getMember().getUsername())
+                    .title(review.getProduct().getBook().getTitle())
+                    .reviewText(review.getReviewText())
+                    .createdAt(review.getCreatedAt().format(formatter))
+                    .imageUrl(review.getProduct().getBook().getBookImageUrl())
+                    .reviewIdx(review.getIdx())
+                    .memberIdx(review.getProduct().getMember().getIdx())
                     .build();
         }
     }
