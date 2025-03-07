@@ -40,21 +40,11 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=Spring%20Boot&logoColor=white)
 ![Spring data jpa](https://img.shields.io/badge/Spring%20data%20jpa-6DB33F?style=for-the-badge&logo=Spring%20Boot&logoColor=white)
 ![Spring Security](https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=Spring%20Security&logoColor=white)
-![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka)
-![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=skyblue)
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 ![WebSocket](https://img.shields.io/badge/WebSocket-0084FF?style=for-the-badge&logo=websocket&logoColor=white)
 ![STOMP](https://img.shields.io/badge/STOMP-6A1B9A?style=for-the-badge&logo=apachekafka&logoColor=white)
 
-&nbsp; 
-
-## 🛠 사용 tools
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
-![IntelliJ_IDEA](https://img.shields.io/badge/IntelliJ_IDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)
-![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)
-![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
-![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 
 &nbsp; 
 ## 시스템 아키텍쳐
@@ -64,21 +54,15 @@
 ## API 문서
 [API Swagger-ui](http://api.breadbook.kro.kr:8080/swagger-ui/index.html)
 <br>
-
-
-## 기능테스트
-
-<details>
-<summary> Member </summary>
-- 회원가입
-</details>
-
-
+&nbsp; 
+## 프론트 주소
+- [front 주소](https://www.breadbook.kro.kr)
+- [front git 주소](https://github.com/beyond-sw-camp/be12-2nd-5ven-bread_book)
 
 
 &nbsp; 
+## 기능테스트
 
-## 시연테스트
 <details>
 <summary> Member </summary>
 - 회원가입
