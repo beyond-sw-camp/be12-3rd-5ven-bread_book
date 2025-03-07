@@ -4,6 +4,7 @@ import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.order.OrderRepository;
 import com.example.breadbook.domain.order.model.Order;
+import com.example.breadbook.domain.order.model.OrderDto;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.domain.review.model.Review;
@@ -11,6 +12,9 @@ import com.example.breadbook.domain.review.model.ReviewDto;
 import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.response.BaseResponseMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +28,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
-    public BaseResponse<Review> regist(ReviewDto.ReviewDtoReq dto) {
+    public BaseResponse<Long> regist(ReviewDto.ReviewDtoReq dto) {
         Order order = orderRepository.findByMemberAndProduct(dto.getOrderIdx());
 
         Review review = Review.builder()
@@ -51,7 +55,7 @@ public class ReviewService {
 
         updateMemberScore(member); // 별도 트랜잭션으로 점수 업데이트
         reviewRepository.save(review);
-        return new BaseResponse<>(BaseResponseMessage.REVIEW_REGISTER_SUCCESS, review);
+        return new BaseResponse<>(BaseResponseMessage.REVIEW_REGISTER_SUCCESS, review.getProduct().getIdx());
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -60,22 +64,26 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public BaseResponse<List<Review>> findReview(Long memberIdx) {
-        List<Member> list = memberRepository.findByMemberAndReview(memberIdx);
-        List<ReviewDto.ReviewDtoResp> result = new ArrayList<>();
-        for (Product product : list.get(0).getProducts()) {
-            if(product.getReviews()!=null){
-                result.add(ReviewDto.ReviewDtoResp.of(product));
-            }
-        }
+    public BaseResponse<List<ReviewDto.ReviewDtoResp>> findReview(ReviewDto.ReviewListReq dto) {
+        Pageable pageable = PageRequest.of(dto.getPage(), 5);
+        Page<Product> products = productRepository.findByProductWithMemberPay(dto.getMemberIdx(),pageable);
+
+        List<ReviewDto.ReviewDtoResp> result = products.getContent().stream().map(ReviewDto.ReviewDtoResp::of).toList();
+
         if(result.size()>0){
             return new BaseResponse(BaseResponseMessage.REVIEW_FIND_SUCCESS,result);
         }
         return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
     }
 
-    @Transactional(readOnly = true)
-    public Review findOderDetails(Long reviewIdx) {
-        return reviewRepository.findById(reviewIdx).orElse(null);
+
+    public BaseResponse<Long> deleteReview(Long reviewIdx) {
+        Review review= reviewRepository.findById(reviewIdx).get();
+        try{
+            reviewRepository.delete(review);
+            return new BaseResponse(BaseResponseMessage.REVIEW_DELETE_SUCCESS,review.getIdx());
+        }catch (Exception e){
+            return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.example.breadbook.domain.chat.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +19,13 @@ public class ChattingRoomDto {
 
     @Getter
     public static class ChattingReq {
-        private Long productIdx;
+        @NotNull(message = "사용자 ID는 필수 입력값입니다.")
+        @Min(value = 1, message = "사용자 ID는 1 이상이어야 합니다.")
         private Long userIdx;
+
+        @NotNull(message = "상품 ID는 필수 입력값입니다.")
+        @Min(value = 1, message = "상품 ID는 1 이상이어야 합니다.")
+        private Long productIdx;
     }
 
     @Getter

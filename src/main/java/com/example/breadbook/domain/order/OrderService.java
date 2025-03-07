@@ -13,12 +13,17 @@ import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.response.BaseResponseMessage;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +31,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ChattingRoomRepository chattingRoomRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
     public BaseResponse<Order> registOrder(OrderDto.OrderDtoReq dto) {
@@ -50,13 +56,13 @@ public class OrderService {
 
 
     @Transactional(readOnly = true)
-    public BaseResponse<List<OrderDto.PayListResp>> PayList(Long idx) {
-        List<Member> members = memberRepository.findMemberWithProductsAndOrders(idx);
-        List<OrderDto.PayListResp> list = new ArrayList<>();
+    public BaseResponse<List<OrderDto.PayListResp>> PayList(OrderDto.OrderListReq dto,Member member) {
+        Pageable pageable = PageRequest.of(dto.getPage(), 5);
+        Page<Product> products = productRepository.findByProductWithMemberPay(member.getIdx(),pageable);
 
-        for(Product product : members.get(0).getProducts()) {
-            list.add(OrderDto.PayListResp.of(product));
-        }
+
+        List<OrderDto.PayListResp> list = products.getContent().stream().map(OrderDto.PayListResp::of).toList();
+
 
         if (list.size() > 0) {
             return new BaseResponse(BaseResponseMessage.ORDER_PAYlISTFIND_SUCCESS, list);
@@ -74,16 +80,13 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public BaseResponse<List<OrderDto.OrderListResp>> orderList(Long idx) {
+    public BaseResponse<List<OrderDto.OrderListResp>> orderList(OrderDto.OrderListReq dto,Member member) {
 
-        List<Member> members = memberRepository.findMemberWithOrdersAndProducts(idx);
+        Pageable pageable = PageRequest.of(dto.getPage(), 5);
 
+        Page<Product> products = productRepository.findByProductWithMemberOrder(member.getIdx(),pageable);
 
-        List<OrderDto.OrderListResp> list = new ArrayList<>();
-        for (Order order : members.get(0).getOrders()) {
-            list.add(OrderDto.OrderListResp.of(order));
-
-        }
+        List<OrderDto.OrderListResp> list = products.getContent().stream().map(OrderDto.OrderListResp::of).toList();
 
         if (list.size() > 0) {
             return new BaseResponse(BaseResponseMessage.ORDER_PAYlISTFIND_SUCCESS, list);

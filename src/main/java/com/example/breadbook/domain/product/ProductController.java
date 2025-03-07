@@ -52,16 +52,16 @@ public class ProductController {
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
     }
 
-    //@PutMapping("/update/{productIdx}")
-    //public ResponseEntity<BaseResponse<ProductDto.ProductResponse>>
+    @PostMapping("/update/{productIdx}")
+    public ResponseEntity<BaseResponse<ProductDto.ProductResponse>> updateItem(@PathVariable Long productIdx,
+                                                                               @AuthenticationPrincipal Member member,
+                                                                               @RequestBody ProductDto.RegisterRequest dto) throws Exception {
+        // 사진 수정 기능 어떻게 구현할지 고민해야함.
+        ProductDto.ProductResponse response = productService.updateProduct(productIdx, member, dto);
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
+    }
 
-//    @PutMapping("/update/{productIdx}")
-//    public ResponseEntity<BaseResponse<ProductDto.ProductResponse>> update(@AuthenticationPrincipal Member member,
-//                                                                             @PathVariable Long productIdx,
-//                                                                             @RequestPart ProductDto.Update dto,
-//                                                                             @RequestPart MultipartFile[] imgFiles) {
-//        ProductDto.ProductResponse response = productService.updateProduct(productIdx, dto, member, imgFiles);
-//        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
-//    }
+
+
 
 }

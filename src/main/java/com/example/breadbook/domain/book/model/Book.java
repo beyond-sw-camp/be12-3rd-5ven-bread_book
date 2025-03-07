@@ -15,7 +15,7 @@ public class Book {
     private Long idx;  // 책 고유 ID
 
     @Column(unique = true, nullable = false, length = 13)
-    private String isbn;  // ISBN 번호
+    private Long isbn;  // ISBN 번호
 
     @Column(nullable = false, length = 255)
     private String title;  // 책 제목
@@ -27,4 +27,6 @@ public class Book {
     private String publisher;  // 출판사
 
     private LocalDate publicationDate;  // 출판일
+
+    private String bookImageUrl;
 }

@@ -48,19 +48,42 @@ public class ProductService {
         Product product = productRepository.save(dto.toEntity(member, book, category));
 
         List<String> uploadFilePaths = localImageService.upload(imgFiles);
-        productImageService.createProductImage(uploadFilePaths, product);
+        List<ProductImage> productImageList = productImageService.createProductImage(uploadFilePaths, product);
+
 
         ProductDto.ProductResponse response =  ProductDto.ProductResponse.of(product, uploadFilePaths);
         response.setProductImageList(uploadFilePaths);
         return response;
     }
 
-//    @Transactional
-//    public ProductDto.Update updateProduct(Long productIdx, ProductDto.Update dto, Member currentUser,MultipartFile[] imgFiles) throws Exception {
-//        Book book = bookRepository.findById(dto.getBookIdx()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 책"));
-//        Category category = categoryRepository.findByName(dto.getCategoryName()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리"));
-//        Product product = productRepository.save(dto.toEntity())
-//    }
+    @Transactional
+    public ProductDto.ProductResponse updateProduct(Long productIdx, Member currentUser, ProductDto.RegisterRequest dto) throws Exception {
+        if (!productRepository.existsByIdx(productIdx)) {
+            throw new Exception("존재하지 않는 상품입니다.");
+        } else if (!currentUser.getIdx().equals(productRepository.findByIdx(productIdx).getMember().getIdx())) {
+            throw new Exception("수정 권한이 없는 사용자입니다.");
+        } else {
+            Product updated = productRepository.findByIdx(productIdx);
+            updated.setBook(bookRepository.findById(dto.getBookIdx()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 책")));
+            updated.setCategory(categoryRepository.findByName(dto.getCategoryName()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리")));
+            updated.setPrice(dto.getPrice());
+            updated.setBookCondition(dto.getBookCondition());
+            updated.setTradeMethod(dto.getTradeMethod());
+            updated.setTradeLocation(dto.getTradeLocation());
+            updated.setDescription(dto.getDescription());
+//            List<ProductImage> productImageList = productImageRepository.findByProductIdx(productIdx);
+//            List<String> imgUrlList = new ArrayList<>();
+//            for (ProductImage productImage : productImageList) {
+//                imgUrlList.add(productImage.getProductImgUrl());
+//            }
+//            Product product = dto.toEntity(currentUser, book, category);
+////            product.setIdx(productIdx);
+//            productRepository.save(product);
+//            ProductDto.ProductResponse response = new ProductDto.ProductResponse();
+//            response = ProductDto.ProductResponse.of(product, imgUrlList);
+            return ProductDto.ProductResponse.of(updated);
+        }
+    }
 
     @Transactional
     public ProductDto.ProductResponse getProductItem(Long productIdx) {
@@ -107,14 +130,14 @@ public class ProductService {
 
     @Transactional
     public ProductDto.DeleteResponse deleteProduct(Long productIdx, Member currentUser) throws Exception {
-        Optional<Product> product = productRepository.findById(productIdx);
-        if (!product.get().getMember().equals(currentUser)) {
+        Product product = productRepository.findByIdx(productIdx);
+        if (!(product.getMember().getIdx()).equals(currentUser.getIdx())) {
             throw new Exception("상품 삭제 권한이 없는 사용자입니다.");
         }
         else {
             productRepository.deleteById(productIdx);
             ProductDto.DeleteResponse dto = new ProductDto.DeleteResponse();
-            dto.builder().idx(productIdx).build();
+            dto.setIdx(productIdx);
             return dto;
         }
     }
