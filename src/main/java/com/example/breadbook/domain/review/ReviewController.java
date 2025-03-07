@@ -37,7 +37,6 @@ public class ReviewController {
     @DeleteMapping("/delete/{reviewIdx}")
     @Operation(summary = "리뷰 삭제", description = "작성된 리뷰를 삭제하는 기능입니다.")
     public ResponseEntity<BaseResponse<Long>> deleteItem(@PathVariable Long reviewIdx) throws Exception {
-
         return ResponseEntity.ok(reviewService.deleteReview(reviewIdx));
     }
 }
