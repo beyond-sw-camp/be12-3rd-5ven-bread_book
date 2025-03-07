@@ -1,5 +1,6 @@
 package com.example.breadbook.domain.order.model;
 
+import com.example.breadbook.domain.chat.model.ChattingRoom;
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.ProductStatus;
 import com.example.breadbook.domain.product.model.Product;
@@ -23,13 +24,14 @@ public class OrderDto {
 
     @Getter
     public static class OrderRegistResp{
-        public static Order toEntity(Member member, Product product, int amount){
+        public static Order toEntity(ChattingRoom dto, int amount){
             return Order.builder()
-                    .orderStatus(OrderStatus.품절)
-                    .member(member)
-                    .product(product)
+                    .orderStatus(OrderStatus.거래중)
+                    .member(dto.getBuyer())
+                    .product(dto.getProduct())
                     .amount(amount)
                     .createdAt(LocalDateTime.now())
+                    .review(null)
                     .build();
         }
     }

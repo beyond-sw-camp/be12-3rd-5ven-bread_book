@@ -1,7 +1,5 @@
 package com.example.breadbook.domain.order;
 
-
-
 import com.example.breadbook.domain.chat.ChattingRoomRepository;
 import com.example.breadbook.domain.chat.model.ChattingRoom;
 import com.example.breadbook.domain.chat.model.Participant;
@@ -9,6 +7,7 @@ import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.member.repository.MemberRepository;
 import com.example.breadbook.domain.order.model.Order;
 import com.example.breadbook.domain.order.model.OrderDto;
+import com.example.breadbook.domain.product.ProductStatus;
 import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.global.response.BaseResponse;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -35,22 +35,46 @@ public class OrderService {
 
     @Transactional
     public BaseResponse<Order> registOrder(OrderDto.OrderDtoReq dto) {
+        System.out.println(dto.getAmount());
+        System.out.println(dto.getChattingRoom());
+        System.out.println("============================");
+        System.out.println("============================");
+        System.out.println("============================");System.out.println("============================");
 
-        List<ChattingRoom> chattingRoom = chattingRoomRepository.findByMemberAndProduct(dto.getChattingRoom());
+
+        ChattingRoom chattingRoom = chattingRoomRepository.findByMemberAndProduct(dto.getChattingRoom());
 
         Order order = new Order();
-        for (Participant participant  : chattingRoom.get(0).getParticipants()){
-            if(participant.getMember().getIdx()!=chattingRoom.get(0).getProduct().getIdx()){
-                order = OrderDto.OrderRegistResp.toEntity(participant.getMember(), chattingRoom.get(0).getProduct(), dto.getAmount());
+
+        for (Participant participant  : chattingRoom.getParticipants()){
+            if(participant.getMember().getIdx()==chattingRoom.getBuyer().getIdx()){
+                order = OrderDto.OrderRegistResp.toEntity(chattingRoom, dto.getAmount());
             }
         }
 
-        try{
-            Order result =orderRepository.save(order);
+        try {
+            Order result = orderRepository.save(order);
 
-            return new BaseResponse(BaseResponseMessage.ORDER_REGISTER_SUCCESS, result);
+            try {
+                Product product = result.getProduct();
+                productUpdate(product);
+            } catch (Exception e) {
+                throw new RuntimeException("상품 업데이트 실패로 인해 주문을 롤백합니다.", e);
+            }
+
+            return new BaseResponse(BaseResponseMessage.ORDER_REGISTER_SUCCESS, result.getIdx());
         } catch (Exception e) {
             return new BaseResponse(BaseResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void productUpdate(Product product) {
+        try {
+            product.setProductStatus(ProductStatus.거래_예약중);
+            productRepository.save(product);
+        } catch (Exception e) {
+            throw new RuntimeException("상품 업데이트 중 오류 발생", e);
         }
     }
 

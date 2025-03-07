@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,11 @@ public interface ChattingRoomRepository extends JpaRepository<ChattingRoom, Long
 
     @Query("SELECT r FROM ChattingRoom r " +
             "LEFT JOIN FETCH r.product p " +
+            "LEFT JOIN FETCH p.category " +
+            "LEFT JOIN FETCH p.book " +
             "LEFT JOIN FETCH r.participants c " +
             "LEFT JOIN FETCH c.member m " +
+            "LEFT JOIN FETCH r.buyer " +
             "WHERE r.idx = :idx")
-    List<ChattingRoom> findByMemberAndProduct(Long idx);
+    ChattingRoom findByMemberAndProduct(Long idx);
 }
