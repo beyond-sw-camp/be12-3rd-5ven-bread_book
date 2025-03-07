@@ -43,12 +43,22 @@ public class ProductController {
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, response));
     }
 
-    @Operation(summary = "상품 목록 조회", description = "상품의 간결한 정보를 표시하여 목록을 기능이다. 판매자 등급, 가격, 책 상태 등으로 정렬할 수 있다. ")
+    /* 요청예시
+    * 프론트 GET /api/product/list?title=데미안&author=헤르만헤세&publisher=민음사&page=0&size=16
+    *  ?page=1&size=5?sort=price,asc&sort=createdAt,desc
+    *  2번째 페이지, 5개 항목씩 & price기준 오름차순 정렬 & 등록일 내림차순 정렬
+    * */
+    @Operation(summary = "상품 목록 조회(검색)", description = "상품의 간결한 정보를 표시하여 목록을 보여주는 기능이다. 판매자 등급, 가격, 책 상태 등으로 정렬할 수 있다. ")
     @GetMapping("/list")
     public ResponseEntity<BaseResponse<Page<ProductDto.ListResponse>>> list(
             @AuthenticationPrincipal Member member,
+            @RequestParam(value="title", required = false) String title,
+            @RequestParam(value="author", required = false) String author,
+            @RequestParam(value="publisher", required = false) String publisher,
+            @RequestParam(value="category",required = false) String category,
+            @RequestParam(value="keyword",required = false) String keyword,
             @PageableDefault(size = 16, sort = "price", direction = Sort.Direction.DESC)Pageable pageable) {
-        Page<ProductDto.ListResponse> response = productService.getProductList(member, pageable);
+        Page<ProductDto.ListResponse> response = productService.getProductList(member, title, author, publisher, category, keyword, pageable);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS,response));
     }
 
