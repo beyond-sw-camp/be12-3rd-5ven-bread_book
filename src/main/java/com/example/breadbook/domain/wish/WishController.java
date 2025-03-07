@@ -22,9 +22,9 @@ public class WishController {
     private final WishService wishService;
 
     @Operation(summary = "찜하기/취소하기", description = "상품을 찜하거나, 찜한 상품을 해제할 수 있는 기능이다.")
-    @PostMapping("/toggle/{productId}")
-    public ResponseEntity<BaseResponse<WishDto.RegisterResponse>> toggleWish(@PathVariable Long productId, @AuthenticationPrincipal Member member) {
-        WishDto.RegisterResponse res = wishService.toggleWish(productId, member);
+    @PostMapping("/toggle/{productIdx}")
+    public ResponseEntity<BaseResponse<WishDto.RegisterResponse>> toggleWish(@PathVariable Long productIdx, @AuthenticationPrincipal Member member) {
+        WishDto.RegisterResponse res = wishService.toggleWish(productIdx, member);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, res));
     }
 
