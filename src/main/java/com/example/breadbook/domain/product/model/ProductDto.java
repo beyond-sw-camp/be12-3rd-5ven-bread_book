@@ -130,6 +130,8 @@ public class ProductDto {
     public static class ListResponse {
         @Schema(description = "판매자 신뢰 점수", example = "180")
         private Integer sellerScore;
+        @Schema(description = "상품 고유값", example="1")
+        private Long productIdx;
         @Schema(description = "중고책 이름", example = "오래 준비해온 대답 (김영하의 시칠리아)")
         private String title;
         @Schema(description = "중고책 저자", example = "김영하")
