@@ -117,6 +117,7 @@ public class ProductService {
 
         return productRepository.findAll(pageable).map(product -> new ProductDto.ListResponse(
                 product.getMember().getScore(),
+                product.getIdx(),
                 product.getBook().getTitle(),
                 product.getBook().getAuthor(),
                 product.getBook().getPublisher(),
