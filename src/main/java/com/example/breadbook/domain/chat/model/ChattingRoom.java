@@ -1,5 +1,7 @@
 package com.example.breadbook.domain.chat.model;
 
+import com.example.breadbook.domain.member.model.Member;
+import com.example.breadbook.domain.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -21,14 +24,19 @@ public class ChattingRoom {
     @Column(nullable = false, unique = true)
     private String identifier;
 
-    @Column(name = "product_idx")
-    private Long productIdx;
+    @ManyToOne
+    @JoinColumn(name = "product_idx")
 
-    @Column(name = "book_title")
-    private String title;
+
+    private Product product;
 
     @Column(columnDefinition = "TEXT")
     private String lastChat;
+
+    @ManyToOne
+    @JoinColumn(name = "buyer_id", nullable = false) // buyer 필드 추가
+    private Member buyer;
+
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -36,9 +44,15 @@ public class ChattingRoom {
     @OneToMany(mappedBy = "room")
     private List<Message> messages = new ArrayList<>();
 
-    @Column(name = "product_image_url")
-    private String productImageUrl;
+    @OneToMany(mappedBy = "room")
+    private List<Participant> participants = new ArrayList<>();
 
-    private Long productPrice;
-
+    //  UUID 기반 identifier 자동 생성
+    @PrePersist
+    public void prePersist() {
+        if (this.identifier == null) {
+            this.identifier = UUID.randomUUID().toString();
+        }
+    }
 }
+

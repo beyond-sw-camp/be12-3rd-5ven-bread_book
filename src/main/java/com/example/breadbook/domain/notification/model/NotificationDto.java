@@ -2,6 +2,7 @@ package com.example.breadbook.domain.notification.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,14 +19,15 @@ public class NotificationDto {
 
     @Getter
     public static class NotificationRegister {
+        @Schema(description = "알림메시지", required = true, example = "알림입니다.")
         private String message;
-        private Boolean is_read;
+        @Schema(description = "알림 생성 시간", required = true, example = "yyyy-mm-dd")
         private LocalDateTime created_at;
 
         public Notification toEntity(Member member, Product product) {
             return Notification.builder()
                     .message(message)
-                    .is_read(is_read)
+                    .is_read(false)
                     .created_at(created_at)
                     .member(member)
                     .product(product)

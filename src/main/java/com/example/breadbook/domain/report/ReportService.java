@@ -21,8 +21,8 @@ public class ReportService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReportDto.ReportResponse>list() {
-        List<Report> reportList = reportRepository.findAll();
+    public List<ReportDto.ReportResponse>list(Long userIdx) {
+        List<Report> reportList = reportRepository.findByMemberIdx(userIdx);
 
         return reportList.stream().map(ReportDto.ReportResponse::from).collect(Collectors.toList());
     }

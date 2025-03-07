@@ -2,8 +2,7 @@ package com.example.breadbook.domain.wish;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
-import com.example.breadbook.domain.product.model.ProductDto;
-//import com.example.breadbook.domain.wish.model.WishDto;
+import com.example.breadbook.domain.wish.model.WishDto;
 import com.example.breadbook.global.response.BaseResponse;
 import com.example.breadbook.global.response.BaseResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,12 +25,18 @@ import java.util.List;
 public class WishController {
     private final WishService wishService;
 
+    @Operation(summary = "찜하기/취소하기", description = "상품을 찜하거나, 찜한 상품을 해제할 수 있는 기능이다.")
     @PostMapping("/toggle/{productIdx}")
-    public ResponseEntity<Void> toggleWish(@PathVariable Long productIdx, @AuthenticationPrincipal Member member) {
-        wishService.toggleWish(productIdx, member);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BaseResponse<WishDto.RegisterResponse>> toggleWish(@PathVariable Long productIdx, @AuthenticationPrincipal Member member) {
+        WishDto.RegisterResponse res = wishService.toggleWish(productIdx, member);
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, res));
     }
 
+    @Operation(summary = "찜 목록 열람", description = "현재 사용자가 찜한 상품들의 목록을 보여주는 기능이다.")
+    @GetMapping("/list")
+    public ResponseEntity<List<Product>> getWishList(@AuthenticationPrincipal Member member) {
+        return ResponseEntity.ok(wishService.getWishList(member));
+    }
 //    @Operation(summary = "찜 목록 열람", description = "현재 사용자가 찜한 상품들의 목록을 보여주는 기능이다.")
 //    @GetMapping("/list")
 //    public ResponseEntity<BaseResponse<Page<ProductDto.ListResponse>>> getWishList(
@@ -41,9 +46,4 @@ public class WishController {
 //        return ResponseEntity.ok(wishService.getWishList(member));
 //    }
 
-    @Operation(summary = "찜 목록 열람", description = "현재 사용자가 찜한 상품들의 목록을 보여주는 기능이다.")
-    @GetMapping("/list")
-    public ResponseEntity<List<Product>> getWishList(@AuthenticationPrincipal Member member) {
-        return ResponseEntity.ok(wishService.getWishList(member));
-    }
 }

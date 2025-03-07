@@ -22,6 +22,8 @@ public enum BaseResponseMessage {
     LOGIN_ID_PW_FAILED(false, 2401, "ID나 비밀번호가 틀렸습니다."),
     LOGIN_VERIFY_DISABLED(false, 2403, "이메일이 인증되지 않았습니다."),
     TOKEN_EXPIRED(false, 2444, "토큰이 만료되었습니다. 다시 로그인해주세요"),
+    MEMBER_INFO_SUCCESS(true, 2201, "회원 정보 요청에 성공했습니다."),
+    INFO_MODIFY_SUCCESS(true, 2201, "회원 정보 수정에 성공했습니다."),
     EMAIL_VERIFY_SUCCESS(true, 2201, "이메일 인증에 성공했습니다."),
     EMAIL_VERIFY_NULL(false, 2404, "해당 uuid가 없습니다."),
     FIND_ID_SUCCESS(true, 2201, "ID를 성공적으로 찾았습니다."),
@@ -47,13 +49,26 @@ public enum BaseResponseMessage {
     // 리뷰 기능(5000)
     // 리뷰 생성 5000
     REVIEW_REGISTER_SUCCESS(true, 5000, "리뷰 작성이 완료 되었습니다."),
-    REVIEW_FIND_SUCCESS(true, 5001, "행당 리뷰가 있습니다."),
+    REVIEW_FIND_SUCCESS(true, 5001, "내 상품 리뷰 확인"),
+    REVIEW_DELETE_SUCCESS(true, 5002, "리뷰가 삭제 되었습니다."),
 
 
     // ==========================================================================================================================
-    CHATTINGROOM_SUCCESS(true, 6000, "채팅방이 생성되었습니다"),
+    CHATTINGROOM_CREATE_SUCCESS(true, 6000, "채팅방이 생성되었습니다"),
     CHATTINGROOM_LIST_SUCCESS(true, 6001, "채팅방 목록이 조회되었습니다"),
     CHATTINGROOM_LIST_DETAIL_SUCCESS(true, 6002, "채팅방이 상세 조회되었습니다"),
+    CHATTINGROOM_LIST_IDENTIFIER_SUCCESS(true, 6003, "채팅방 상세 조회 성공(identifier)"),
+    CHATTINGROOM_LIST_DETAIL_USER_SUCCESS(true, 6004,"채팅방 상세 조회 성공(user)"),
+    CHATTINGROOM_CREATE_PRODUCT_NULL(false,6005,"채팅방 생성 실패 : 상품이 존재하지 않습니다."),
+    CHATTINGROOM_CREATE_BUYER_NULL(false, 6006, "채팅방 생성 실패 : 구매자가 존재하지 않습니다."),
+    CHATTINGROOM_CREATE_NULL(false, 6007, "채팅방 생성 실패: 해당 상품이나 구매자를 찾을 수 없습니다."),
+    CHATTINGROOM_ROOM_NULL(false, 6008, "채팅방 조회 실패 : 채팅방이 존재하지 않습니다."),
+    CHATTINGROOM_LIST_FAIL(false, 6009, "채팅방 목록 조회가 실패했습니다."),
+    CHATTINGROOM_LIST_DETAIL_FAIL(false, 6010, "채팅방 상세 조회가 실패했습니다."),
+    CHATTINGROOM_LIST_IDENTIFIER_USER_FAIL(false, 6011,"채팅방 상세 조회 실패(identifier) : 사용자가 존재하지 않습니다"),
+    CHATTINGROOM_LIST_IDENTIFIER_FAIL(false, 6012," 채팅방 상세 조회 실패 (identifier)"),
+    CHATTINGROOM_LIST_DETAIL_USER_FAIL(false, 6013,"채팅방 상세 조회 실패(user) : 사용자가 존재하지 않습니다"),
+    CHATTINGROOM_CREATE_INVALID_REQUEST(false, 6014,"채팅방 생성 실패 : 구매자와 상품등록자가 동일합니다."),
 
 
 
@@ -68,9 +83,8 @@ public enum BaseResponseMessage {
 
 
 
+;
 
-
-    ;
     private Boolean isSuccess;
     private Integer code;
     private String message;
