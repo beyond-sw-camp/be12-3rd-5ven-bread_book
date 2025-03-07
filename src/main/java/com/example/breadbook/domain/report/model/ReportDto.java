@@ -2,6 +2,7 @@ package com.example.breadbook.domain.report.model;
 
 import com.example.breadbook.domain.member.model.Member;
 import com.example.breadbook.domain.product.model.Product;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +14,9 @@ import java.util.Date;
 public class ReportDto {
     @Getter
     public static class ReportRegister {
-        @
+        @Schema(description = "신고내용", required = true, example = "신고합니다.")
         private String report_reason;
+        @Schema(description = "신고한 시간", required = true, example = "yyyy-mm-dd")
         private LocalDateTime create_at;
 
         public Report toEntity(Product product, Member member) {
