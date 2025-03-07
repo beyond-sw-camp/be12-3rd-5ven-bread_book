@@ -5,17 +5,10 @@ import com.example.breadbook.domain.product.model.Product;
 import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.domain.wish.model.Wish;
 import com.example.breadbook.domain.wish.model.WishDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -25,7 +18,7 @@ public class WishService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public void toggleWish(Long productIdx, Member member) {
+    public WishDto.RegisterResponse toggleWish(Long productIdx, Member member) {
         Product product = productRepository.findById(productIdx)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
@@ -38,6 +31,7 @@ public class WishService {
 
         wish.setCanceled(!wish.isCanceled());
         wishRepository.save(wish);
+        return WishDto.RegisterResponse.of(wish);
     }
 
     @Transactional

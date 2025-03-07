@@ -13,21 +13,25 @@ import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter
     private Long idx;  // 판매 상품 고유 ID
 
     /* 외래키 */
     @ManyToOne
-    @JoinColumn(name="member_idx")
+    @JoinColumn(name="member_idx", nullable = false)
     private Member member;  // 판매자 ID (회원 테이블 참조)
     /* 외래키 */
     @ManyToOne
@@ -54,8 +58,14 @@ public class Product {
 
     /* ENUM 열거형 상수 */
     @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus;  // 판매 상태 (ENUM)
+    private ProductStatus productStatus = ProductStatus.판매중;  // 판매 상태 (ENUM)
 
+
+    public void setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
+    }
+
+    @Setter
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImageList = new ArrayList<>();
 
@@ -69,6 +79,7 @@ public class Product {
 
     @Builder.Default
     @OneToMany(mappedBy = "product")
+    @BatchSize(size = 5)
     private List<Review> reviews = new ArrayList<>();
 
 }
