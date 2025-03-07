@@ -24,7 +24,7 @@ public class Category {
     @Column(nullable = false, length = 100)
     private String name;  // 카테고리 이름
 
-    @Schema(description = "상위 분류의 고유값", example = "3")
+    @Schema(description = "상위 분류의 고유값")
     @ManyToOne
     @JoinColumn(name = "parent_idx", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Category parent;  // 부모 카테고리
