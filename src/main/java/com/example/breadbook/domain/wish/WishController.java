@@ -8,6 +8,10 @@ import com.example.breadbook.global.response.BaseResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +26,9 @@ public class WishController {
     private final WishService wishService;
 
     @Operation(summary = "찜하기/취소하기", description = "상품을 찜하거나, 찜한 상품을 해제할 수 있는 기능이다.")
-    @PostMapping("/toggle/{productId}")
-    public ResponseEntity<BaseResponse<WishDto.RegisterResponse>> toggleWish(@PathVariable Long productId, @AuthenticationPrincipal Member member) {
-        WishDto.RegisterResponse res = wishService.toggleWish(productId, member);
+    @PostMapping("/toggle/{productIdx}")
+    public ResponseEntity<BaseResponse<WishDto.RegisterResponse>> toggleWish(@PathVariable Long productIdx, @AuthenticationPrincipal Member member) {
+        WishDto.RegisterResponse res = wishService.toggleWish(productIdx, member);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS, res));
     }
 
@@ -33,4 +37,13 @@ public class WishController {
     public ResponseEntity<List<Product>> getWishList(@AuthenticationPrincipal Member member) {
         return ResponseEntity.ok(wishService.getWishList(member));
     }
+//    @Operation(summary = "찜 목록 열람", description = "현재 사용자가 찜한 상품들의 목록을 보여주는 기능이다.")
+//    @GetMapping("/list")
+//    public ResponseEntity<BaseResponse<Page<ProductDto.ListResponse>>> getWishList(
+//            @AuthenticationPrincipal Member member,
+//            @PageableDefault(size = 16, sort = "price", direction = Sort.Direction.DESC) Pageable pageable){
+//        Page<ProductDto.ListResponse> response = wishService(getWishList(member, pageable));
+//        return ResponseEntity.ok(wishService.getWishList(member));
+//    }
+
 }

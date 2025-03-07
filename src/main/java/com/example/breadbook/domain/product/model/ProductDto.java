@@ -92,9 +92,23 @@ public class ProductDto {
                     .productStatus(product.getProductStatus()).build();
             response.setProductImageList(productImageList);
             return response;
+            // 응답에 null값 오류 없도록 시도할 코드 아래...
+//            return builder()
+//                    .idx(product.getIdx())
+//                    .scoreCategory(ScoreCategory.toCategoryString(product.getMember().getScore()))
+//                    .sellerName(product.getMember().getNickname())
+//                    .book(product.getBook())
+//                    .category(product.getCategory())
+//                    .price(product.getPrice())
+//                    .bookCondition(product.getBookCondition())
+//                    .tradeMethod(product.getTradeMethod())
+//                    .tradeLocation(product.getTradeLocation())
+//                    .description(product.getDescription())
+//                    .productStatus(product.getProductStatus())
+//                    .productImageList(productImageList).build();
         }
         public static ProductResponse of(Product product) {
-            ProductResponse response = ProductResponse.builder().idx(product.getIdx())
+            return builder().idx(product.getIdx())
                     .scoreCategory(ScoreCategory.toCategoryString(product.getMember().getScore()))
                     .sellerName(product.getMember().getNickname())
                     .book(product.getBook())
@@ -105,7 +119,6 @@ public class ProductDto {
                     .tradeLocation(product.getTradeLocation())
                     .description(product.getDescription())
                     .productStatus(product.getProductStatus()).build();
-            return response;
         }
     }
 

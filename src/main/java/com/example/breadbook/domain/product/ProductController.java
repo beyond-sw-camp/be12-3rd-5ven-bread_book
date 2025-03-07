@@ -47,7 +47,7 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity<BaseResponse<Page<ProductDto.ListResponse>>> list(
             @AuthenticationPrincipal Member member,
-            @PageableDefault(size = 24, sort = "price", direction = Sort.Direction.DESC)Pageable pageable) {
+            @PageableDefault(size = 16, sort = "price", direction = Sort.Direction.DESC)Pageable pageable) {
         Page<ProductDto.ListResponse> response = productService.getProductList(member, pageable);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.REQUEST_SUCCESS,response));
     }
