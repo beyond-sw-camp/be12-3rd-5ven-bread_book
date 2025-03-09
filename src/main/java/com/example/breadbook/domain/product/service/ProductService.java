@@ -3,12 +3,9 @@ package com.example.breadbook.domain.product.service;
 import com.example.breadbook.domain.book.BookRepository;
 import com.example.breadbook.domain.book.model.Book;
 import com.example.breadbook.domain.member.service.MemberService;
-import com.example.breadbook.domain.product.model.ProductImage;
+import com.example.breadbook.domain.product.model.*;
 import com.example.breadbook.domain.product.repository.CategoryRepository;
-import com.example.breadbook.domain.product.model.Category;
 import com.example.breadbook.domain.member.model.Member;
-import com.example.breadbook.domain.product.model.Product;
-import com.example.breadbook.domain.product.model.ProductDto;
 import com.example.breadbook.domain.product.repository.ProductImageRepository;
 import com.example.breadbook.domain.product.repository.ProductRepository;
 import com.example.breadbook.domain.wish.WishRepository;
@@ -16,6 +13,7 @@ import com.example.breadbook.domain.wish.model.Wish;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,25 +96,49 @@ public class ProductService {
     }
 
     @Transactional
-    public Page<ProductDto.ListResponse> getProductList(Member currentUser, Pageable pageable) {
+    public Page<ProductDto.ListResponse> getProductList(Member currentUser, String title, String author, String publisher, String category, String keyword, Pageable pageable) {
+        // 검색 조건을 적용할 specification 생성
+        Specification<Product> spec = (root, query, criteriaBuilder) -> null;
+        if (title != null && !title.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasTitle(title));
+        }
+        if (author != null && !author.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasAuthor(author));
+        }
+        if (publisher != null && !publisher.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasPubliser(publisher));
+        }
+        if (category != null && !category.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasCategory(category));
+        }
+        if (keyword != null && !keyword.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasKeyword(keyword));
+        }
+
         // 현재 로그인한 사용자의 위시리스트 조회
         List<Wish> wishList = wishRepository.findAllByMemberAndCanceledFalse(currentUser);
         // 로그인하지 않은 상태라면? => 어떻게 할 지 생각해보기.. ㅠㅠ
+        // 일단 지금 상태(2025-03-18)로서는 토큰이 없으면 검색이 안 되긴 함
 
         // wishList를 productIdx 기준으로 Map 변환 (N+1) 방지
-        Map<Long, Boolean> wishCanceledMap = wishList.stream().collect(Collectors.toMap(wish -> wish.getProduct().getIdx(), Wish::isCanceled));
+        Map<Long, Boolean> wishCanceledMap = wishList
+                .stream()
+                .collect(Collectors
+                        .toMap(wish -> wish
+                                .getProduct()
+                                .getIdx(), Wish::isCanceled));
         /* 아래와 동일한 코드..
         Map<Long, Boolean> wishCanceledMap = new HashMap<>();
-
         for (Wish wish : wishList) {
             Long productId = wish.getProduct().getIdx(); // 키: Product의 Idx
             Boolean isCanceled = wish.isCanceled();     // 값: 등록된 Wish의 isCanceled 취소 여부
             wishCanceledMap.put(productId, isCanceled);
-        }
-        */
+        }*/
+        Page<Product> products = productRepository.findAll(spec, pageable);
 
-        return productRepository.findAll(pageable).map(product -> new ProductDto.ListResponse(
+        return products.map(product -> new ProductDto.ListResponse(
                 product.getMember().getScore(),
+                product.getIdx(),
                 product.getBook().getTitle(),
                 product.getBook().getAuthor(),
                 product.getBook().getPublisher(),
