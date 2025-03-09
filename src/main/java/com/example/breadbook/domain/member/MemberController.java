@@ -31,7 +31,7 @@ public class MemberController {
 
     @Operation(summary = "회원가입", description = "주어진 정보로 회원가입")
     @PostMapping("/signup")
-    public ResponseEntity<MemberDto.SignupResponse> signup(@RequestBody @Valid MemberDto.SignupRequest dto) {
+    public ResponseEntity<BaseResponse<MemberDto.SignupResponse>> signup(@RequestBody @Valid MemberDto.SignupRequest dto) {
         return ResponseEntity.ok(memberService.signup(dto));
     }
 

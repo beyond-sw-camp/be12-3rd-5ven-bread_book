@@ -76,7 +76,7 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public MemberDto.SignupResponse signup(MemberDto.SignupRequest dto) {
+    public BaseResponse<MemberDto.SignupResponse> signup(MemberDto.SignupRequest dto) {
         String uuid = UUID.randomUUID().toString();
         Member member = memberRepository.save(dto.toEntity(passwordEncoder.encode(dto.getPassword())));
         emailVerifyRepository.save(EmailVerify.builder()
@@ -86,7 +86,7 @@ public class MemberService implements UserDetailsService {
 
         // 이메일 전송
         sendVerifyEmail(uuid, dto.getEmail());
-        return MemberDto.SignupResponse.fromEntity(member);
+        return new BaseResponse<>(BaseResponseMessage.SIGNUP_SUCCESS ,MemberDto.SignupResponse.fromEntity(member));
     }
 
     @Transactional
