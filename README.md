@@ -75,5 +75,21 @@
 ## 성능테스트
 <details>
 <summary> review </summary>
-- 조회
+	
+### 개선 된 쿼리
+	
+![개선된쿼리4](https://github.com/user-attachments/assets/5f37e2a4-75d5-4983-a01c-0cc07f2ab9d8)
+- fetch join을 사용하여 쿼리 문 개선
+- 
+### 개선 전 성능
+  
+![스크린샷 2025-03-07 190808](https://github.com/user-attachments/assets/1ece1cce-8ffd-4b4e-ad04-3f332153116a)
+![스크린샷 2025-03-07 190905](https://github.com/user-attachments/assets/cfd2b952-07ee-4fa8-bebf-87e5a67a4aa3)
+
+### 개선 후 성능
+  
+![스크린샷 2025-03-07 191604](https://github.com/user-attachments/assets/145ed06f-97e3-41f9-ad3d-6c0a0ad81df3)
+![스크린샷 2025-03-07 191740](https://github.com/user-attachments/assets/146f57f9-072a-452e-bc26-12f7d7706bcb)
+
+
 </details>
