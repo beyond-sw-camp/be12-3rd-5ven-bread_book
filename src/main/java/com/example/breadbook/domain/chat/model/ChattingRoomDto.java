@@ -19,13 +19,13 @@ public class ChattingRoomDto {
 
     @Getter
     public static class ChattingReq {
-        @NotNull(message = "사용자 ID는 필수 입력값입니다.")
-        @Min(value = 1, message = "사용자 ID는 1 이상이어야 합니다.")
-        private Long buyerIdx;
-
         @NotNull(message = "상품 ID는 필수 입력값입니다.")
         @Min(value = 1, message = "상품 ID는 1 이상이어야 합니다.")
         private Long productIdx;
+
+        @NotNull(message = "사용자 ID는 필수 입력값입니다.")
+        @Min(value = 1, message = "사용자 ID는 1 이상이어야 합니다.")
+        private Long buyerIdx;
     }
 
     @Getter

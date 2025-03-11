@@ -31,7 +31,7 @@ public class ChattingRoomController {
             @Valid @RequestBody
             @Parameter(description = "채팅방 생성 요청 DTO", required = true) ChattingRoomDto.ChattingReq request) {
 
-        return chattingRoomService.createChattingRoom(request.getBuyerIdx(), request.getProductIdx());
+        return chattingRoomService.createChattingRoom(request.getProductIdx(), request.getBuyerIdx());
     }
 
 

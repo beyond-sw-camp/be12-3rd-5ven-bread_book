@@ -57,6 +57,7 @@ public class ChattingRoomService {
             // 기존 채팅방이 있는지 확인
             Optional<ChattingRoom> existingRoom = chattingRoomRepository.findByProductIdxAndBuyerIdx(productIdx, buyerIdx);
             if (existingRoom.isPresent()) {
+                System.out.println("✅ 기존 채팅방 반환! ID: " + existingRoom.get().getIdx());
                 return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_SUCCESS, ChattingRoomDto.ChattingRes.from(existingRoom.get())));
             }
 
@@ -75,6 +76,7 @@ public class ChattingRoomService {
             participantRepository.saveAll(participants);
 
             return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_SUCCESS, ChattingRoomDto.ChattingRes.from(savedRoom)));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new BaseResponse<>(BaseResponseMessage.CHATTINGROOM_CREATE_NULL));
