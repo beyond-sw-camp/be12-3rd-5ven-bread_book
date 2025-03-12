@@ -62,11 +62,7 @@
 
 &nbsp; 
 ## 기능테스트
-
-<details>
-<summary> Member </summary>
-- 회원가입
-</details>
+[기능테스트WIKI](https://github.com/beyond-sw-camp/be12-3rd-5ven-bread_book/wiki/%EA%B8%B0%EB%8A%A5-%ED%85%8C%EC%8A%A4%ED%8A%B8)
 
 
 
