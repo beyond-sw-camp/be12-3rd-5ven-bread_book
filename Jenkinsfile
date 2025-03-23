@@ -36,7 +36,7 @@ pipeline {
          * - deploy 라벨이 붙은 노드에서 실행됨
          */
         stage('Blue-Green Deploy') {
-            agent { label 'deploy' } // ❗️배포 노드가 별도로 있을 경우를 위한 설정
+            agent any
             steps {
                 script {
                     // 현재 빌드 번호를 기준으로 블루/그린 중 어떤 쪽으로 배포할지 결정
