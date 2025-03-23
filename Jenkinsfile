@@ -1,8 +1,8 @@
 pipeline {
-    agent any  // 전체 파이프라인에서는 기본 에이전트를 사용하지 않음
+    agent none  // 전체 파이프라인에서는 기본 에이전트를 사용하지 않음
 
     environment {
-        IMAGE_NAME = 'cwi/breadbookback'      // 도커 허브에 푸시할 이미지 이름
+        IMAGE_NAME = 'wkdlrn/breadbookback'      // 도커 허브에 푸시할 이미지 이름
         IMAGE_TAG = "${BUILD_NUMBER}"              // Jenkins의 빌드 번호를 태그로 사용
     }
 
@@ -13,7 +13,7 @@ pipeline {
          * - build 라벨이 붙은 노드에서 실행됨
          */
         stage('Build & Push') {
-            agent { label 'Built-In Node' } // 'build' 노드에서 실행
+            agent { label 'build' } // 'build' 노드에서 실행
             steps {
                 echo "✅ Gradle 실행 권한 부여"
                 sh 'chmod +x gradlew'
@@ -25,7 +25,7 @@ pipeline {
                 sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
 
                 echo "🔐 Docker Hub 로그인 및 Push"
-                sh "docker login -u whwwhs7837 -p 123456789a"
+                sh "docker login -u wkdlrn -p qwer1234qwer"
                 sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
@@ -46,11 +46,11 @@ pipeline {
 
                     // 🎯 새로운 버전의 Deployment 생성
                     def deployCommand = """
-                    ssh test@192.0.5.19 kubectl apply -f - <<EOF
+                    ssh test@192.168.201.101 kubectl apply -f - <<EOF
                     apiVersion: apps/v1
                     kind: Deployment
                     metadata:
-                      namespace: cwi
+                      namespace: kjg
                       name: backend-deployment-${color}
                     spec:
                       selector:
@@ -76,17 +76,17 @@ pipeline {
 
                     // 🕐 배포 완료 대기
                     def waitCommand = """
-                    ssh test@192.0.5.19 kubectl rollout status deployment/backend-deployment-${color} -n cwi
-                    ssh test@192.0.5.19 kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n cwi
+                    ssh test@192.168.201.101 kubectl rollout status deployment/backend-deployment-${color} -n kjg
+                    ssh test@192.168.201.101 kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg
                     """
 
                     // 📡 서비스 라우팅을 새 버전으로 전환
                     def serviceCommand = """
-                    ssh test@192.0.5.19 kubectl apply -f - <<EOF
+                    ssh test@192.168.201.101 kubectl apply -f - <<EOF
                     apiVersion: v1
                     kind: Service
                     metadata:
-                      namespace: cwi
+                      namespace: kjg
                       name: backend-svc
                     spec:
                       selector:
@@ -101,7 +101,7 @@ pipeline {
 
                     // 🧹 이전 버전 scale down
                     def scaleDownCommand = """
-                    ssh test@192.0.5.19 kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n cwi || true
+                    ssh test@192.168.201.101 kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true
                     """
 
                     // 실행 순서대로 배포 실행
