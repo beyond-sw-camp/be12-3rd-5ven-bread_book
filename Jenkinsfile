@@ -70,6 +70,9 @@ spec:
       containers:
       - name: backend-${color}
         image: ${IMAGE_NAME}:${IMAGE_TAG}
+        env:
+          - name: DB_URL
+            value: "jdbc:mariadb://192.168.201.48:3306/DB0306?useSSL=false"
       terminationGracePeriodSeconds: 0
 EOF"
 """.stripIndent()
