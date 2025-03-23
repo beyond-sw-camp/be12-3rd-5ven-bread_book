@@ -3,17 +3,17 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'wkdlrn/breadbookback'      // 도커 허브에 푸시할 이미지 이름
-        IMAGE_TAG = "${BUILD_NUMBER}"           // Jenkins의 빌드 번호를 태그로 사용
+        IMAGE_TAG = "${BUILD_NUMBER}"            // Jenkins의 빌드 번호를 태그로 사용
     }
 
     stages {
         /*
          * 🔧 [BUILD STAGE]
          * - Git 클론, Gradle 빌드, Docker 이미지 빌드 및 푸시
-         * - label 없이, 사용 가능한 기본 노드(Built-In Node 등)에서 실행됨
+         * - 사용 가능한 기본 노드(Built-In Node 등)에서 실행됨
          */
         stage('Build & Push') {
-            agent any  // ✅ 사용 가능한 어떤 노드든 사용 (label 필요 없음)
+            agent any
             steps {
                 echo "✅ Gradle 실행 권한 부여"
                 sh 'chmod +x gradlew'
@@ -32,21 +32,20 @@ pipeline {
 
         /*
          * 🚀 [DEPLOY STAGE]
-         * - Blue/Green 전략으로 Kubernetes에 배포
-         * - label 없이 기본 노드에서 실행되도록 설정
+         * - Blue-Green 전략으로 Kubernetes에 배포
+         * - 쿠버네티스 마스터(192.168.201.100)에 SSH로 접속하여 배포 실행
          */
         stage('Blue-Green Deploy') {
             agent any
             steps {
                 script {
-                    // 현재 빌드 번호를 기준으로 블루/그린 중 어떤 쪽으로 배포할지 결정
                     def even_or_odd = BUILD_NUMBER.toInteger() % 2
                     def color = even_or_odd == 0 ? 'green' : 'blue'
                     def otherColor = even_or_odd == 0 ? 'blue' : 'green'
 
                     // 🎯 새로운 버전의 Deployment 생성
                     def deployCommand = """
-ssh test@192.168.201.100 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - <<EOF
+ssh test@192.168.201.100 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - --validate=false <<'EOF'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -68,21 +67,20 @@ spec:
         deployment: ${color}
     spec:
       containers:
-        - name: backend-${color}
-          image: ${IMAGE_NAME}:${IMAGE_TAG}
+      - name: backend-${color}
+        image: ${IMAGE_NAME}:${IMAGE_TAG}
       terminationGracePeriodSeconds: 0
-EOF
+EOF"
 """.stripIndent()
 
                     // 🕐 배포 완료 대기
                     def waitCommand = """
-ssh test@192.168.201.100 kubectl rollout status deployment/backend-deployment-${color} -n kjg
-ssh test@192.168.201.100 kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg
+ssh test@192.168.201.100 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl rollout status deployment/backend-deployment-${color} -n kjg && kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg"
 """.stripIndent()
 
                     // 📡 서비스 라우팅을 새 버전으로 전환
                     def serviceCommand = """
-ssh test@192.168.201.100 kubectl apply -f - <<EOF
+ssh test@192.168.201.100 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - --validate=false <<'EOF'
 apiVersion: v1
 kind: Service
 metadata:
@@ -96,12 +94,12 @@ spec:
     - port: 8080
       targetPort: 8080
   type: LoadBalancer
-EOF
+EOF"
 """.stripIndent()
 
                     // 🧹 이전 버전 scale down
                     def scaleDownCommand = """
-ssh test@192.168.201.100 kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true
+ssh test@192.168.201.100 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true"
 """.stripIndent()
 
                     // 실행 순서대로 배포 실행
