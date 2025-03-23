@@ -46,7 +46,7 @@ pipeline {
 
                     // 🎯 새로운 버전의 Deployment 생성
                     def deployCommand = """
-ssh test@192.168.201.101 kubectl apply -f - <<EOF
+ssh test@192.168.201.100 kubectl apply -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -76,13 +76,13 @@ EOF
 
                     // 🕐 배포 완료 대기
                     def waitCommand = """
-ssh test@192.168.201.101 kubectl rollout status deployment/backend-deployment-${color} -n kjg
-ssh test@192.168.201.101 kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg
+ssh test@192.168.201.100 kubectl rollout status deployment/backend-deployment-${color} -n kjg
+ssh test@192.168.201.100 kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg
 """.stripIndent()
 
                     // 📡 서비스 라우팅을 새 버전으로 전환
                     def serviceCommand = """
-ssh test@192.168.201.101 kubectl apply -f - <<EOF
+ssh test@192.168.201.100 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: Service
 metadata:
@@ -101,7 +101,7 @@ EOF
 
                     // 🧹 이전 버전 scale down
                     def scaleDownCommand = """
-ssh test@192.168.201.101 kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true
+ssh test@192.168.201.100 kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true
 """.stripIndent()
 
                     // 실행 순서대로 배포 실행
