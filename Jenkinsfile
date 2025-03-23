@@ -46,7 +46,7 @@ pipeline {
 
                     // 🎯 새로운 버전의 Deployment 생성
                     def deployCommand = """
-ssh test@192.168.201.100 kubectl apply -f - <<EOF
+ssh test@192.168.201.100 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
