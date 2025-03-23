@@ -13,7 +13,7 @@ pipeline {
          * - build 라벨이 붙은 노드에서 실행됨
          */
         stage('Build & Push') {
-            agent { label 'build' } // 'build' 노드에서 실행
+            agent { label 'Built-In Node' } // 'build' 노드에서 실행
             steps {
                 echo "✅ Gradle 실행 권한 부여"
                 sh 'chmod +x gradlew'
