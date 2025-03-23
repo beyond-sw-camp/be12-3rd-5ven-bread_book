@@ -3,17 +3,17 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'wkdlrn/breadbookback'      // 도커 허브에 푸시할 이미지 이름
-        IMAGE_TAG = "${BUILD_NUMBER}"              // Jenkins의 빌드 번호를 태그로 사용
+        IMAGE_TAG = "${BUILD_NUMBER}"           // Jenkins의 빌드 번호를 태그로 사용
     }
 
     stages {
         /*
          * 🔧 [BUILD STAGE]
          * - Git 클론, Gradle 빌드, Docker 이미지 빌드 및 푸시
-         * - build 라벨이 붙은 노드에서 실행됨
+         * - label 없이, 사용 가능한 기본 노드(Built-In Node 등)에서 실행됨
          */
         stage('Build & Push') {
-            agent { label 'Built-In Node' }
+            agent any  // ✅ 사용 가능한 어떤 노드든 사용 (label 필요 없음)
             steps {
                 echo "✅ Gradle 실행 권한 부여"
                 sh 'chmod +x gradlew'
@@ -36,7 +36,7 @@ pipeline {
          * - deploy 라벨이 붙은 노드에서 실행됨
          */
         stage('Blue-Green Deploy') {
-            agent { label 'deploy' } // 'deploy' 노드에서 실행
+            agent { label 'deploy' } // ❗️배포 노드가 별도로 있을 경우를 위한 설정
             steps {
                 script {
                     // 현재 빌드 번호를 기준으로 블루/그린 중 어떤 쪽으로 배포할지 결정
