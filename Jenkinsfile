@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'wkdlrn/breadbookback'      // 도커 허브에 푸시할 이미지 이름
         IMAGE_TAG = "${BUILD_NUMBER}"            // Jenkins의 빌드 번호를 태그로 사용
+        DB_URL = 'jdbc:mariadb://192.168.201.48:3306/DB0306?useSSL=false'
     }
 
     stages {
