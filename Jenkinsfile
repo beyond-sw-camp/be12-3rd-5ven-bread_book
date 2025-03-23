@@ -33,7 +33,7 @@ pipeline {
         /*
          * 🚀 [DEPLOY STAGE]
          * - Blue/Green 전략으로 Kubernetes에 배포
-         * - deploy 라벨이 붙은 노드에서 실행됨
+         * - label 없이 기본 노드에서 실행되도록 설정
          */
         stage('Blue-Green Deploy') {
             agent any
@@ -46,63 +46,63 @@ pipeline {
 
                     // 🎯 새로운 버전의 Deployment 생성
                     def deployCommand = """
-                    ssh test@192.168.201.101 kubectl apply -f - <<EOF
-                    apiVersion: apps/v1
-                    kind: Deployment
-                    metadata:
-                      namespace: kjg
-                      name: backend-deployment-${color}
-                    spec:
-                      selector:
-                        matchLabels:
-                          type: backend
-                          deployment: ${color}
-                      replicas: 2
-                      strategy:
-                        type: RollingUpdate
-                      minReadySeconds: 10
-                      template:
-                        metadata:
-                          labels:
-                            type: backend
-                            deployment: ${color}
-                        spec:
-                          containers:
-                            - name: backend-${color}
-                              image: ${IMAGE_NAME}:${IMAGE_TAG}
-                          terminationGracePeriodSeconds: 0
-                    EOF
-                    """
+ssh test@192.168.201.101 kubectl apply -f - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kjg
+  name: backend-deployment-${color}
+spec:
+  selector:
+    matchLabels:
+      type: backend
+      deployment: ${color}
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        type: backend
+        deployment: ${color}
+    spec:
+      containers:
+        - name: backend-${color}
+          image: ${IMAGE_NAME}:${IMAGE_TAG}
+      terminationGracePeriodSeconds: 0
+EOF
+""".stripIndent()
 
                     // 🕐 배포 완료 대기
                     def waitCommand = """
-                    ssh test@192.168.201.101 kubectl rollout status deployment/backend-deployment-${color} -n kjg
-                    ssh test@192.168.201.101 kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg
-                    """
+ssh test@192.168.201.101 kubectl rollout status deployment/backend-deployment-${color} -n kjg
+ssh test@192.168.201.101 kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg
+""".stripIndent()
 
                     // 📡 서비스 라우팅을 새 버전으로 전환
                     def serviceCommand = """
-                    ssh test@192.168.201.101 kubectl apply -f - <<EOF
-                    apiVersion: v1
-                    kind: Service
-                    metadata:
-                      namespace: kjg
-                      name: backend-svc
-                    spec:
-                      selector:
-                        type: backend
-                        deployment: ${color}
-                      ports:
-                      - port: 8080
-                        targetPort: 8080
-                      type: LoadBalancer
-                    EOF
-                    """
+ssh test@192.168.201.101 kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kjg
+  name: backend-svc
+spec:
+  selector:
+    type: backend
+    deployment: ${color}
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+EOF
+""".stripIndent()
 
                     // 🧹 이전 버전 scale down
                     def scaleDownCommand = """
-                    ssh test@192.168.201.101 kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true
-                    """
+ssh test@192.168.201.101 kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true
+""".stripIndent()
 
                     // 실행 순서대로 배포 실행
                     sh deployCommand
