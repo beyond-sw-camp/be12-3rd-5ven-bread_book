@@ -1,5 +1,5 @@
 pipeline {
-    agent back  // 전체 파이프라인에서는 기본 에이전트를 사용하지 않음
+    agent any  // 전체 파이프라인에서는 기본 에이전트를 사용하지 않음
 
     environment {
         IMAGE_NAME = 'cwi/breadbookback'      // 도커 허브에 푸시할 이미지 이름
