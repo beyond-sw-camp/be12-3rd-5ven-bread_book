@@ -30,7 +30,7 @@ pipeline {
                         script: "ssh -o StrictHostKeyChecking=no test@192.0.5.9 \"export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'\"",
                         returnStdout: true
                     ).trim()
-                    env.DB_URL = "jdbc:mariadb://${svc}/DB0306?useSSL=false"
+                    env.DB_URL = "jdbc:mariadb://${svc}/breadbook?useSSL=false"
                     echo "▶ DB_URL = ${env.DB_URL}"
                 }
             }
