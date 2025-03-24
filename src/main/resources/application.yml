@@ -2,7 +2,7 @@ spring:
   application:
     name: chatting
   kafka:
-    bootstrap-servers: 192.0.5.2:9092
+    bootstrap-servers: ${KAFKA_URL}:9092
     consumer:
       group-id: chatting-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
