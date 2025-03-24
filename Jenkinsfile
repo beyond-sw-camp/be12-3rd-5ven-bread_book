@@ -67,9 +67,18 @@ spec:
       containers:
       - name: backend-${color}
         image: ${IMAGE_NAME}:${IMAGE_TAG}
+        ports:
+           - containerPort: 8080
+        volumeMounts:
+        - name: image-upload
+          mountPath: /mnt
         envFrom:
         - configMapRef:
             name: back-cm
+      volumes:
+        - name: image-upload
+          persistentVolumeClaim:
+            claimName: image-pvc
 EOF"
 """
                     sh "ssh test@192.0.5.9 \"kubectl rollout status deployment/backend-deployment-${color} -n breadbook --timeout=120s\""
