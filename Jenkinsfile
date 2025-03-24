@@ -21,9 +21,13 @@ pipeline {
         stage('Prepare DB URL') {
             agent { label 'deploy' }
             steps {
+                sh '''
+                   mkdir -p ~/.ssh
+                   ssh-keyscan -H 192.0.5.9 >> ~/.ssh/known_hosts
+                '''
                 script {
                     def svc = sh(
-                        script: "ssh test@192.0.5.9 \"export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'\"",
+                        script: "ssh -o StrictHostKeyChecking=no test@192.0.5.9 \"export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'\"",
                         returnStdout: true
                     ).trim()
                     env.DB_URL = "jdbc:mariadb://${svc}/DB0306?useSSL=false"
@@ -31,6 +35,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Blue-Green Deploy') {
             agent { label 'deploy' }
