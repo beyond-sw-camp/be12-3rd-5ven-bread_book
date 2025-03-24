@@ -18,24 +18,6 @@ pipeline {
             }
         }
 
-//         stage('Prepare DB URL') {
-//             agent { label 'deploy' }
-//             steps {
-//                 sh '''
-//                    mkdir -p ~/.ssh
-//                    ssh-keyscan -H 192.0.5.9 >> ~/.ssh/known_hosts
-//                 '''
-//                 script {
-//                     def svc = sh(
-//                         script: "ssh -o StrictHostKeyChecking=no test@192.0.5.9 \"export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'\"",
-//                         returnStdout: true
-//                     ).trim()
-//                     env.DB_URL = "jdbc:mariadb://${svc}/breadbook?useSSL=false"
-//                     echo "▶ DB_URL = ${env.DB_URL}"
-//                 }
-//             }
-//         }
-
         stage('Blue-Green Deploy') {
             agent { label 'deploy' }
             steps {
@@ -43,6 +25,23 @@ pipeline {
                     def color      = (BUILD_NUMBER.toInteger() % 2 == 0) ? 'green' : 'blue'
                     def otherColor = (color == 'green') ? 'blue' : 'green'
 
+                    sh """
+ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: breadbook
+  name: backend-svc
+spec:
+  selector:
+    type: backend
+    deployment: ${color}
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
+EOF"
+"""
                     sh """
 ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - <<EOF
 apiVersion: apps/v1
