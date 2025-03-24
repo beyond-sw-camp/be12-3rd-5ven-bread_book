@@ -20,6 +20,7 @@ pipeline {
                 }
             }
 
+
         stage('Blue-Green Deploy') {
             agent { label 'deploy' }
             steps {
