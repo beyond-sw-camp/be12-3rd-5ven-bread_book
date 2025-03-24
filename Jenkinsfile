@@ -34,7 +34,7 @@ pipeline {
         /*
          * 🚀 [DEPLOY STAGE]
          * - Blue-Green 전략으로 Kubernetes에 배포
-         * - 쿠버네티스 마스터(192.168.201.100)에 SSH로 접속하여 배포 실행
+         * - 쿠버네티스 마스터(192.0.5.9)에 SSH로 접속하여 배포 실행
          */
         stage('Blue-Green Deploy') {
             agent any
@@ -46,7 +46,7 @@ pipeline {
 
                     // 🎯 새로운 버전의 Deployment 생성
                     def deployCommand = """
-ssh test@192.0.5.7 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - --validate=false <<'EOF'
+ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - --validate=false <<'EOF'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -79,12 +79,12 @@ EOF"
 
                     // 🕐 배포 완료 대기
                     def waitCommand = """
-ssh test@192.0.5.7 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl rollout status deployment/backend-deployment-${color} -n kjg && kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg"
+ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl rollout status deployment/backend-deployment-${color} -n kjg && kubectl wait --for=condition=available deployment/backend-deployment-${color} --timeout=120s -n kjg"
 """.stripIndent()
 
                     // 📡 서비스 라우팅을 새 버전으로 전환
                     def serviceCommand = """
-ssh test@192.0.5.7 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - --validate=false <<'EOF'
+ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - --validate=false <<'EOF'
 apiVersion: v1
 kind: Service
 metadata:
@@ -103,7 +103,7 @@ EOF"
 
                     // 🧹 이전 버전 scale down
                     def scaleDownCommand = """
-ssh test@192.0.5.7 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true"
+ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl scale deployment backend-deployment-${otherColor} --replicas=0 -n kjg || true"
 """.stripIndent()
 
                     // 실행 순서대로 배포 실행
