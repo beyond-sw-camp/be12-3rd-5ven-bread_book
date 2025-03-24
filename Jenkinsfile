@@ -7,16 +7,18 @@ pipeline {
     }
 
     stages {
-        stage('Build & Push') {
-            agent { label 'build' }
-            steps {
-                sh 'chmod +x gradlew'
-                sh './gradlew bootJar'
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-                sh "docker login -u wkdlrn -p qwer1234qwer"
-                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+            stage('Build & Push') {
+                agent { label 'build' }
+                steps {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'chmod +x gradlew'
+                        sh './gradlew bootJar'
+                        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                        sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin"
+                        sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
+                }
             }
-        }
 
         stage('Blue-Green Deploy') {
             agent { label 'deploy' }
