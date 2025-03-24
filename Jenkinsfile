@@ -21,20 +21,20 @@ pipeline {
         stage('Prepare DB URL') {
             agent { label 'deploy' }
             steps {
-                sh '''
-                   mkdir -p ~/.ssh
-                   ssh-keyscan -H 192.0.5.9 >> ~/.ssh/known_hosts
-                '''
-                script {
-                    def svc = sh(
-                        script: "ssh -o StrictHostKeyChecking=no test@192.0.5.9 \"export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'\"",
-                        returnStdout: true
-                    ).trim()
-                    env.DB_URL = "jdbc:mariadb://${svc}/breadbook?useSSL=false"
-                    echo "▶ DB_URL = ${env.DB_URL}"
+                // kubeconfig credential 사용
+                withCredentials([file(credentialsId: 'kubeconfig-breadbook', variable: 'KUBECONFIG')]) {
+                    script {
+                        def svc = sh(
+                            script: "kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'",
+                            returnStdout: true
+                        ).trim()
+                        env.DB_URL = "jdbc:mariadb://${svc}/breadbook?useSSL=false"
+                        echo "▶ DB_URL = ${env.DB_URL}"
+                    }
                 }
             }
         }
+
 
 
         stage('Blue-Green Deploy') {
