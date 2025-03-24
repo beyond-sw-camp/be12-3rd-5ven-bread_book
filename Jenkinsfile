@@ -18,23 +18,23 @@ pipeline {
             }
         }
 
-        stage('Prepare DB URL') {
-            agent { label 'deploy' }
-            steps {
-                sh '''
-                   mkdir -p ~/.ssh
-                   ssh-keyscan -H 192.0.5.9 >> ~/.ssh/known_hosts
-                '''
-                script {
-                    def svc = sh(
-                        script: "ssh -o StrictHostKeyChecking=no test@192.0.5.9 \"export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'\"",
-                        returnStdout: true
-                    ).trim()
-                    env.DB_URL = "jdbc:mariadb://${svc}/breadbook?useSSL=false"
-                    echo "▶ DB_URL = ${env.DB_URL}"
-                }
-            }
-        }
+//         stage('Prepare DB URL') {
+//             agent { label 'deploy' }
+//             steps {
+//                 sh '''
+//                    mkdir -p ~/.ssh
+//                    ssh-keyscan -H 192.0.5.9 >> ~/.ssh/known_hosts
+//                 '''
+//                 script {
+//                     def svc = sh(
+//                         script: "ssh -o StrictHostKeyChecking=no test@192.0.5.9 \"export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl get svc db-svc -n breadbook -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}'\"",
+//                         returnStdout: true
+//                     ).trim()
+//                     env.DB_URL = "jdbc:mariadb://${svc}/breadbook?useSSL=false"
+//                     echo "▶ DB_URL = ${env.DB_URL}"
+//                 }
+//             }
+//         }
 
         stage('Blue-Green Deploy') {
             agent { label 'deploy' }
@@ -67,7 +67,7 @@ spec:
         image: ${IMAGE_NAME}:${IMAGE_TAG}
         envFrom:
         - configMapRef:
-          name: back-cm
+            name: back-cm
 EOF"
 """
                     sh "ssh test@192.0.5.9 \"kubectl rollout status deployment/backend-deployment-${color} -n breadbook --timeout=120s\""
