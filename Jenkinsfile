@@ -65,19 +65,9 @@ spec:
       containers:
       - name: backend-${color}
         image: ${IMAGE_NAME}:${IMAGE_TAG}
-        env:
-        - name: DB_URL
-          value: "${DB_URL}"
-        - name: MARIADB_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: db-cm
-              key: MARIADB_DATABASE
-        - name: MARIADB_ROOT_PASSWORD
-          valueFrom:
-            configMapKeyRef:
-              name: db-cm
-              key: MARIADB_ROOT_PASSWORD
+        envFrom:
+        - configMapRef:
+          name: back-cm
 EOF"
 """
                     sh "ssh test@192.0.5.9 \"kubectl rollout status deployment/backend-deployment-${color} -n breadbook --timeout=120s\""
