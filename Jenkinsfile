@@ -2,7 +2,7 @@ pipeline {
     agent none
 
     environment {
-        IMAGE_NAME = 'alpaka1111/breadbookback-test'
+        IMAGE_NAME = 'wkdlrn/breadbookback'
         IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
@@ -10,7 +10,7 @@ pipeline {
             stage('Build & Push') {
                 agent { label 'build' }
                 steps {
-                    withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_KHR', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'chmod +x gradlew'
                         sh './gradlew bootJar'
                         sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
