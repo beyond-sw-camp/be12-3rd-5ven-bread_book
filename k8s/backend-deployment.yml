@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend-blue
-          image: alpaka/breadbookback-test:latest
+          image: wkdlrn/breadbookback-test:latest
           ports:
             - containerPort: 8080
           volumeMounts:
