@@ -34,12 +34,12 @@ pipeline {
                                 verbose: true,
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: 'k8s/backend-deployment.yml, k8s/backend-service.yml',
+                                        sourceFiles: 'k8s/backend-deployment.yml, k8s/service.yml',
                                         remoteDirectory: '/backend',
                                         execCommand: """
                                             sed -i "s/IMAGE_TAG/${BUILD_NUMBER}/g" /home/test/backend/k8s/backend-deployment.yml
                                             sed -i "s/COLOR/${color}/g" /home/test/backend/k8s/backend-deployment.yml
-                                            sed -i "s/COLOR/${color}/g" /home/test/backend/k8s/backend-service.yml
+                                            sed -i "s/COLOR/${color}/g" /home/test/backend/k8s/service.yml
                                         """
                                     ),
                                     sshTransfer(
@@ -47,7 +47,7 @@ pipeline {
                                             export KUBECONFIG=/etc/kubernetes/admin.conf
                                             kubectl apply -f /home/test/backend/k8s/backend-deployment.yml
                                             kubectl rollout status deployment/backend-deployment-${color} -n breadbook --timeout=120s
-                                            kubectl apply -f /home/test/backend/k8s/backend-service.yml
+                                            kubectl apply -f /home/test/backend/k8s/service.yml
                                             kubectl patch svc backend-svc -n breadbook -p '{\"spec\":{\"selector\":{\"deployment\":\"${color}\"}}}'
                                             kubectl scale deployment/backend-deployment-${otherColor} -n breadbook --replicas=0 || true
                                         """
