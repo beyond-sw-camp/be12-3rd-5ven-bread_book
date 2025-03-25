@@ -27,63 +27,36 @@ pipeline {
                 script {
                     def color      = (BUILD_NUMBER.toInteger() % 2 == 0) ? 'green' : 'blue'
                     def otherColor = (color == 'green') ? 'blue' : 'green'
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'k8s',
+                                verbose: true,
+                                transfers: [
+                                    sshTransfer(
+                                        sourceFiles: 'k8s/backend-deployment.yml, k8s/backend-service.yml',
+                                        remoteDirectory: '/backend',
+                                        execCommand: """
+                                            sed -i "s/IMAGE_TAG/${BUILD_NUMBER}/g" /home/test/backend/k8s/backend-deployment.yml
+                                            sed -i "s/COLOR/${color}/g" /home/test/backend/k8s/backend-deployment.yml
+                                            sed -i "s/COLOR/${color}/g" /home/test/backend/k8s/backend-service.yml
+                                        """
+                                    ),
+                                    sshTransfer(
+                                        execCommand: """
+                                            export KUBECONFIG=/etc/kubernetes/admin.conf
+                                            kubectl apply -f /home/test/backend/k8s/backend-deployment.yml
+                                            kubectl rollout status deployment/backend-deployment-${color} -n breadbook --timeout=120s
+                                            kubectl apply -f /home/test/backend/k8s/backend-service.yml
+                                            kubectl patch svc backend-svc -n breadbook -p '{\"spec\":{\"selector\":{\"deployment\":\"${color}\"}}}'
+                                            kubectl scale deployment/backend-deployment-${otherColor} -n breadbook --replicas=0 || true
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
 
-                    sh """
-ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - <<EOF
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: breadbook
-  name: backend-svc
-spec:
-  selector:
-    type: backend
-    deployment: ${color}
-  ports:
-    - port: 8080
-      targetPort: 8080
-  type: ClusterIP
-EOF"
-"""
-                    sh """
-ssh test@192.0.5.9 "export KUBECONFIG=/etc/kubernetes/admin.conf && kubectl apply -f - <<EOF
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  namespace: breadbook
-  name: backend-deployment-${color}
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      type: backend
-      deployment: ${color}
-  template:
-    metadata:
-      labels:
-        type: backend
-        deployment: ${color}
-    spec:
-      containers:
-      - name: backend-${color}
-        image: ${IMAGE_NAME}:${IMAGE_TAG}
-        ports:
-           - containerPort: 8080
-        volumeMounts:
-        - name: image-upload
-          mountPath: /mnt
-        envFrom:
-        - configMapRef:
-            name: back-cm
-      volumes:
-        - name: image-upload
-          persistentVolumeClaim:
-            claimName: image-pvc
-EOF"
-"""
-                    sh "ssh test@192.0.5.9 \"kubectl rollout status deployment/backend-deployment-${color} -n breadbook --timeout=120s\""
-                    sh "ssh test@192.0.5.9 \"kubectl patch svc backend-svc -n breadbook -p '{\\\"spec\\\":{\\\"selector\\\":{\\\"deployment\\\":\\\"${color}\\\"}}}'\""
-                    sh "ssh test@192.0.5.9 \"kubectl scale deployment/backend-deployment-${otherColor} -n breadbook --replicas=0 || true\""
                 }
             }
         }
