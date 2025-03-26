@@ -2,7 +2,7 @@ pipeline {
     agent none
 
     environment {
-        IMAGE_NAME = 'wkdlrn/breadbookback'
+        IMAGE_NAME = 'alpaka1111/breadbook-be-jenkins'
         IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
@@ -10,7 +10,7 @@ pipeline {
             stage('Build & Push') {
                 agent { label 'build' }
                 steps {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_KHR', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'chmod +x gradlew'
                         sh './gradlew bootJar'
                         sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
@@ -37,7 +37,7 @@ pipeline {
                                         sourceFiles: 'k8s/backend-deployment.yml, k8s/service.yml',
                                         remoteDirectory: '/backend',
                                         execCommand: """
-                                            sed -i "s/IMAGE_TAG/${BUILD_NUMBER}/g" /home/test/backend/k8s/backend-deployment.yml
+                                            sed -i "s/LATEST/${BUILD_NUMBER}/g" /home/test/backend/k8s/backend-deployment.yml
                                             sed -i "s/COLOR/${color}/g" /home/test/backend/k8s/backend-deployment.yml
                                             sed -i "s/COLOR/${color}/g" /home/test/backend/k8s/service.yml
                                         """

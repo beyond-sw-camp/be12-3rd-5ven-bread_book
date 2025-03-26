@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend-blue
-          image: wkdlrn/breadbookback-test:latest
+          image: alpaka1111/breadbook-be-jenkins:LATEST
           ports:
             - containerPort: 8080
           volumeMounts:
